@@ -1,12 +1,23 @@
+import utils
+from constant import *
 import arcade
 from pyglet.gl import GL_NEAREST
 
-TILE_SPRITE_SCALING = 2
-PLAYER_SCALING = 0.2
 
-SCREEN_WIDTH = 960
-SCREEN_HEIGHT = 482
-SCREEN_TITLE = "You better run..."
+class Player(arcade.Sprite):
+    def handle_user_input(self, key: int, modifiers: int):
+        """
+        Handle events passed from the MainWindow.
+        :return:
+        """
+        if key == arcade.key.UP:
+            self.center_y += TILE_SIZE
+        elif key == arcade.key.DOWN:
+            self.center_y -= TILE_SIZE
+        elif key == arcade.key.LEFT:
+            self.center_x -= TILE_SIZE
+        elif key == arcade.key.RIGHT:
+            self.center_x += TILE_SIZE
 
 
 class MainWindow(arcade.Window):
@@ -21,14 +32,12 @@ class MainWindow(arcade.Window):
         self.player_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(
-            ":resources:images/animated_characters/female_person/femalePerson_idle.png",
-            PLAYER_SCALING,
-        )
+        self.player_sprite = Player("assets/sprites/square.png", PLAYER_SCALING)
 
         # Starting position of the player
-        self.player_sprite.center_x = 135
-        self.player_sprite.center_y = 400
+        self.player_sprite.center_x, self.player_sprite.center_y = utils.center_of_tile(
+            135, 390
+        )
 
         self.player_list.append(self.player_sprite)
 
@@ -45,6 +54,18 @@ class MainWindow(arcade.Window):
             tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
+    def on_key_press(self, key: int, modifiers: int):
+        if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
+            # Record Original Pos so if collision with wall is detected, we return the
+            # player to that spot before rendering, making it impassable.
+            original_pos = (self.player_sprite.center_x, self.player_sprite.center_y)
+            self.player_sprite.handle_user_input(key, modifiers)
+            if arcade.check_for_collision_with_list(self.player_sprite, self.wall_list):
+                self.player_sprite.center_x, self.player_sprite.center_y = original_pos
+
+    def on_update(self, delta_time: float):
+        ...
+
     def on_draw(self):
         arcade.start_render()
 
@@ -53,19 +74,6 @@ class MainWindow(arcade.Window):
         self.floor_list.draw(filter=GL_NEAREST)
 
         self.player_list.draw()
-
-    def on_key_press(self, key, modifiers):
-        if key == arcade.key.UP:
-            ...
-        elif key == arcade.key.LEFT:
-            ...
-        elif key == arcade.key.RIGHT:
-            ...
-        elif key == arcade.key.DOWN:
-            ...
-
-    def on_update(self, delta_time):
-        ...
 
 
 def main():
