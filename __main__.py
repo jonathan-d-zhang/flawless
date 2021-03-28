@@ -1,10 +1,30 @@
+from typing import NamedTuple, Optional
+
 import utils
 from constant import *
 import arcade
 from pyglet.gl import GL_NEAREST
 
 
+class Vector2D(NamedTuple):
+    x: int
+    y: int
+
+    def __add__(self, other):
+        return Vector2D(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, scalar):
+        return Vector2D(scalar * self.x, scalar * self.y)
+
+
 class Player(arcade.Sprite):
+    @property
+    def position(self) -> Vector2D:
+        return Vector2D(int(self.center_x), int(self.center_y))
+
+    def update(self):
+        ...
+
     def handle_user_input(self, key: int, modifiers: int):
         """
         Handle events passed from the MainWindow.
@@ -20,13 +40,13 @@ class Player(arcade.Sprite):
             self.center_x += TILE_SIZE
 
 
-class MainWindow(arcade.Window):
-    def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-        self.wall_list = None
-        self.floor_list = None
-        self.player_list = None
-        self.player_sprite = None
+class GameView(arcade.View):
+    def __init__(self, window):
+        super().__init__(window)
+        self.wall_list: Optional[arcade.SpriteList] = None
+        self.floor_list: Optional[arcade.SpriteList] = None
+        self.player_list: Optional[arcade.SpriteList] = None
+        self.player_sprite: Optional[Player] = None
 
     def setup(self):
         self.player_list = arcade.SpriteList()
@@ -93,13 +113,17 @@ class MainWindow(arcade.Window):
         # GL_NEAREST makes scaled Pixel art look cleaner
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
-
         self.player_list.draw()
 
 
 def main():
-    window = MainWindow()
-    window.setup()
+    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+    game_view = GameView(main_window)
+    game_view.setup()
+
+    main_window.show_view(game_view)
+
     arcade.run()
 
 
