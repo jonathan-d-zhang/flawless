@@ -1,13 +1,16 @@
 from typing import Optional
 
 import utils
+
 from constants import *
+
 import arcade
 from pyglet.gl import GL_NEAREST
 
 from entity.cabinet import Cabinet
 from entity.enemy import Enemy
 from entity.player import Player
+
 from item.key import Key
 
 
@@ -19,19 +22,30 @@ class GameView(arcade.View):
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player_sprite: Optional[Player] = None
-        self.event_bus = None
-        self.event_emitter = None
 
     def setup(self):
+
+        # Set up the player
+        self.player_sprite = Player("assets/sprites/square.png", PLAYER_SCALING)
+
         self.load_map()
 
         # Set up the player
         self.player_sprite = Player()
 
+
         # Starting position of the player
         self.player_sprite.center_x, self.player_sprite.center_y = utils.center_of_tile(
             135, 390
         )
+
+        cabinet_test = Cabinet(Key(), "assets/sprites/square.png", 1)
+
+        cabinet_test.center_x, cabinet_test.center_y = utils.center_of_tile(135, 300)
+        self.interactable_list = arcade.SpriteList()
+        self.interactable_list.append(cabinet_test)
+
+        self.load_map()
 
         cabinet = Cabinet(content=Key())
         cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
@@ -93,6 +107,8 @@ class GameView(arcade.View):
         ):
             interactable.interact(self.player_sprite)
 
+        self.player_sprite.update()
+
     def on_draw(self):
         arcade.start_render()
 
@@ -100,6 +116,7 @@ class GameView(arcade.View):
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
+
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player_sprite.draw()
 
