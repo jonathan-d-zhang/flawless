@@ -1,22 +1,10 @@
 import arcade
-from pyglet.gl import GL_NEAREST
-import constants
-from ui_elements import main_menu
-
-SCREEN_TITLE = "You better run..."
-
-
-class MainWindow(arcade.Window):
-    def __init__(self):
-        super().__init__(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, SCREEN_TITLE)
-
-
-def main():
-    window = MainWindow()
-    view = main_menu.MainMenuView()
-    window.show_view(view)
-    arcade.run()
+from constants import *
+from views import main_menu_view
 
 
 if __name__ == "__main__":
-    main()
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    view = main_menu_view.MainMenuView()
+    window.show_view(view)
+    arcade.run()
