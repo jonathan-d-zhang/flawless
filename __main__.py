@@ -21,31 +21,19 @@ class GameView(arcade.View):
         self.floor_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
-        self.player_sprite: Optional[Player] = None
+        self.player: Optional[Player] = None
 
     def setup(self):
 
         # Set up the player
-        self.player_sprite = Player("assets/sprites/square.png", PLAYER_SCALING)
 
         self.load_map()
 
         # Set up the player
-        self.player_sprite = Player()
-
+        self.player = Player()
 
         # Starting position of the player
-        self.player_sprite.center_x, self.player_sprite.center_y = utils.center_of_tile(
-            135, 390
-        )
-
-        cabinet_test = Cabinet(Key(), "assets/sprites/square.png", 1)
-
-        cabinet_test.center_x, cabinet_test.center_y = utils.center_of_tile(135, 300)
-        self.interactable_list = arcade.SpriteList()
-        self.interactable_list.append(cabinet_test)
-
-        self.load_map()
+        self.player.center_x, self.player.center_y = utils.center_of_tile(135, 390)
 
         cabinet = Cabinet(content=Key())
         cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
@@ -56,6 +44,8 @@ class GameView(arcade.View):
         enemy.center_x, enemy.center_y = utils.center_of_tile(135, 500)
         self.enemy_list = arcade.SpriteList()
         self.enemy_list.append(enemy)
+
+        self.load_map()
 
         self.set_viewport_on_player()
 
@@ -74,10 +64,10 @@ class GameView(arcade.View):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
-            original_pos = (self.player_sprite.center_x, self.player_sprite.center_y)
-            self.player_sprite.handle_user_input(key, modifiers)
-            if arcade.check_for_collision_with_list(self.player_sprite, self.wall_list):
-                self.player_sprite.center_x, self.player_sprite.center_y = original_pos
+            original_pos = (self.player.center_x, self.player.center_y)
+            self.player.handle_user_input(key, modifiers)
+            if arcade.check_for_collision_with_list(self.player, self.wall_list):
+                self.player.center_x, self.player.center_y = original_pos
             else:
                 self.enemy_list.update()
 
@@ -90,12 +80,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH,
-            max(0, self.player_sprite.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
         )
         clamped_y = min(
-            SCREEN_HEIGHT,
-            max(0, self.player_sprite.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
@@ -103,11 +91,11 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
-            self.player_sprite, self.interactable_list
+            self.player, self.interactable_list
         ):
-            interactable.interact(self.player_sprite)
+            interactable.interact(self.player)
 
-        self.player_sprite.update()
+        self.player.update()
 
     def on_draw(self):
         arcade.start_render()
@@ -118,7 +106,7 @@ class GameView(arcade.View):
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
-        self.player_sprite.draw()
+        self.player.draw()
 
 
 def main():
