@@ -42,6 +42,7 @@ class MainWindow(arcade.Window):
         self.player_list.append(self.player_sprite)
 
         self.load_map()
+        self.set_viewport_on_player()
 
     def load_map(self):
         tile_map = arcade.tilemap.read_tmx(f"tilemaps/TestLevel.tmx")
@@ -62,6 +63,26 @@ class MainWindow(arcade.Window):
             self.player_sprite.handle_user_input(key, modifiers)
             if arcade.check_for_collision_with_list(self.player_sprite, self.wall_list):
                 self.player_sprite.center_x, self.player_sprite.center_y = original_pos
+
+            self.set_viewport_on_player()
+
+    def set_viewport_on_player(self):
+        """
+        Set the viewport to be over the player. If the Viewport would display the outside blackness,
+        it is clamped with the game map.
+        :return:
+        """
+        clamped_x = min(
+            SCREEN_WIDTH,
+            max(0, self.player_sprite.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+        )
+        clamped_y = min(
+            SCREEN_HEIGHT,
+            max(0, self.player_sprite.center_y - VERTICAL_VIEWPORT_MARGIN),
+        )
+        arcade.set_viewport(
+            clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
+        )
 
     def on_update(self, delta_time: float):
         ...
