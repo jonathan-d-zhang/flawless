@@ -1,12 +1,16 @@
 from typing import Optional
 
 import utils
-from constant import *
+
+from constants import *
+
 import arcade
 from pyglet.gl import GL_NEAREST
 
 from entity.cabinet import Cabinet
+from entity.enemy import Enemy
 from entity.player import Player
+
 from item.key import Key
 
 
@@ -16,14 +20,19 @@ class GameView(arcade.View):
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
+        self.enemy_list: Optional[arcade.SpriteList] = None
         self.player_sprite: Optional[Player] = None
-        self.event_bus = None
-        self.event_emitter = None
 
     def setup(self):
 
         # Set up the player
         self.player_sprite = Player("assets/sprites/square.png", PLAYER_SCALING)
+
+        self.load_map()
+
+        # Set up the player
+        self.player_sprite = Player()
+
 
         # Starting position of the player
         self.player_sprite.center_x, self.player_sprite.center_y = utils.center_of_tile(
@@ -37,6 +46,17 @@ class GameView(arcade.View):
         self.interactable_list.append(cabinet_test)
 
         self.load_map()
+
+        cabinet = Cabinet(content=Key())
+        cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
+        self.interactable_list = arcade.SpriteList()
+        self.interactable_list.append(cabinet)
+
+        enemy = Enemy(self.wall_list)
+        enemy.center_x, enemy.center_y = utils.center_of_tile(135, 500)
+        self.enemy_list = arcade.SpriteList()
+        self.enemy_list.append(enemy)
+
         self.set_viewport_on_player()
 
     def load_map(self):
@@ -58,6 +78,8 @@ class GameView(arcade.View):
             self.player_sprite.handle_user_input(key, modifiers)
             if arcade.check_for_collision_with_list(self.player_sprite, self.wall_list):
                 self.player_sprite.center_x, self.player_sprite.center_y = original_pos
+            else:
+                self.enemy_list.update()
 
             self.set_viewport_on_player()
 
@@ -94,6 +116,8 @@ class GameView(arcade.View):
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
+
+        self.enemy_list.draw(filter=GL_NEAREST)
         self.player_sprite.draw()
 
 
