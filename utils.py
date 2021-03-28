@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import NamedTuple
 
-from constant import *
+from constants import *
 
 
 class Vector(NamedTuple):

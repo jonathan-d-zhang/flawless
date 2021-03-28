@@ -2,14 +2,14 @@ from typing import List
 
 import arcade
 
-from constant import TILE_SIZE
+from constants import TILE_SIZE, PLAYER_SCALING
 from model.item import Item
 from utils import Vector
 
 
 class Player(arcade.Sprite):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__("assets/sprites/square.png", PLAYER_SCALING, *args, **kwargs)
         self.inventory: List[Item] = []
 
     @property
