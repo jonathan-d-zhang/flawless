@@ -1,43 +1,13 @@
-from typing import NamedTuple, Optional
+from typing import Optional
 
 import utils
 from constant import *
 import arcade
 from pyglet.gl import GL_NEAREST
 
-
-class Vector2D(NamedTuple):
-    x: int
-    y: int
-
-    def __add__(self, other):
-        return Vector2D(self.x + other.x, self.y + other.y)
-
-    def __mul__(self, scalar):
-        return Vector2D(scalar * self.x, scalar * self.y)
-
-
-class Player(arcade.Sprite):
-    @property
-    def position(self) -> Vector2D:
-        return Vector2D(int(self.center_x), int(self.center_y))
-
-    def update(self):
-        ...
-
-    def handle_user_input(self, key: int, modifiers: int):
-        """
-        Handle events passed from the MainWindow.
-        :return:
-        """
-        if key == arcade.key.UP:
-            self.center_y += TILE_SIZE
-        elif key == arcade.key.DOWN:
-            self.center_y -= TILE_SIZE
-        elif key == arcade.key.LEFT:
-            self.center_x -= TILE_SIZE
-        elif key == arcade.key.RIGHT:
-            self.center_x += TILE_SIZE
+from entity.cabinet import Cabinet
+from entity.player import Player
+from item.key import Key
 
 
 class GameView(arcade.View):
@@ -45,11 +15,12 @@ class GameView(arcade.View):
         super().__init__(window)
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
-        self.player_list: Optional[arcade.SpriteList] = None
+        self.interactable_list: Optional[arcade.SpriteList] = None
         self.player_sprite: Optional[Player] = None
+        self.event_bus = None
+        self.event_emitter = None
 
     def setup(self):
-        self.player_list = arcade.SpriteList()
 
         # Set up the player
         self.player_sprite = Player("assets/sprites/square.png", PLAYER_SCALING)
@@ -59,13 +30,17 @@ class GameView(arcade.View):
             135, 390
         )
 
-        self.player_list.append(self.player_sprite)
+        cabinet_test = Cabinet(Key(), "assets/sprites/square.png", 1)
+
+        cabinet_test.center_x, cabinet_test.center_y = utils.center_of_tile(135, 300)
+        self.interactable_list = arcade.SpriteList()
+        self.interactable_list.append(cabinet_test)
 
         self.load_map()
         self.set_viewport_on_player()
 
     def load_map(self):
-        tile_map = arcade.tilemap.read_tmx(f"tilemaps/TestLevel.tmx")
+        tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
 
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
@@ -105,7 +80,12 @@ class GameView(arcade.View):
         )
 
     def on_update(self, delta_time: float):
-        ...
+        for interactable in arcade.check_for_collision_with_list(
+            self.player_sprite, self.interactable_list
+        ):
+            interactable.interact(self.player_sprite)
+
+        self.player_sprite.update()
 
     def on_draw(self):
         arcade.start_render()
@@ -113,7 +93,8 @@ class GameView(arcade.View):
         # GL_NEAREST makes scaled Pixel art look cleaner
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
-        self.player_list.draw()
+        self.interactable_list.draw(filter=GL_NEAREST)
+        self.player_sprite.draw()
 
 
 def main():
