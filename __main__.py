@@ -1,10 +1,6 @@
-from typing import Optional
-
-import utils
-
-from constants import *
-
 import arcade
+from constants import *
+from typing import Optional
 from pyglet.gl import GL_NEAREST
 
 from entity.cabinet import Cabinet
@@ -12,6 +8,7 @@ from entity.enemy import Enemy
 from entity.player import Player
 
 from item.key import Key
+
 
 
 class GameView(arcade.View):
@@ -119,13 +116,9 @@ class GameView(arcade.View):
 
 
 def main():
-    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-
-    game_view = GameView(main_window)
-    game_view.setup()
-
-    main_window.show_view(game_view)
-
+    window = MainWindow()
+    view = main_menu.MainMenuView()
+    window.show_view(view)
     arcade.run()
 
 
