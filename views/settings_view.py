@@ -18,8 +18,8 @@ class SettingsView(arcade.View):
         # setting_list will store list of settings to add to the view
         self.setting_list = [
             partial(SettingToggle, text="Turn music off/on", binding="is_music_on"),
-            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen"),
             partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
+            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen"),
         ]
         self.setting_list = [
             setting(width // 2 - 25, height - i * 50 - height // 8)
@@ -29,10 +29,24 @@ class SettingsView(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.setup()
-        ...
 
-    def on_show(self):
-        ...
+        longest = 0
+        for setting in self.setting_list:
+            setting.draw()
+            if len(setting.text) > longest:
+                longest = len(setting.text)
+
+        setting = self.setting_list[self.setting_index]
+        x = setting.center_x - 5
+        y = setting.center_y
+        width = setting.length 
+        arcade.draw_rectangle_outline(
+            center_x=x,
+            center_y=y,
+            width=width,
+            height=30,
+            color=arcade.color.WHITE,
+        )
 
     def on_show_view(self):
         ...
@@ -64,8 +78,7 @@ class SettingsView(arcade.View):
         self.ui_manager.unregister_handlers()
 
     def setup(self):
-        for setting in self.setting_list:
-            setting.draw()
+        pass
 
 
 class SettingField(ABC):
@@ -78,6 +91,10 @@ class SettingField(ABC):
         self.y = y
         self.text = text
         self.binding = binding
+        self.length = len(self.text) * 8
+
+        self.center_x = self.x + (self.length // 2)
+        self.center_y = self.y + 8
 
     @property
     def value(self):
@@ -93,8 +110,11 @@ class SettingField(ABC):
 
     def draw(self):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=75
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
         )
+
+    def value(self):
+        return True
 
     @abstractmethod
     def decrease(self):
@@ -118,6 +138,17 @@ class SettingToggle(SettingField):
 
     def increase(self):
         self.value = True
+
+    def draw(self):
+        arcade.draw_text(
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
+        )
+        arcade.draw_rectangle_outline(self.center_x + (self.length // 2) + 28, self.center_y, 49, 20, color=arcade.color.AQUA) 
+        if self.value(): 
+            arcade.draw_rectangle_filled(self.center_x + (self.length // 2) + 28, self.center_y, 48, 18, color=arcade.color.ARYLIDE_YELLOW)
+
+        else:
+            arcade.draw_rectangle_filled(self.center_x + (self.length // 2) + 16, self.center_y, 23, 18, color=arcade.color.ARYLIDE_YELLOW)
 
 
 class SettingSlider(SettingField):
