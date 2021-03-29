@@ -74,8 +74,6 @@ class GameView(arcade.View):
             self.object_layers["guard2"]
         )
 
-        print(self.guard1_locations, self.guard2_locations)
-
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
@@ -86,8 +84,6 @@ class GameView(arcade.View):
                 self.player.center_x, self.player.center_y = original_pos
             else:
                 self.enemy_list.update()
-
-            print(self.player.center_x)
 
             self.set_viewport_on_player()
 
