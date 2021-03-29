@@ -68,6 +68,18 @@ class SettingField(ABC):
         self.text = text
         self.binding = binding
 
+    @property
+    def value(self):
+        return getattr(CONFIG, self.binding)
+
+    @value.setter
+    def value(self, value):
+        setattr(CONFIG, self.binding, value)
+
+    @value.getter
+    def value(self):
+        return getattr(CONFIG, self.binding)
+
     def draw(self):
         arcade.draw_text(
             self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=75
@@ -87,7 +99,18 @@ class SettingToggle(SettingField):
         super().__init__(x, y, text, binding)
 
     def decrease(self):
-        ...
+        self.value = False
 
     def increase(self):
-        print(f"incrementing {self.binding}")
+        self.value = True
+
+
+class SettingSlider(SettingField):
+    def __init__(self, x, y, text, binding):
+        super().__init__(x, y, text, binding)
+
+    def decrease(self):
+        self.value -= 1
+
+    def increase(self):
+        self.value += 1
