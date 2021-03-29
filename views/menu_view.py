@@ -2,7 +2,6 @@ import arcade
 import arcade.gui
 
 from abc import ABC
-from config import CONFIG
 
 
 class MenuView(arcade.View):
@@ -27,6 +26,7 @@ class MenuField(ABC):
         self.x = x
         self.y = y
         self.text = text
+        self.length = len(self.text) * 8
 
     def draw(self, longest: int):
         ...

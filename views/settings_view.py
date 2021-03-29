@@ -8,12 +8,12 @@ from .menu_view import MenuView, MenuField
 
 
 class SettingsView(MenuView):
-    def __init__(self):
+    def __init__(self, parent_view):
         super().__init__()
         self.ui_manager = arcade.gui.UIManager()
-        self.last_size = (self.width, self.height) = self.window.get_size()
+        self.width, self.height = self.window.get_size()
+        self.parent_view = parent_view
         # use setting_index to grab the currently selected setting
-        self.setting_index = 0
 
         # setting_list will store list of settings to add to the view
         self.setting_list = [
@@ -38,7 +38,7 @@ class SettingsView(MenuView):
         for setting in self.setting_list:
             setting.draw(longest)
 
-        setting = self.setting_list[self.setting_index]
+        setting = self.setting_list[self.selection_index]
         x = setting.x + (longest + 60) // 2
         width = longest + 100
 
@@ -60,24 +60,25 @@ class SettingsView(MenuView):
             )
 
     def update(self, delta_time: float):
-        if self.last_size != (new_size := self.window.get_size()):
+        if (self.width, self.height) != (new_size := self.window.get_size()):
             self.width, self.height = new_size
             for i, setting in enumerate(self.setting_list):
                 setting.x = self.width // 4
                 setting.y = self.height - i * 70 - self.height // 4
-        self.last_size = new_size
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.UP:
-            self.setting_index -= 1
-            if self.setting_index < 0:
-                self.setting_index = len(self.setting_list) - 1
+            self.selection_index -= 1
+            if self.selection_index < 0:
+                self.selection_index = len(self.setting_list) - 1
         elif symbol == arcade.key.DOWN:
-            self.setting_index = (self.setting_index + 1) % len(self.setting_list)
+            self.selection_index = (self.selection_index + 1) % len(self.setting_list)
         elif symbol == arcade.key.LEFT:
-            self.setting_list[self.setting_index].decrease()
+            self.setting_list[self.selection_index].decrease()
         elif symbol == arcade.key.RIGHT:
-            self.setting_list[self.setting_index].increase()
+            self.setting_list[self.selection_index].increase()
+        elif symbol == arcade.key.ESCAPE:
+            self.window.show_view(self.parent_view)
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
@@ -91,7 +92,6 @@ class SettingField(MenuField):
     def __init__(self, x: int, y: int, text: str, binding: str):
         super().__init__(x, y, text)
         self.binding = binding
-        self.length = len(self.text) * 8
 
     @property
     def value(self):
