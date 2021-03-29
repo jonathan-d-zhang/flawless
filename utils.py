@@ -38,9 +38,9 @@ def center_of_tile(x: int, y: int) -> Vector:
 
 def process_objects(file_path: str) -> list[ObjectLayer]:
     """
-    Reads the .tmx file that the tile infomation is stored in an process the object infomation into
-    a list of dicts
-    :return: list constaining a dictionary for each layer
+    Reads the .tmx file that the tile infomation is stored in and process the object infomation into
+    a list of ObjectLayers
+    :return: A list of ObjectLayer's
     """
 
     object_layers: list[ObjectLayer] = []
@@ -74,14 +74,16 @@ def process_objects(file_path: str) -> list[ObjectLayer]:
     return object_layers
 
 
-def extract_guard_locations(layer_data: ObjectLayer,) -> dict[str, list[coordinate]]:
+def extract_guard_locations(
+    layer_data: ObjectLayer,
+) -> dict[str, Union[coordinate, list[coordinate]]]:
     """
     Extracts the infomation that can be generated from process_objects about the guards spawn location and the
     waypoints it must patrol
     :return: dictionary containing spawn (dict) and waypoints (list of dicts)
     """
 
-    locations = {"spawn": [{"x": 0, "y": 0}], "waypoints": []}
+    locations = {"spawn": {"x": 0, "y": 0}, "waypoints": []}
 
     locations["waypoints"] = [False for i in range(layer_data.object_count - 1)]
 
