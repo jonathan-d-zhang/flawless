@@ -16,7 +16,6 @@ class GameWindow(arcade.Window):
         # because it checks to see if we try to change it into a state
         # it is already in, e.g. go fullscreen when we are already fullscreen
         self.set_fullscreen(CONFIG.is_fullscreen)
-        # print(self.get_size())
 
 
 if __name__ == "__main__":
