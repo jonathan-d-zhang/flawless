@@ -45,8 +45,6 @@ class GameView(arcade.View):
         self.enemy_list = arcade.SpriteList()
         self.enemy_list.append(enemy)
 
-        self.load_map()
-
         self.set_viewport_on_player()
 
     def load_map(self):
@@ -70,6 +68,8 @@ class GameView(arcade.View):
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
 
         self.guard1_locations = utils.extract_guard_locations(self.object_layers[0])
+
+        print(self.guard1_locations)
 
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
