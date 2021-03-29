@@ -1,5 +1,9 @@
+from abc import ABC, abstractmethod
+
 import arcade
 import arcade.gui
+import config
+from enum import Enum
 from constants import *
 
 
@@ -13,11 +17,22 @@ class SettingsView(arcade.View):
 
         # setting_list will store list of settings to add to the view
         self.setting_list = [
-            arcade.gui.UIToggle(400, 400, 50),
+            SettingToggle(
+                SCREEN_WIDTH // 2 - 25,
+                SCREEN_HEIGHT - 0 * 50 - 100,
+                "test text 1",
+                config.Setting.music,
+            ),
+            SettingToggle(
+                SCREEN_WIDTH // 2 - 25,
+                SCREEN_HEIGHT - 1 * 50 - 100,
+                "test text 2",
+                config.Setting.music_volume,
+            ),
         ]
 
     def on_draw(self):
-        arcade.start_render()
+        ...
 
     def on_show_view(self):
         self.setup()
@@ -26,29 +41,54 @@ class SettingsView(arcade.View):
         ...
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == arcade.key.SPACE:
-            print("inkyo")
-            # self.window.show_view(game.GameView())
+        if symbol == arcade.key.UP:
+            self.setting_index -= 1
+            if self.setting_index < 0:
+                self.setting_index = len(self.setting_list) - 1
+        elif symbol == arcade.key.DOWN:
+            self.setting_index = (self.setting_index + 1) % len(self.setting_list)
+        elif symbol == arcade.key.LEFT:
+            self.setting_list[self.setting_index].decrease()
+        elif symbol == arcade.key.RIGHT:
+            self.setting_list[self.setting_index].increase()
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
 
     def setup(self):
+        # arcade.start_render()
         for setting in self.setting_list:
-            self.ui_manager.add_ui_element(setting)
+            setting.draw()
+            print(setting)
 
 
-class SettingField:
-    def __init__(self, center_x, center_y):
-        self.center_x = center_x
-        self.center_y = center_y
-
-
-class SettingToggle(arcade.gui.UIToggle, SettingField):
-    def __init__(self, center_x, center_y, text):
-        super().__init__(center_x, center_y, 20, value=False)
+class SettingField(ABC):
+    def __init__(self, x: int, y: int, text: str, binding: config.Setting):
+        self.x = x
+        self.y = y
         self.text = text
-        arcade.start_render()
+        self.binding = binding
 
-    def on_toggle(self, value):
-        print("toggled !")
+    def draw(self):
+        arcade.draw_text(
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=75
+        )
+
+    @abstractmethod
+    def decrease(self):
+        ...
+
+    @abstractmethod
+    def increase(self):
+        ...
+
+
+class SettingToggle(SettingField):
+    def __init__(self, x, y, text, binding):
+        super().__init__(x, y, text, binding)
+
+    def decrease(self):
+        ...
+
+    def increase(self):
+        print(f"incrementing {self.binding}")
