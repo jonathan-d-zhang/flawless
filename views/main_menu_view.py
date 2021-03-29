@@ -10,22 +10,17 @@ TEXT_COLOR = arcade.csscolor.WHITE
 class MainMenuView(MenuView):
     def __init__(self):
         super().__init__()
-        self.ui_manager = arcade.gui.UIManager()
-        options = "Play", "Settings"
+        options = "Play", "Settings", "Exit"
 
         self.field_list = [
             MainMenuField(
-                self.width // 2, self.height - i * 70 - self.height // 2, option
+                self.width // 2, self.height - i * 50 - self.height // 2, option
             )
             for i, option in enumerate(options)
         ]
 
     def on_draw(self):
         arcade.start_render()
-
-        # arcade.draw_line(
-        #     self.width // 2, 0, self.width // 2, self.height, color=TEXT_COLOR
-        # )
 
         arcade.draw_text(
             "Name of The Game",
@@ -49,8 +44,8 @@ class MainMenuView(MenuView):
             color=TEXT_COLOR,
         )
 
-        t = "Use up and down arrow keys to navigate, and ENTER to select"
-        arcade.draw_text(t, self.width // 2 - len(t) * 4, self.height * 0.1, TEXT_COLOR)
+        t = "Up and down to navigate, ENTER to select"
+        arcade.draw_text(t, self.width // 16, self.height // 8, TEXT_COLOR)
 
     def on_show_view(self):
         self.setup()
@@ -76,6 +71,8 @@ class MainMenuView(MenuView):
                 pass
             elif self.selection_index == 1:
                 self.window.show_view(settings_view.SettingsView(self))
+            elif self.selection_index == 2:
+                self.window.close()
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
