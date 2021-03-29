@@ -4,6 +4,7 @@ import arcade
 import arcade.gui
 
 from config import CONFIG
+from functools import partial
 
 
 class SettingsView(arcade.View):
@@ -16,24 +17,13 @@ class SettingsView(arcade.View):
 
         # setting_list will store list of settings to add to the view
         self.setting_list = [
-            SettingToggle(
-                width // 2 - 25,
-                height - 0 * 50 - height // 8,
-                "Turn music off/on",
-                "is_music_on",
-            ),
-            SettingSlider(
-                width // 2 - 25,
-                height - 1 * 50 - height // 8,
-                "Adjust volume",
-                "music_volume",
-            ),
-            SettingToggle(
-                width // 2 - 25,
-                height - 2 * 50 - height // 8,
-                "Fullscreen",
-                "is_fullscreen",
-            ),
+            partial(SettingToggle, text="Turn music off/on", binding="is_music_on"),
+            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen"),
+            partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
+        ]
+        self.setting_list = [
+            setting(width // 2 - 25, height - i * 50 - height // 8)
+            for i, setting in enumerate(self.setting_list)
         ]
 
     def on_draw(self):
@@ -52,11 +42,10 @@ class SettingsView(arcade.View):
 
     def update(self, delta_time: float):
         if self.last_size != (new_size := self.window.get_size()):
-            print(f"changed the size from {self.last_size} to {new_size}")
             width, height = new_size
             for i, setting in enumerate(self.setting_list):
                 setting.x = width // 2 - 25
-                setting.y = height - i * 50 - height // 2
+                setting.y = height - i * 50 - height // 8
         self.last_size = new_size
 
     def on_key_press(self, symbol, modifiers):
@@ -133,7 +122,7 @@ class SettingToggle(SettingField):
 
 class SettingSlider(SettingField):
     """
-    Represents a setting with a slider
+    Represents a setting with a slider, with values ranging from [1, 10]
     """
 
     def __init__(self, x, y, text, binding):
