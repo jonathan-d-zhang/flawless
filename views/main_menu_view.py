@@ -1,33 +1,98 @@
 import arcade
 import arcade.gui
-from constants import *
+from .menu_view import MenuView, MenuField
 
-# import game
 from views import settings_view
 
+TEXT_COLOR = arcade.csscolor.WHITE
 
-class MainMenuView(arcade.View):
+
+class MainMenuView(MenuView):
     def __init__(self):
         super().__init__()
         self.ui_manager = arcade.gui.UIManager()
+        options = "Play", "Settings"
+
+        self.field_list = [
+            MainMenuField(
+                self.width // 2, self.height - i * 70 - self.height // 2, option
+            )
+            for i, option in enumerate(options)
+        ]
 
     def on_draw(self):
-        # arcade.start_render()
-        ...
+        arcade.start_render()
+
+        # arcade.draw_line(
+        #     self.width // 2, 0, self.width // 2, self.height, color=TEXT_COLOR
+        # )
+
+        arcade.draw_text(
+            "Name of The Game",
+            self.width // 2 - 100,
+            self.height * 0.75,
+            TEXT_COLOR,
+            20,
+        )
+
+        half = self.width // 2
+        for field in self.field_list:
+            field.draw(half)
+
+        field = self.field_list[self.selection_index]
+
+        arcade.draw_rectangle_outline(
+            center_x=field.x,
+            center_y=field.y + 8,
+            width=half // 4,
+            height=30,
+            color=TEXT_COLOR,
+        )
+
+        t = "Use up and down arrow keys to navigate, and ENTER to select"
+        arcade.draw_text(t, self.width // 2 - len(t) * 4, self.height * 0.1, TEXT_COLOR)
 
     def on_show_view(self):
         self.setup()
 
-    def on_update(self, delta_time: float):
-        ...
+    def update(self, delta_time: float):
+        if (self.width, self.height) != (new_size := self.window.get_size()):
+            self.width, self.height = new_size
+            for i, field in enumerate(self.field_list):
+                field.x = self.width // 2 - field.length // 2
+                field.y = self.height - i * 70 - self.height // 4
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == arcade.key.S:
-            self.window.show_view(settings_view.SettingsView())
-            # self.window.show_view(game.GameView())
+        if symbol == arcade.key.DOWN:
+            self.selection_index = (self.selection_index + 1) % len(self.field_list)
+        elif symbol == arcade.key.UP:
+            self.selection_index -= 1
+            if self.selection_index < 0:
+                self.selection_index = len(self.field_list) - 1
+        elif symbol == arcade.key.ENTER:
+            if self.selection_index == 0:
+                # load the gameview
+                # self.window.show_view()
+                pass
+            elif self.selection_index == 1:
+                self.window.show_view(settings_view.SettingsView(self))
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
 
     def setup(self):
         ...
+
+
+class MainMenuField(MenuField):
+    def __init__(self, x, y, text):
+        super().__init__(x, y, text)
+
+    def draw(self, longest):
+        arcade.draw_text(
+            self.text,
+            self.x - self.length // 2,
+            self.y,
+            color=TEXT_COLOR,
+            width=self.length,
+        )

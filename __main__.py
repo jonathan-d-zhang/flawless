@@ -21,8 +21,6 @@ class GameWindow(arcade.Window):
 if __name__ == "__main__":
     window = GameWindow()
     window.center_window()
-    window.set_fullscreen(CONFIG.is_fullscreen)
-    # view = main_menu_view.MainMenuView()
-    view = settings_view.SettingsView()
+    view = main_menu_view.MainMenuView()
     window.show_view(view)
     arcade.run()
