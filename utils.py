@@ -5,6 +5,7 @@ from constants import *
 
 from xml.dom import minidom
 
+
 class Vector(NamedTuple):
     x: int
     y: int
@@ -45,24 +46,27 @@ def process_objects(file_path: str) -> list:
     objects = file.getElementsByTagName("objectgroup")
 
     for i in objects:
-        guard = {'name': i.getAttribute('name'),
-                 'objects': [],
-                 'object_count': 0}
+        guard = {"name": i.getAttribute("name"), "objects": [], "object_count": 0}
 
-        child_object_elements = i.getElementsByTagName('object')
+        child_object_elements = i.getElementsByTagName("object")
 
         for x in child_object_elements:
-            guard['object_count'] += 1
-            guard['objects'].append({'name': x.getAttribute('name'),
-                                    'type': x.getAttribute('type'),
-                                    'x': x.getAttribute('x'),
-                                    'y': x.getAttribute('y'),
-                                    'width': x.getAttribute('width'),
-                                    'height': x.getAttribute('width')})
+            guard["object_count"] += 1
+            guard["objects"].append(
+                {
+                    "name": x.getAttribute("name"),
+                    "type": x.getAttribute("type"),
+                    "x": x.getAttribute("x"),
+                    "y": x.getAttribute("y"),
+                    "width": x.getAttribute("width"),
+                    "height": x.getAttribute("width"),
+                }
+            )
 
         guards.append(guard)
 
     return guards
+
 
 def extract_guard_locations(layer_data: dict) -> dict:
     """
@@ -71,17 +75,16 @@ def extract_guard_locations(layer_data: dict) -> dict:
     :return: dictionary containing spawn (dict) and waypoints (list of dicts)
     """
 
-    locations = {'spawn': {'x': 0, 'y': 0},
-                 'waypoints': []}
+    locations = {"spawn": {"x": 0, "y": 0}, "waypoints": []}
 
-    locations['waypoints'] = [False for i in range(layer_data['object_count']-1)]
+    locations["waypoints"] = [False for i in range(layer_data["object_count"] - 1)]
 
-    for i in layer_data['objects']:
-        if i['type'] == 'spawn':
-            locations['spawn']['x'] = i['x']
-            locations['spawn']['y'] = i['y']
+    for i in layer_data["objects"]:
+        if i["type"] == "spawn":
+            locations["spawn"]["x"] = i["x"]
+            locations["spawn"]["y"] = i["y"]
 
-        if i['type'] == 'point':
-            locations['waypoints'][int(i['name'])] = {'x': i['x'], 'y': i['y']}
+        if i["type"] == "point":
+            locations["waypoints"][int(i["name"])] = {"x": i["x"], "y": i["y"]}
 
     return locations
