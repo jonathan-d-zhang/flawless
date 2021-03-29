@@ -10,7 +10,6 @@ from .menu_view import MenuView, MenuField
 class SettingsView(MenuView):
     def __init__(self, parent_view):
         super().__init__()
-        self.ui_manager = arcade.gui.UIManager()
         self.width, self.height = self.window.get_size()
         self.parent_view = parent_view
         # use setting_index to grab the currently selected setting
@@ -34,6 +33,20 @@ class SettingsView(MenuView):
             "Settings", self.width // 2 - 22, self.height * 0.90, arcade.color.WHITE, 20
         )
 
+        arcade.draw_text(
+            "Press ESC to go back",
+            self.width // 16,
+            self.height * 7 / 8,
+            arcade.color.WHITE,
+        )
+
+        arcade.draw_text(
+            "Left and right to change settings",
+            self.width // 16,
+            self.height // 8,
+            arcade.color.WHITE,
+        )
+
         longest = self.width // 2
         for setting in self.setting_list:
             setting.draw(longest)
@@ -42,7 +55,7 @@ class SettingsView(MenuView):
         x = setting.x + (longest + 60) // 2
         width = longest + 100
 
-        if type(setting) == SettingToggle:
+        if type(setting) is SettingToggle:
             arcade.draw_rectangle_outline(
                 center_x=x,
                 center_y=setting.y + 8,
