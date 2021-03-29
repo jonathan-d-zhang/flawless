@@ -19,7 +19,7 @@ class SettingsView(arcade.View):
         self.setting_list = [
             partial(SettingToggle, text="Turn music off/on", binding="is_music_on"),
             partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
-            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen")
+            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen"),
         ]
         self.setting_list = [
             setting(width // 2 - 25, height - i * 50 - height // 8)
@@ -112,7 +112,12 @@ class SettingField(ABC):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
+            font_name="arial.ttf",
         )
 
     @abstractmethod
@@ -140,14 +145,33 @@ class SettingToggle(SettingField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
+            font_name="arial.ttf",
         )
-        arcade.draw_rectangle_outline(self.x + longest + 35, self.center_y, 49, 20, color=arcade.color.AQUA) 
-        if self.value: 
-            arcade.draw_rectangle_filled(self.x + longest + 35, self.center_y, 48, 18, color=arcade.color.ARYLIDE_YELLOW)
+        arcade.draw_rectangle_outline(
+            self.x + longest + 35, self.center_y, 49, 20, color=arcade.color.AQUA
+        )
+        if self.value:
+            arcade.draw_rectangle_filled(
+                self.x + longest + 35,
+                self.center_y,
+                48,
+                18,
+                color=arcade.color.ARYLIDE_YELLOW,
+            )
 
         else:
-            arcade.draw_rectangle_filled(self.x + longest + 23, self.center_y, 23, 18, color=arcade.color.ARYLIDE_YELLOW)
+            arcade.draw_rectangle_filled(
+                self.x + longest + 23,
+                self.center_y,
+                23,
+                18,
+                color=arcade.color.ARYLIDE_YELLOW,
+            )
 
 
 class SettingSlider(SettingField):
