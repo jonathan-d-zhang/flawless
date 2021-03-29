@@ -45,8 +45,6 @@ class GameView(arcade.View):
         self.enemy_list = arcade.SpriteList()
         self.enemy_list.append(enemy)
 
-        self.load_map()
-
         self.set_viewport_on_player()
 
     def load_map(self):
