@@ -12,7 +12,8 @@ class MainMenuView(arcade.View):
         self.ui_manager = arcade.gui.UIManager()
 
     def on_draw(self):
-        arcade.start_render()
+        # arcade.start_render()
+        ...
 
     def on_show_view(self):
         self.setup()
@@ -22,7 +23,6 @@ class MainMenuView(arcade.View):
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.S:
-            print("showing settings")
             self.window.show_view(settings_view.SettingsView())
             # self.window.show_view(game.GameView())
 
