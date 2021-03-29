@@ -19,7 +19,7 @@ class SettingsView(arcade.View):
         self.setting_list = [
             partial(SettingToggle, text="Turn music off/on", binding="is_music_on"),
             partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
-            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen"),
+            partial(SettingSlider, text="Adjust volume", binding="is_fullscreen")
         ]
         self.setting_list = [
             setting(width // 2 - 25, height - i * 50 - height // 8)
@@ -32,14 +32,16 @@ class SettingsView(arcade.View):
 
         longest = 0
         for setting in self.setting_list:
-            setting.draw()
-            if len(setting.text) > longest:
-                longest = len(setting.text)
+            if setting.length > longest:
+                longest = setting.length
+
+        for setting in self.setting_list:
+            setting.draw(longest)
 
         setting = self.setting_list[self.setting_index]
-        x = setting.center_x - 5
+        x = setting.x + (longest + 60) // 2
         y = setting.center_y
-        width = setting.length 
+        width = longest + 120
         arcade.draw_rectangle_outline(
             center_x=x,
             center_y=y,
@@ -108,13 +110,10 @@ class SettingField(ABC):
     def value(self):
         return getattr(CONFIG, self.binding)
 
-    def draw(self):
+    def draw(self, longest):
         arcade.draw_text(
             self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
         )
-
-    def value(self):
-        return True
 
     @abstractmethod
     def decrease(self):
@@ -139,16 +138,16 @@ class SettingToggle(SettingField):
     def increase(self):
         self.value = True
 
-    def draw(self):
+    def draw(self, longest):
         arcade.draw_text(
             self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length, font_name="arial.ttf"
         )
-        arcade.draw_rectangle_outline(self.center_x + (self.length // 2) + 28, self.center_y, 49, 20, color=arcade.color.AQUA) 
-        if self.value(): 
-            arcade.draw_rectangle_filled(self.center_x + (self.length // 2) + 28, self.center_y, 48, 18, color=arcade.color.ARYLIDE_YELLOW)
+        arcade.draw_rectangle_outline(self.x + longest + 35, self.center_y, 49, 20, color=arcade.color.AQUA) 
+        if self.value: 
+            arcade.draw_rectangle_filled(self.x + longest + 35, self.center_y, 48, 18, color=arcade.color.ARYLIDE_YELLOW)
 
         else:
-            arcade.draw_rectangle_filled(self.center_x + (self.length // 2) + 16, self.center_y, 23, 18, color=arcade.color.ARYLIDE_YELLOW)
+            arcade.draw_rectangle_filled(self.x + longest + 23, self.center_y, 23, 18, color=arcade.color.ARYLIDE_YELLOW)
 
 
 class SettingSlider(SettingField):
