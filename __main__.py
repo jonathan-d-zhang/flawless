@@ -12,6 +12,27 @@ from entity.enemy import Enemy
 from entity.player import Player
 
 from item.key import Key
+from model.item import Item
+
+
+class IngameUI:
+    """
+    Used to display in-game interface features like Key count and Current Level.
+    """
+
+    def __init__(self, player_inventory: list[Item]):
+        self.player_inv = player_inventory
+
+    def draw(self, current_level: int, viewport: tuple[float, float, float, float]):
+        vp_left, vp_right, vp_bottom, vp_top = viewport
+        background_width, background_height = 100, 75
+        point_list = (
+            (vp_right, vp_top),
+            (vp_right - background_width, vp_top),
+            (vp_right - background_width, vp_top - background_height),
+            (vp_right, vp_top - background_width),
+        )
+        arcade.draw_polygon_filled(point_list, (int(0x22), int(0x3D), int(0x28)))
 
 
 class GameView(arcade.View):
@@ -22,6 +43,7 @@ class GameView(arcade.View):
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
+        self.ingame_ui: Optional[IngameUI] = None
 
     def setup(self):
 
@@ -45,16 +67,16 @@ class GameView(arcade.View):
         self.enemy_list = arcade.SpriteList()
         self.enemy_list.append(enemy)
 
-        self.load_map()
+        self.ingame_ui = IngameUI(self.player.inventory)
 
         self.set_viewport_on_player()
+        self._draw()
 
     def load_map(self):
 
         # Process Tile Map
 
         tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
-
         # Tile Layers
 
         self.wall_list = arcade.tilemap.process_layer(
@@ -83,6 +105,7 @@ class GameView(arcade.View):
                 self.enemy_list.update()
 
             self.set_viewport_on_player()
+            self._draw()
 
     def set_viewport_on_player(self):
         """
@@ -108,7 +131,7 @@ class GameView(arcade.View):
 
         self.player.update()
 
-    def on_draw(self):
+    def _draw(self):
         arcade.start_render()
 
         # GL_NEAREST makes scaled Pixel art look cleaner
@@ -118,6 +141,12 @@ class GameView(arcade.View):
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
+        self.ingame_ui.draw(
+            1, self.window.get_viewport()
+        )  # TODO: Replace with actual level.
+
+    def on_draw(self):
+        ...
 
 
 def main():
