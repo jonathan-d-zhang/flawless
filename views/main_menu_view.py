@@ -54,8 +54,8 @@ class MainMenuView(MenuView):
         if (self.width, self.height) != (new_size := self.window.get_size()):
             self.width, self.height = new_size
             for i, field in enumerate(self.field_list):
-                field.x = self.width // 2 - field.length // 2
-                field.y = self.height - i * 70 - self.height // 4
+                field.x = self.width // 2
+                field.y = self.height - i * 50 - self.height // 2
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.DOWN:
