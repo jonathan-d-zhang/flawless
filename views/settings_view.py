@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import arcade
 import arcade.gui
-import config
+from config import CONFIG
 from enum import Enum
 from constants import *
 
@@ -21,13 +21,13 @@ class SettingsView(arcade.View):
                 SCREEN_WIDTH // 2 - 25,
                 SCREEN_HEIGHT - 0 * 50 - 100,
                 "test text 1",
-                config.Setting.music,
+                "is_music_on",
             ),
-            SettingToggle(
+            SettingSlider(
                 SCREEN_WIDTH // 2 - 25,
                 SCREEN_HEIGHT - 1 * 50 - 100,
                 "test text 2",
-                config.Setting.music_volume,
+                "music_volume",
             ),
         ]
 
@@ -38,7 +38,7 @@ class SettingsView(arcade.View):
         self.setup()
 
     def on_update(self, delta_time: float):
-        ...
+        print(CONFIG)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.UP:
@@ -59,11 +59,10 @@ class SettingsView(arcade.View):
         # arcade.start_render()
         for setting in self.setting_list:
             setting.draw()
-            print(setting)
 
 
 class SettingField(ABC):
-    def __init__(self, x: int, y: int, text: str, binding: config.Setting):
+    def __init__(self, x: int, y: int, text: str, binding: str):
         self.x = x
         self.y = y
         self.text = text
