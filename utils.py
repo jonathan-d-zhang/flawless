@@ -36,22 +36,20 @@ def center_of_tile(x: int, y: int) -> Vector:
     )
 
 
-def process_objects(file_path: str) -> list[ObjectLayer]:
+def process_objects(file_path: str) -> dict[str, ObjectLayer]:
     """
     Reads the .tmx file that the tile infomation is stored in and process the object infomation into
     a list of ObjectLayers
-    :return: A list of ObjectLayer's
+    :return: A dict of ObjectLayer's
     """
 
-    object_layers: list[ObjectLayer] = []
+    object_layers: dict[str, ObjectLayer] = {}
 
     file = minidom.parse(file_path)
     objects = file.getElementsByTagName("objectgroup")
 
     for i in objects:
-        object_layer = ObjectLayer(
-            name=i.getAttribute("name"), objects=[], object_count=0
-        )
+        object_layer = ObjectLayer(objects=[], object_count=0)
 
         child_object_elements = i.getElementsByTagName("object")
 
@@ -69,7 +67,7 @@ def process_objects(file_path: str) -> list[ObjectLayer]:
 
             object_layer.objects.append(object_infomation)
 
-        object_layers.append(object_layer)
+        object_layers[i.getAttribute("name")] = object_layer
 
     return object_layers
 

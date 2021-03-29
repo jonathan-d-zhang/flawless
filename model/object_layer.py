@@ -13,6 +13,5 @@ class Object:
 
 @dataclass
 class ObjectLayer:
-    name: str
     object_count: int
     objects: list[Object]
