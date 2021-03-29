@@ -23,7 +23,7 @@ class SettingsView(arcade.View):
             partial(SettingToggle, text="test", binding="is_music_on")
         ]
         self.setting_list = [
-            setting(self.width // 4, self.height - i * 60 - self.height // 8)
+            setting(self.width // 4, self.height - i * 60 - self.height // 4)
             for i, setting in enumerate(self.setting_list)
         ]
 
@@ -31,10 +31,7 @@ class SettingsView(arcade.View):
         arcade.start_render()
         self.setup()
 
-        # longest = 0
-        # for setting in self.setting_list:
-        #     if setting.length > longest:
-        #         longest = setting.length
+        arcade.draw_text("Settings", self.width // 2 - 22, self.height * .90, arcade.color.WHITE, 20)
 
         longest = (self.width // 2)
         for setting in self.setting_list:
@@ -43,6 +40,7 @@ class SettingsView(arcade.View):
         setting = self.setting_list[self.setting_index]
         x = setting.x + (longest + 60) // 2
         width = longest + 100
+
         if type(setting) == SettingToggle:
             arcade.draw_rectangle_outline(
                 center_x=x,
@@ -59,8 +57,6 @@ class SettingsView(arcade.View):
                 height=60,
                 color=arcade.color.WHITE,
                 )
-        arcade.draw_line(self.width // 2, 0, self.width // 2, 400, arcade.color.WHITE)
-
 
     def on_show_view(self):
         ...
@@ -73,7 +69,7 @@ class SettingsView(arcade.View):
             self.width, self.height = new_size
             for i, setting in enumerate(self.setting_list):
                 setting.x = self.width // 4
-                setting.y = self.height - i * 50 - self.height // 8
+                setting.y = self.height - i * 50 - self.height // 4
         self.last_size = new_size
 
     def on_key_press(self, symbol, modifiers):
