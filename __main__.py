@@ -1,10 +1,28 @@
 import arcade
 from constants import *
+from config import CONFIG
 from views import main_menu_view, settings_view
 
 
+class GameWindow(arcade.Window):
+    def __init__(self, **kwargs):
+        super().__init__(
+            INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, SCREEN_TITLE, **kwargs
+        )
+        self.last_fullscreen = False
+
+    def on_update(self, delta_time: float):
+        # not expensive if we call this function when we don't need to
+        # because it checks to see if we try to change it into a state
+        # it is already in, e.g. go fullscreen when we are already fullscreen
+        self.set_fullscreen(CONFIG.is_fullscreen)
+        # print(self.get_size())
+
+
 if __name__ == "__main__":
-    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window = GameWindow()
+    window.center_window()
+    window.set_fullscreen(CONFIG.is_fullscreen)
     # view = main_menu_view.MainMenuView()
     view = settings_view.SettingsView()
     window.show_view(view)
