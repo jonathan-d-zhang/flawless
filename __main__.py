@@ -34,16 +34,13 @@ class GameView(arcade.View):
         Advance our pointer to the next song. This does NOT play the song.
         :return:
         """
-        self.song_index += 1
-        if self.song_index >= len(self.music_list):
-            self.song_index = 0
+        self.song_index += (self.song_index + 1) % len(self.music_list)
 
     def play_song(self):
-        if self.music:
-            self.music.stop(self.current_player)
-
         self.music = arcade.Sound(self.music_list[self.song_index], streaming=True)
-        self.current_player = self.music.play(0.1)
+        self.current_player = self.music.play(
+            0.1
+        )  # should use config.CONFIG.music_volume when ui-elements is merged
         time.sleep(0.03)
 
     def setup(self):
@@ -70,7 +67,10 @@ class GameView(arcade.View):
 
         self.set_viewport_on_player()
 
-        self.music_list = [":resources:music/funkyrobot.mp3"]
+        self.music_list = [
+            ":resources:music/funkyrobot.mp3",
+            ":resources:music/1918.mp3",
+        ]
         self.song_index = 0
         self.play_song()
 
