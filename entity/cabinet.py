@@ -10,7 +10,9 @@ class Cabinet(arcade.Sprite, Interactable):
         super().__init__("assets/sprites/cabinet.png", 1, *args, **kwargs)
 
         self.content = content
+        self.sound_effect = arcade.load_sound("assets/sound_effects/key_pickup.mp3")
 
     def interact(self, player: Player):
         player.inventory.append(self.content)
+        arcade.play_sound(self.sound_effect, volume=0.1)
         self.kill()
