@@ -1,7 +1,7 @@
 import arcade
 
 from .menu_view import MenuView, MenuField
-from views import settings_view, credits_view
+from views import settings_view, credits_view, game_view
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -66,9 +66,9 @@ class MainMenuView(MenuView):
                 self.selection_index = len(self.field_list) - 1
         elif symbol == arcade.key.ENTER:
             if self.selection_index == 0:
-                # load the gameview
-                # self.window.show_view()
-                pass
+                view = game_view.GameView(self.window)
+                view.setup()
+                self.window.show_view(view)
             elif self.selection_index == 1:
                 self.window.show_view(settings_view.SettingsView(self))
             elif self.selection_index == 2:
@@ -89,9 +89,5 @@ class MainMenuField(MenuField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=TEXT_COLOR,
-            anchor_x="center",
+            self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="center",
         )
