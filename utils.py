@@ -100,3 +100,18 @@ def extract_guard_locations(
             locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
 
     return locations
+
+def extract_key_locations(layer_data: ObjectLayer) -> dict[str, Vector]:
+    """
+    Extracts the infomation that can be generated from process_objects about the keys spawn
+    location
+    :return: dictionary containing key location
+    """
+
+    locations = {"spawn": None}
+
+    for i in layer_data.objects:
+        if i.type == "spawn":
+            locations["spawn"] = Vector(i.x, i.y)
+
+    return locations
