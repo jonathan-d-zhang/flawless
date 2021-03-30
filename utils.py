@@ -49,7 +49,7 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
     for i in objects:
 
         object_layer = ObjectLayer(
-            name=i.getAttribute("name"), objects=[], object_count=0
+            name=i.getAttribute("name"), objects=[], object_count=0, type=None
         )
 
         child_object_elements = i.getElementsByTagName("object")
@@ -76,44 +76,41 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
                 and x.getAttribute("value") in entitys.keys()
             ):
                 entitys[x.getAttribute("value")].append(object_layer)
+                object_layer.type = x.getAttribute("value")
 
     return entitys
 
 
-def extract_guard_locations(
+def extract_locations(
     layer_data: ObjectLayer,
 ) -> dict[str, Union[Vector, list[Vector]]]:
     """
-    Extracts the infomation that can be generated from process_objects about the guards spawn location and the
-    waypoints it must patrol
-    :return: dictionary containing spawn (dict) and waypoints (list of dicts)
+    Extract locations for each different entity.
     """
 
-    locations = {"spawn": None, "waypoints": []}
+    # Guard Location Extraction
 
-    locations["waypoints"] = [None for i in range(layer_data.object_count - 1)]
+    if layer_data.type == "guard":
+        locations = {"spawn": None, "waypoints": []}
 
-    for i in layer_data.objects:
-        if i.type == "spawn":
-            locations["spawn"] = Vector(i.x, i.y)
+        locations["waypoints"] = [None for i in range(layer_data.object_count - 1)]
 
-        if i.type == "point":
-            locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
+        for i in layer_data.objects:
+            if i.type == "spawn":
+                locations["spawn"] = Vector(i.x, i.y)
 
-    return locations
+            if i.type == "point":
+                locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
 
+        return locations
 
-def extract_key_locations(layer_data: ObjectLayer) -> dict[str, Vector]:
-    """
-    Extracts the infomation that can be generated from process_objects about the keys spawn
-    location
-    :return: dictionary containing key location
-    """
+    # Key Location Extration
 
-    locations = {"spawn": None}
+    elif layer_data.type == "key":
+        locations = {"spawn": None}
 
-    for i in layer_data.objects:
-        if i.type == "spawn":
-            locations["spawn"] = Vector(i.x, i.y)
+        for i in layer_data.objects:
+            if i.type == "spawn":
+                locations["spawn"] = Vector(i.x, i.y)
 
-    return locations
+        return locations
