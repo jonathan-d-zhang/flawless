@@ -14,6 +14,8 @@ from entity.player import Player
 
 from item.key import Key
 
+from music_player import MusicPlayer
+
 
 class GameView(arcade.View):
     def __init__(self, window):
@@ -24,29 +26,9 @@ class GameView(arcade.View):
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
 
-        self.music_list = []
-        self.song_index = 0
-        self.current_player = None
-        self.music = None
-
-    def advance_song(self):
-        """
-        Advance our pointer to the next song. This does NOT play the song.
-        :return:
-        """
-        self.song_index += (self.song_index + 1) % len(self.music_list)
-
-    def play_song(self):
-        self.music = arcade.Sound(self.music_list[self.song_index], streaming=True)
-        self.current_player = self.music.play(
-            0.1
-        )  # should use config.CONFIG.music_volume when ui-elements is merged
-        time.sleep(0.03)
+        self.music_player = MusicPlayer()
 
     def setup(self):
-
-        # Set up the player
-
         self.load_map()
 
         # Set up the player
@@ -67,21 +49,12 @@ class GameView(arcade.View):
 
         self.set_viewport_on_player()
 
-        self.music_list = [
-            ":resources:music/funkyrobot.mp3",
-            ":resources:music/1918.mp3",
-        ]
-        self.song_index = 0
-        self.play_song()
-
     def load_map(self):
 
         # Process Tile Map
-
         tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
 
         # Tile Layers
-
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
@@ -91,9 +64,7 @@ class GameView(arcade.View):
         )
 
         # Object Layers
-
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
-
         self.guard1_locations = utils.extract_guard_locations(self.object_layers[0])
 
     def on_key_press(self, key: int, modifiers: int):
@@ -133,10 +104,7 @@ class GameView(arcade.View):
 
         self.player.update()
 
-        music_position = self.music.get_stream_position(self.current_player)
-        if music_position == 0.0:
-            self.advance_song()
-            self.play_song()
+        self.music_player.update()
 
     def on_draw(self):
         arcade.start_render()
