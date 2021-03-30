@@ -86,7 +86,7 @@ class MainMenuField(MenuField):
     def __init__(self, x, y, text):
         super().__init__(x, y, text)
 
-    def draw(self, longest):
+    def draw(self, longest=None):
         arcade.draw_text(
             self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="center",
         )

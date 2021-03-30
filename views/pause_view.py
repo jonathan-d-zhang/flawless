@@ -73,5 +73,5 @@ class PauseField(MenuField):
     def __init__(self, x, y, text):
         super().__init__(x, y, text)
 
-    def draw(self):
+    def draw(self, longest=None):
         arcade.draw_text(self.text, self.x, self.y, TEXT_COLOR, anchor_x="center")
