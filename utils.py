@@ -8,7 +8,6 @@ from xml.dom import minidom
 
 Coordinate = dict[str, float]
 
-
 class Vector(NamedTuple):
     x: int
     y: int
@@ -36,20 +35,23 @@ def center_of_tile(x: int, y: int) -> Vector:
     )
 
 
-def process_objects(file_path: str) -> dict[str, ObjectLayer]:
+def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
     """
     Reads the .tmx file that the tile infomation is stored in and process the object infomation into
     a list of ObjectLayers
-    :return: A dict of ObjectLayer's
+    :return: A dictionary of object types and a list of those objects
     """
 
-    object_layers: dict[str, ObjectLayer] = {}
+    entitys: dict[str, list[ObjectLayer]] = {"guard": [], "key": []}
 
     file = minidom.parse(file_path)
     objects = file.getElementsByTagName("objectgroup")
 
     for i in objects:
-        object_layer = ObjectLayer(objects=[], object_count=0)
+
+        object_layer = ObjectLayer(
+            name=i.getAttribute("name"), objects=[], object_count=0
+        )
 
         child_object_elements = i.getElementsByTagName("object")
 
@@ -67,9 +69,13 @@ def process_objects(file_path: str) -> dict[str, ObjectLayer]:
 
             object_layer.objects.append(object_infomation)
 
-        object_layers[i.getAttribute("name")] = object_layer
+        property = i.getElementsByTagName("property")
 
-    return object_layers
+        for x in property:
+            if x.getAttribute('name') == 'type' and x.getAttribute('value') in entitys.keys():
+                entitys[x.getAttribute('value')].append(object_layer)
+
+    return entitys
 
 
 def extract_guard_locations(

@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
 
 @dataclass
 class Object:
@@ -10,8 +9,8 @@ class Object:
     width: float
     height: float
 
-
 @dataclass
 class ObjectLayer:
+    name: str
     object_count: int
     objects: list[Object]
