@@ -11,7 +11,7 @@ TEXT_COLOR = arcade.csscolor.WHITE
 class PauseView(MenuView):
     def __init__(self):
         super().__init__()
-        self.field_list = ["Resume", "Settings", "Quit Game"]
+        self.field_list = ["Resume", "Settings", "Exit to Main Menu", "Exit Game"]
         self.field_list = [
             PauseField(self.width // 2, self.height - i * 50 - self.height // 2, field)
             for i, field in enumerate(self.field_list)
@@ -64,8 +64,10 @@ class PauseView(MenuView):
                 pass
             elif current_option == "Settings":
                 self.window.show_view(SettingsView(self))
-            elif current_option == "Quit Game":
+            elif current_option == "Exit to Main Menu":
                 self.window.show_view(MainMenuView())
+            elif current_option == "Exit Game":
+                self.window.close() 
 
 
 class PauseField(MenuField):
