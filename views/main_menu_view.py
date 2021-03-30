@@ -44,8 +44,7 @@ class MainMenuView(MenuView):
             color=TEXT_COLOR,
         )
 
-        t = "Up and down to navigate, ENTER to select"
-        arcade.draw_text(t, self.width // 16, self.height // 8, TEXT_COLOR)
+        self.draw_information_text(TEXT_COLOR, nav=True)
 
     def on_show_view(self):
         self.setup()

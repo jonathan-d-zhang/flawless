@@ -36,8 +36,7 @@ class PauseView(MenuView):
             current_field.x, current_field.y + 8, self.width // 8, 30, TEXT_COLOR
         )
 
-        t = "Up and down to navigate, ENTER to select"
-        arcade.draw_text(t, self.width // 16, self.height // 8, TEXT_COLOR)
+        self.draw_information_text(TEXT_COLOR, nav=True)
 
     def update(self, delta_time: float):
         if (self.width, self.height) != (new_size := self.window.get_size()):
@@ -67,7 +66,7 @@ class PauseView(MenuView):
             elif current_option == "Exit to Main Menu":
                 self.window.show_view(MainMenuView())
             elif current_option == "Exit Game":
-                self.window.close() 
+                self.window.close()
 
 
 class PauseField(MenuField):

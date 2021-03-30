@@ -22,14 +22,7 @@ class CreditsView(MenuView):
             anchor_x="center",
         )
 
-        arcade.draw_text(
-            "Press ESC to go back",
-            self.width // 16,
-            self.height * 7 / 8,
-            arcade.color.WHITE,
-        )
-
-
+        self.draw_information_text(TEXT_COLOR, nav=True)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:

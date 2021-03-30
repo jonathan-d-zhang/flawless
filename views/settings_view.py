@@ -37,12 +37,7 @@ class SettingsView(MenuView):
             anchor_x="center",
         )
 
-        arcade.draw_text(
-            "Press ESC to go back",
-            self.width // 16,
-            self.height * 7 / 8,
-            arcade.color.WHITE,
-        )
+        self.draw_information_text(arcade.color.WHITE, back=True)
 
         arcade.draw_text(
             "Left and right to change settings",
@@ -145,31 +140,19 @@ class SettingToggle(SettingField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=arcade.csscolor.WHITE,
-            width=self.length,
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
         )
         arcade.draw_rectangle_outline(
             self.x + longest + 35, self.y + 8, 49, 20, color=arcade.color.AQUA
         )
         if self.value:
             arcade.draw_rectangle_filled(
-                self.x + longest + 47,
-                self.y + 8,
-                23,
-                18,
-                color=arcade.color.AO,
+                self.x + longest + 47, self.y + 8, 23, 18, color=arcade.color.AO,
             )
 
         else:
             arcade.draw_rectangle_filled(
-                self.x + longest + 23,
-                self.y + 8,
-                23,
-                18,
-                color=arcade.color.RED,
+                self.x + longest + 23, self.y + 8, 23, 18, color=arcade.color.RED,
             )
 
 
@@ -191,17 +174,18 @@ class SettingSlider(SettingField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=arcade.csscolor.WHITE,
-            width=self.length,
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
         )
         arcade.draw_line(
             self.x, self.y - 15, self.x + longest, self.y - 15, arcade.color.WHITE
         )
         arcade.draw_text(
-            str(self.value), self.x + longest + 35, self.y - 10, arcade.color.WHITE, 20, anchor_x="center"
+            str(self.value),
+            self.x + longest + 35,
+            self.y - 10,
+            arcade.color.WHITE,
+            20,
+            anchor_x="center",
         )
 
         tick_len = longest // 9
