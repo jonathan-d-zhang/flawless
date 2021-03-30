@@ -79,6 +79,10 @@ class GameView(arcade.View):
                 self.enemy_list.update()
 
             self.set_viewport_on_player()
+        elif key == arcade.key.ESCAPE:
+            from views import PauseView
+
+            self.window.show_view(PauseView(self))
 
     def set_viewport_on_player(self):
         """
