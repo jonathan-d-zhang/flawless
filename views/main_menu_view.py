@@ -24,10 +24,11 @@ class MainMenuView(MenuView):
 
         arcade.draw_text(
             "Name of The Game",
-            self.width // 2 - 100,
+            self.width // 2,
             self.height * 0.75,
             TEXT_COLOR,
             20,
+            anchor_x="center",
         )
 
         half = self.width // 2
@@ -88,8 +89,9 @@ class MainMenuField(MenuField):
     def draw(self, longest):
         arcade.draw_text(
             self.text,
-            self.x - self.length // 2,
+            self.x,
             self.y,
             color=TEXT_COLOR,
             width=self.length,
+            anchor_x="center"
         )
