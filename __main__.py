@@ -2,7 +2,7 @@ import arcade
 from config import CONFIG
 from constants import *
 
-from views import main_menu_view
+import views
 
 
 class GameWindow(arcade.Window):
@@ -21,7 +21,7 @@ class GameWindow(arcade.Window):
 def main():
     window = GameWindow()
     window.center_window()
-    view = main_menu_view.MainMenuView()
+    view = views.main_menu_view.MainMenuView()
     window.show_view(view)
     arcade.run()
 
