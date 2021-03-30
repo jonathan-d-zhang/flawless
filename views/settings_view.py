@@ -17,7 +17,7 @@ class SettingsView(MenuView):
         # setting_list will store list of settings to add to the view
         self.setting_list = [
             partial(SettingToggle, text="Turn music on/off", binding="is_music_on"),
-            partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
+            # partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
             partial(SettingSlider, text="Adjust volume", binding="music_volume"),
         ]
         self.setting_list = [
@@ -138,7 +138,7 @@ class SettingToggle(SettingField):
     def increase(self):
         self.value = True
 
-    def draw(self, longest):
+    def draw(self, longest=None):
         arcade.draw_text(
             self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
         )
@@ -172,7 +172,7 @@ class SettingSlider(SettingField):
         if self.value < 10:
             self.value += 1
 
-    def draw(self, longest):
+    def draw(self, longest=None):
         arcade.draw_text(
             self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
         )

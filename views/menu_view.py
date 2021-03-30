@@ -38,5 +38,5 @@ class MenuField(ABC):
         self.text = text
         self.length = len(self.text) * 8
 
-    def draw(self, longest: int):
+    def draw(self, longest: int = None):
         ...
