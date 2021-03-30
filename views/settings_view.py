@@ -30,7 +30,7 @@ class SettingsView(MenuView):
         arcade.start_render()
 
         arcade.draw_text(
-            "Settings", self.width // 2 - 22, self.height * 0.90, arcade.color.WHITE, 20
+            "Settings", self.width // 2, self.height * 0.90, arcade.color.WHITE, 20, anchor_x="center",
         )
 
         arcade.draw_text(

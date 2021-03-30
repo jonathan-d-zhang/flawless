@@ -44,4 +44,4 @@ class PauseField(MenuField):
         super().__init__(x, y, text)
 
     def draw(self):
-        arcade.draw_text(self.text, self.x, self.y, arcade.color.WHITE, anchor_x="center", anchor_y="center")
+        arcade.draw_text(self.text, self.x, self.y, arcade.color.WHITE, anchor_x="center")
