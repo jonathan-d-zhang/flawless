@@ -20,6 +20,16 @@ class MenuView(arcade.View):
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
 
+    def draw_information_text(self, color, *, back=False, nav=False):
+        width, height = self.window.get_size()
+        if back:
+            arcade.draw_text(
+                "Press ESC to go back", width // 16, height * 7 / 8, arcade.color.WHITE,
+            )
+        if nav:
+            t = "Up and down to navigate, ENTER to select"
+            arcade.draw_text(t, width // 16, height // 8, color)
+
 
 class MenuField(ABC):
     def __init__(self, x: int, y: int, text: str):
