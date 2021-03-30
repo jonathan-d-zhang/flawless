@@ -6,9 +6,6 @@ from constants import *
 
 from xml.dom import minidom
 
-Coordinate = dict[str, float]
-
-
 class Vector(NamedTuple):
     x: int
     y: int
@@ -84,23 +81,22 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
 
 def extract_guard_locations(
     layer_data: ObjectLayer,
-) -> dict[str, Union[Coordinate, list[Coordinate]]]:
+) -> dict[str, Union[Vector, list[Vector]]]:
     """
     Extracts the infomation that can be generated from process_objects about the guards spawn location and the
     waypoints it must patrol
     :return: dictionary containing spawn (dict) and waypoints (list of dicts)
     """
 
-    locations = {"spawn": {"x": 0, "y": 0}, "waypoints": []}
+    locations = {"spawn": None, "waypoints": []}
 
     locations["waypoints"] = [None for i in range(layer_data.object_count - 1)]
 
     for i in layer_data.objects:
         if i.type == "spawn":
-            locations["spawn"]["x"] = i.x
-            locations["spawn"]["y"] = i.y
+            locations["spawn"] = Vector(i.x, i.y)
 
         if i.type == "point":
-            locations["waypoints"][int(i.name)] = {"x": i.x, "y": i.y}
+            locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
 
     return locations
