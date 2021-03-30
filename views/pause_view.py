@@ -7,6 +7,7 @@ from .main_menu_view import MainMenuView
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
+
 class PauseView(MenuView):
     def __init__(self):
         super().__init__()
@@ -19,12 +20,21 @@ class PauseView(MenuView):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_text("Game is Paused", self.width // 2, self.height * 0.75, TEXT_COLOR, 20, anchor_x="center")
+        arcade.draw_text(
+            "Game is Paused",
+            self.width // 2,
+            self.height * 0.75,
+            TEXT_COLOR,
+            20,
+            anchor_x="center",
+        )
         for field in self.field_list:
             field.draw()
 
         current_field = self.field_list[self.selection_index]
-        arcade.draw_rectangle_outline(current_field.x, current_field.y + 8, self.width // 8, 30, TEXT_COLOR)
+        arcade.draw_rectangle_outline(
+            current_field.x, current_field.y + 8, self.width // 8, 30, TEXT_COLOR
+        )
 
         t = "Up and down to navigate, ENTER to select"
         arcade.draw_text(t, self.width // 16, self.height // 8, TEXT_COLOR)
@@ -47,7 +57,7 @@ class PauseView(MenuView):
             if self.selection_index < 0:
                 self.selection_index = len(self.field_list) - 1
         elif symbol == arcade.key.ENTER:
-            current_option = self.field_list[self.selection_index].text 
+            current_option = self.field_list[self.selection_index].text
             if current_option == "Resume":
                 # load game view
                 # self.window.show_view(GameView)
