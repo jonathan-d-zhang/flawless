@@ -3,6 +3,7 @@ import arcade.gui
 
 from .menu_view import MenuView, MenuField
 from .settings_view import SettingsView
+from .main_menu_view import MainMenuView
 
 
 class PauseView(MenuView):
@@ -10,14 +11,26 @@ class PauseView(MenuView):
         super().__init__()
         self.field_list = ["Resume", "Settings", "Quit Game"]
         self.field_list = [
-            PauseField(self.width // 2, self.height - i * 50 - self.height // 2, option)
-            for i, option in enumerate(self.field_list)
+            PauseField(self.width // 2, self.height - i * 50 - self.height // 2, field)
+            for i, field in enumerate(self.field_list)
         ]
 
     def on_draw(self):
         arcade.start_render()
-        for option in self.field_list:
-            option.draw()
+
+        arcade.draw_text("Game is Paused", self.width // 2, self.height * 0.75, arcade.color.WHITE, 20, anchor_x="center")
+        for field in self.field_list:
+            field.draw()
+
+        current_field = self.field_list[self.selection_index]
+        arcade.draw_rectangle_outline(current_field.x, current_field.y + 8, self.width // 8, 30, arcade.color.WHITE)
+
+    def update(self, delta_time: float):
+        if (self.width, self.height) != (new_size := self.window.get_size()):
+            self.width, self.height = new_size
+            for i, field in enumerate(self.field_list):
+                field.x = self.width // 20
+                field.y = self.height - i * 50 - self.height // 2
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
@@ -37,6 +50,8 @@ class PauseView(MenuView):
                 pass
             elif current_option == "Settings":
                 self.window.show_view(SettingsView(self))
+            elif current_option == "Quit Game":
+                self.window.show_view(MainMenuView())
 
 
 class PauseField(MenuField):
