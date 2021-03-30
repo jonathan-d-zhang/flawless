@@ -39,9 +39,8 @@ class GameView(arcade.View):
             self.song_index = 0
 
     def play_song(self):
-
         if self.music:
-            self.music.stop()
+            self.music.stop(self.current_player)
 
         self.music = arcade.Sound(self.music_list[self.song_index], streaming=True)
         self.current_player = self.music.play(0.1)
