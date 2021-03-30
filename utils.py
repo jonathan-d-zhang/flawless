@@ -8,6 +8,7 @@ from xml.dom import minidom
 
 Coordinate = dict[str, float]
 
+
 class Vector(NamedTuple):
     x: int
     y: int
@@ -72,8 +73,11 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
         property = i.getElementsByTagName("property")
 
         for x in property:
-            if x.getAttribute('name') == 'type' and x.getAttribute('value') in entitys.keys():
-                entitys[x.getAttribute('value')].append(object_layer)
+            if (
+                x.getAttribute("name") == "type"
+                and x.getAttribute("value") in entitys.keys()
+            ):
+                entitys[x.getAttribute("value")].append(object_layer)
 
     return entitys
 

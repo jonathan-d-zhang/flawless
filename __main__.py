@@ -67,9 +67,10 @@ class GameView(arcade.View):
 
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
 
-        print(self.object_layers)
-
-        #self.guard1_locations = utils.extract_guard_locations(self.object_layers[0])
+        self.guard_locations = [
+            utils.extract_guard_locations(self.object_layers["guard"][i])
+            for i in range(len(self.object_layers["guard"]))
+        ]
 
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
@@ -91,10 +92,12 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH,
+            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
         )
         clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT,
+            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
