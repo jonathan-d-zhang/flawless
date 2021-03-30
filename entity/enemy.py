@@ -3,7 +3,7 @@ import random
 import arcade
 
 from constants import TILE_SIZE
-from utils import Vector
+from utils import Vector, center_of_tile
 
 # Location Example {'spawn': {'x': 144.0, 'y': 64.0}, 'waypoints': [{'x': 136.0, 'y': 88.0}, {'x': 136.0, 'y': 192.0}]}
 class Enemy(arcade.Sprite):
@@ -57,14 +57,14 @@ class Enemy(arcade.Sprite):
         for waypoint1, waypoint2 in zip([self.position] + self.waypoints,
                                         self.waypoints + [self.position]):
             print("pathing", waypoint1, waypoint2)
-            a = arcade.astar_calculate_path(
-                waypoint1,
-                waypoint2,
+            subpath = arcade.astar_calculate_path(
+                center_of_tile(*waypoint1),
+                center_of_tile(*waypoint2),
                 self.barrierlist,
                 diagonal_movement=False)
-            print(self.path, a)
-            if a:  #TODO Why are some paths returning None? Assuming no path found, but why?
-                self.path.extend(a)
+            if subpath:  #TODO Why are some paths returning None? Assuming no path found, but why?
+                for point in subpath[:-1]:
+                    self.path.append(center_of_tile(*point))
         print(self.path)
 
     def move_along_path(self):
@@ -77,4 +77,4 @@ class Enemy(arcade.Sprite):
 
     def draw_path(self):
         if self.path: #TODO: Paths don't go through center of the tiles
-            arcade.draw_line_strip(self.path, arcade.color.BLUE, 2) #TODO: Get different colors for each guard's path
+            arcade.draw_line_strip(self.path + self.path[:1], arcade.color.BLUE, 2) #TODO: Get different colors for each guard's path
