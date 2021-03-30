@@ -1,7 +1,7 @@
 import arcade
 from constants import *
 from config import CONFIG
-from views import main_menu_view, settings_view
+from views import main_menu_view, settings_view, pause_view
 
 
 class GameWindow(arcade.Window):

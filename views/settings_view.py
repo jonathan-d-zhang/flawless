@@ -16,10 +16,9 @@ class SettingsView(MenuView):
 
         # setting_list will store list of settings to add to the view
         self.setting_list = [
-            partial(SettingToggle, text="Turn music off/on", binding="is_music_on"),
+            partial(SettingToggle, text="Turn music on/off", binding="is_music_on"),
             partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
             partial(SettingSlider, text="Adjust volume", binding="music_volume"),
-            partial(SettingToggle, text="test", binding="is_music_on"),
         ]
         self.setting_list = [
             setting(self.width // 4, self.height - i * 70 - self.height // 4)
@@ -30,7 +29,12 @@ class SettingsView(MenuView):
         arcade.start_render()
 
         arcade.draw_text(
-            "Settings", self.width // 2, self.height * 0.90, arcade.color.WHITE, 20, anchor_x="center",
+            "Settings",
+            self.width // 2,
+            self.height * 0.90,
+            arcade.color.WHITE,
+            20,
+            anchor_x="center",
         )
 
         arcade.draw_text(
@@ -141,19 +145,31 @@ class SettingToggle(SettingField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
         )
         arcade.draw_rectangle_outline(
             self.x + longest + 35, self.y + 8, 49, 20, color=arcade.color.AQUA
         )
         if self.value:
             arcade.draw_rectangle_filled(
-                self.x + longest + 47, self.y + 8, 23, 18, color=arcade.color.AO,
+                self.x + longest + 47,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.AO,
             )
 
         else:
             arcade.draw_rectangle_filled(
-                self.x + longest + 23, self.y + 8, 23, 18, color=arcade.color.RED,
+                self.x + longest + 23,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.RED,
             )
 
 
@@ -175,13 +191,17 @@ class SettingSlider(SettingField):
 
     def draw(self, longest):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
         )
         arcade.draw_line(
             self.x, self.y - 15, self.x + longest, self.y - 15, arcade.color.WHITE
         )
         arcade.draw_text(
-            str(self.value), self.x + longest + 25, self.y - 10, arcade.color.WHITE, 20
+            str(self.value), self.x + longest + 35, self.y - 10, arcade.color.WHITE, 20, anchor_x="center"
         )
 
         tick_len = longest // 9
