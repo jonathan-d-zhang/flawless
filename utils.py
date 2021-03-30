@@ -8,6 +8,8 @@ from xml.dom import minidom
 
 Coordinate = dict[str, float]
 
+# Map Height in grid spaces - Set in __main__, used by tile_pos_to_arcade to convert from tile to arcade positions
+map_height = None
 
 class Vector(NamedTuple):
     x: int
@@ -22,6 +24,14 @@ class Vector(NamedTuple):
     def __mul__(self, scalar: int) -> Vector:
         return Vector(scalar * self.x, scalar * self.y)
 
+    def __getitem__(self, key):
+        if key in (0, 'x'):
+            return self.x
+        elif key in (1, 'y'):
+            return self.y
+        else:
+            raise IndexError
+
     __rmul__ = __mul__
 
 
@@ -35,6 +45,14 @@ def center_of_tile(x: int, y: int) -> Vector:
         ((y // TILE_SIZE) * TILE_SIZE) + TILE_SIZE // 2,
     )
 
+def tiled_pos_to_arcade(x: int, y: int) -> Vector:
+    """
+    Converts Tile style pixel locations ((0, 0) in upper left) to
+    arcade style pixel locations ((0,0) in lower left)
+    """
+    newx = x * TILE_SPRITE_SCALING + TILE_SIZE // 2
+    newy = map_height * TILE_SIZE - y * TILE_SPRITE_SCALING - TILE_SIZE // 2
+    return center_of_tile(newx, newy)
 
 def process_objects(file_path: str) -> list[ObjectLayer]:
     """
@@ -82,17 +100,17 @@ def extract_guard_locations(
     waypoints it must patrol
     :return: dictionary containing spawn (dict) and waypoints (list of dicts)
     """
+    print(layer_data)
+    locations = {"spawn": None, "waypoints": []}
 
-    locations = {"spawn": {"x": 0, "y": 0}, "waypoints": []}
-
-    locations["waypoints"] = [None for i in range(layer_data.object_count - 1)]
+    waypoints = {}
 
     for i in layer_data.objects:
         if i.type == "spawn":
-            locations["spawn"]["x"] = i.x
-            locations["spawn"]["y"] = i.y
+            locations["spawn"] = tiled_pos_to_arcade(i.x, i.y)
 
-        if i.type == "point":
-            locations["waypoints"][int(i.name)] = {"x": i.x, "y": i.y}
+        elif i.type == "point":
+            waypoints[int(i.name)] = tiled_pos_to_arcade(i.x, i.y)
+    locations['waypoints'] = [x[1] for x in sorted(waypoints.items())]
 
     return locations
