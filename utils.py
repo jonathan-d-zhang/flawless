@@ -6,6 +6,7 @@ from constants import *
 
 from xml.dom import minidom
 
+
 class Vector(NamedTuple):
     x: int
     y: int
@@ -100,6 +101,7 @@ def extract_guard_locations(
             locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
 
     return locations
+
 
 def extract_key_locations(layer_data: ObjectLayer) -> dict[str, Vector]:
     """
