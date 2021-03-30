@@ -21,6 +21,8 @@ class GameView(arcade.View):
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
 
+        self.setup()
+
     def setup(self):
 
         # Set up the player

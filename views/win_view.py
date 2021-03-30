@@ -3,6 +3,7 @@ import arcade.gui
 
 from .menu_view import MenuView, MenuField
 from .main_menu_view import MainMenuView
+from .game_view import GameView
 
 
 class WinView(MenuView):
@@ -54,8 +55,7 @@ class WinView(MenuView):
         elif symbol == arcade.key.ENTER:
             current_option = self.field_list[self.selection_index].text
             if current_option == "Play Again":
-                self.parent_view.setup()
-                self.window.show_view(self.parent_view)
+                self.window.show_view(GameView(self.window))
             elif current_option == "Exit to Main Menu":
                 self.window.show_view(MainMenuView())
 
@@ -69,10 +69,5 @@ class WinField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=arcade.csscolor.WHITE,
-            width=self.length,
-            anchor_x="center",
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, anchor_x="center",
         )
