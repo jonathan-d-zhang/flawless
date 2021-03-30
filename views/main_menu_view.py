@@ -92,6 +92,5 @@ class MainMenuField(MenuField):
             self.x,
             self.y,
             color=TEXT_COLOR,
-            width=self.length,
             anchor_x="center",
         )
