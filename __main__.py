@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 
 import utils
@@ -23,6 +24,29 @@ class GameView(arcade.View):
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
 
+        self.music_list = []
+        self.song_index = 0
+        self.current_player = None
+        self.music = None
+
+    def advance_song(self):
+        """
+        Advance our pointer to the next song. This does NOT play the song.
+        :return:
+        """
+        self.song_index += 1
+        if self.song_index >= len(self.music_list):
+            self.song_index = 0
+
+    def play_song(self):
+
+        if self.music:
+            self.music.stop()
+
+        self.music = arcade.Sound(self.music_list[self.song_index], streaming=True)
+        self.current_player = self.music.play(0.1)
+        time.sleep(0.03)
+
     def setup(self):
 
         # Set up the player
@@ -46,6 +70,10 @@ class GameView(arcade.View):
         self.enemy_list.append(enemy)
 
         self.set_viewport_on_player()
+
+        self.music_list = [":resources:music/funkyrobot.mp3"]
+        self.song_index = 0
+        self.play_song()
 
     def load_map(self):
 
@@ -105,6 +133,11 @@ class GameView(arcade.View):
             interactable.interact(self.player)
 
         self.player.update()
+
+        music_position = self.music.get_stream_position(self.current_player)
+        if music_position == 0.0:
+            self.advance_song()
+            self.play_song()
 
     def on_draw(self):
         arcade.start_render()
