@@ -68,13 +68,13 @@ class GameView(arcade.View):
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
 
         self.guard_locations = [
-            utils.extract_locations(self.object_layers["guard"][i])
-            for i in range(len(self.object_layers["guard"]))
+            utils.extract_locations(guard_layers)
+            for guard_layers in self.object_layers["guard"]
         ]
 
         self.key_locations = [
-            utils.extract_locations(self.object_layers["key"][i])
-            for i in range(len(self.object_layers["key"]))
+            utils.extract_locations(key_layers)
+            for key_layers in self.object_layers["key"]
         ]
 
     def on_key_press(self, key: int, modifiers: int):
