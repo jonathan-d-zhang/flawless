@@ -27,7 +27,7 @@ class pathcolors:
 
 class Enemy(arcade.Sprite):
     def __init__(self, walls, locations, *args, **kwargs):
-        super().__init__("assets/sprites/enemy.png", 1, *args, **kwargs)
+        super().__init__("game/assets/sprites/enemy.png", 1, *args, **kwargs)
         self._walls = walls
         self.position = locations["spawn"]
         self.waypoints = locations["waypoints"]

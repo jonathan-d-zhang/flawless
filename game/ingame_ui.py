@@ -12,7 +12,7 @@ class IngameUI:
     def __init__(self, player_inventory: PlayerInventory):
         self.player_inv = player_inventory
         self.inv_sprite = arcade.SpriteList()
-        self.key_sprite = arcade.Sprite("assets/sprites/key.png", 2)
+        self.key_sprite = arcade.Sprite("game/assets/sprites/key.png", 2)
         self.inv_sprite.append(self.key_sprite)
         self.colour = 0x22, 0x3D, 0x28
 

@@ -11,7 +11,7 @@ class PlayerInventory:
 class Player(arcade.Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(
-            "assets/sprites/square.png", PLAYER_SCALING, *args, **kwargs
+            "game/assets/sprites/square.png", PLAYER_SCALING, *args, **kwargs
         )
         self.inventory: PlayerInventory = PlayerInventory()
 

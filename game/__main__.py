@@ -51,7 +51,7 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
+        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/TestLevel.tmx")
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -65,12 +65,14 @@ class GameView(arcade.View):
 
         # Object Layers
         self.object_layers = utils.process_objects(
-            f"assets/tilemaps/TestLevel.tmx"
+            f"game/assets/tilemaps/TestLevel.tmx"
         )
 
         self.enemy_list = arcade.SpriteList()
 
-        self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
+        self.object_layers = utils.process_objects(
+            f"game/assets/tilemaps/TestLevel.tmx"
+        )
 
         self.guard_locations = [
             utils.extract_locations(guard_layers)
@@ -82,7 +84,10 @@ class GameView(arcade.View):
             for key_layers in self.object_layers["key"]
         ]
 
-        [self.enemy_list.append(i) for i in [Enemy(self.wall_list, guard_location) for guard_location in self.guard_locations]]
+        self.enemy_list.extend(
+            Enemy(self.wall_list, guard_location)
+            for guard_location in self.guard_locations
+        )
 
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
@@ -105,12 +110,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH,
-            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
         )
         clamped_y = min(
-            SCREEN_HEIGHT,
-            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
