@@ -88,29 +88,17 @@ def extract_locations(
     Extract locations for each different entity.
     """
 
-    # Guard Location Extraction
+    locations = {"spawn": None}
 
-    if layer_data.type == "guard":
-        locations = {"spawn": None, "waypoints": []}
+    for object in layer_data.objects:
+        if object.type == "spawn":
+            locations["spawn"] = Vector(object.x, object.y)
 
-        locations["waypoints"] = [None for i in range(layer_data.object_count - 1)]
+        if object.type == "point":
 
-        for i in layer_data.objects:
-            if i.type == "spawn":
-                locations["spawn"] = Vector(i.x, i.y)
+            if not "waypoints" in locations.keys():
+                locations["waypoints"] = [None for _ in range(layer_data.object_count - 1)]
 
-            if i.type == "point":
-                locations["waypoints"][int(i.name)] = Vector(i.x, i.y)
+            locations["waypoints"][int(object.name)] = Vector(object.x, object.y)
 
-        return locations
-
-    # Key Location Extration
-
-    elif layer_data.type == "key":
-        locations = {"spawn": None}
-
-        for i in layer_data.objects:
-            if i.type == "spawn":
-                locations["spawn"] = Vector(i.x, i.y)
-
-        return locations
+    return locations
