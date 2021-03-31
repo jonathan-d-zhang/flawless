@@ -22,6 +22,7 @@ class GameView(arcade.View):
         super().__init__(window)
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
+        self.door_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
@@ -56,6 +57,10 @@ class GameView(arcade.View):
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
+        self.door_list = arcade.tilemap.process_layer(
+            tile_map, "doors", TILE_SPRITE_SCALING, use_spatial_hash=True
+        )
+
         self.floor_list = arcade.tilemap.process_layer(
             tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
@@ -78,16 +83,30 @@ class GameView(arcade.View):
                 guard_location = utils.extract_guard_locations(object_layer)
                 self.enemy_list.append(Enemy(self.wall_list, guard_location))
 
+    def handle_collision(self, key: int, modifiers: int):
+        original_pos = (self.player.center_x, self.player.center_y)
+        self.player.handle_user_input(key, modifiers)
+
+        if arcade.check_for_collision_with_list(self.player, self.wall_list):
+            self.player.center_x, self.player.center_y = original_pos
+
+        elif collisions := arcade.check_for_collision_with_list(
+            self.player, self.door_list
+        ):
+            if self.player.inventory.keys > 0:
+                self.player.inventory.keys -= 1
+                self.door_list.remove(collisions[0])
+            else:
+                self.player.center_x, self.player.center_y = original_pos
+
+        else:
+            self.enemy_list.update()
+
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
-            original_pos = (self.player.center_x, self.player.center_y)
-            self.player.handle_user_input(key, modifiers)
-            if arcade.check_for_collision_with_list(self.player, self.wall_list):
-                self.player.center_x, self.player.center_y = original_pos
-            else:
-                self.enemy_list.update()
+            self.handle_collision(key, modifiers)
 
             self.set_viewport_on_player()
             self._draw()
@@ -124,6 +143,7 @@ class GameView(arcade.View):
         # GL_NEAREST makes scaled Pixel art look cleaner
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
+        self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
