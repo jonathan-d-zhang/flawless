@@ -14,7 +14,7 @@ class IngameUI:
         self.inv_sprite = arcade.SpriteList()
         self.key_sprite = arcade.Sprite("assets/sprites/key.png", 2)
         self.inv_sprite.append(self.key_sprite)
-        self.colour = int(0x22), int(0x3D), int(0x28)
+        self.colour = 0x22, 0x3D, 0x28
 
     def _draw_level(self, top, right) -> tuple[int, int]:
         """
