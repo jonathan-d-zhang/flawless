@@ -37,17 +37,12 @@ class GameView(arcade.View):
         self.player = Player()
 
         # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(135, 390)
+        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
 
         cabinet = Cabinet(content=Key())
         cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
         self.interactable_list = arcade.SpriteList()
         self.interactable_list.append(cabinet)
-
-        enemy = Enemy(self.wall_list)
-        enemy.center_x, enemy.center_y = utils.center_of_tile(135, 500)
-        self.enemy_list = arcade.SpriteList()
-        self.enemy_list.append(enemy)
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
@@ -58,6 +53,8 @@ class GameView(arcade.View):
 
         # Process Tile Map
         tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
+        utils.map_height = tile_map.map_size[1]
+
         # Tile Layers
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
@@ -69,7 +66,11 @@ class GameView(arcade.View):
 
         # Object Layers
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
-        self.guard1_locations = utils.extract_guard_locations(self.object_layers[0])
+
+        self.enemy_list = arcade.SpriteList()
+        for object_layer in self.object_layers:
+            guard_location = utils.extract_guard_locations(object_layer)
+            self.enemy_list.append(Enemy(self.wall_list, guard_location))
 
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
@@ -120,6 +121,8 @@ class GameView(arcade.View):
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
+        for enemy in self.enemy_list:
+            enemy.draw_path()
         self.player.draw()
 
     def on_draw(self):
