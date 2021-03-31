@@ -1,9 +1,7 @@
 from functools import partial
-
 import arcade
-import arcade.gui
-
 from config import CONFIG
+
 from .menu_view import MenuView, MenuField
 
 
@@ -17,11 +15,11 @@ class SettingsView(MenuView):
         # setting_list will store list of settings to add to the view
         self.setting_list = [
             partial(SettingToggle, text="Turn music on/off", binding="is_music_on"),
-            # partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
+            partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
             partial(SettingSlider, text="Adjust volume", binding="music_volume"),
         ]
         self.setting_list = [
-            setting(self.width // 4, self.height - i * 70 - self.height // 4)
+            setting(self.width // 4, self.height - i * 70 - self.height // 3)
             for i, setting in enumerate(self.setting_list)
         ]
 
@@ -31,7 +29,7 @@ class SettingsView(MenuView):
         arcade.draw_text(
             "Settings",
             self.width // 2,
-            self.height * 0.90,
+            self.height * 0.85,
             arcade.color.WHITE,
             20,
             anchor_x="center",
@@ -59,7 +57,7 @@ class SettingsView(MenuView):
                 center_x=x,
                 center_y=setting.y + 8,
                 width=width,
-                height=30,
+                height=40,
                 color=arcade.color.WHITE,
             )
         else:
@@ -76,7 +74,7 @@ class SettingsView(MenuView):
             self.width, self.height = new_size
             for i, setting in enumerate(self.setting_list):
                 setting.x = self.width // 4
-                setting.y = self.height - i * 70 - self.height // 4
+                setting.y = self.height - i * 70 - self.height // 3
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.UP:
@@ -140,19 +138,32 @@ class SettingToggle(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
         )
+
         arcade.draw_rectangle_outline(
-            self.x + longest + 35, self.y + 8, 49, 20, color=arcade.color.AQUA
+            self.x + longest + 35, self.y + 8, 49, 20, color=arcade.color.WHITE
         )
+
         if self.value:
             arcade.draw_rectangle_filled(
-                self.x + longest + 47, self.y + 8, 23, 18, color=arcade.color.AO,
+                self.x + longest + 47,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.BUD_GREEN,
             )
 
         else:
             arcade.draw_rectangle_filled(
-                self.x + longest + 23, self.y + 8, 23, 18, color=arcade.color.RED,
+                self.x + longest + 23,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.CG_RED,
             )
 
 
