@@ -59,12 +59,12 @@ def tiled_pos_to_arcade(x: int, y: int) -> Vector:
 
 def process_objects(file_path: str) -> list[ObjectLayer]:
     """
-    Reads the .tmx file that the tile infomation is stored in and process the object infomation into
+    Reads the .tmx file that the tile information is stored in and process the object information into
     a list of ObjectLayers
     :return: A dictionary of object types and a list of those objects
     """
 
-    entitys: dict[str, list[ObjectLayer]] = {"guard": [], "key": []}
+    entities: dict[str, list[ObjectLayer]] = {"guard": [], "key": []}
 
     file = minidom.parse(file_path)
     objects = file.getElementsByTagName("objectgroup")
@@ -96,12 +96,12 @@ def process_objects(file_path: str) -> list[ObjectLayer]:
         for x in property:
             if (
                 x.getAttribute("name") == "type"
-                and x.getAttribute("value") in entitys.keys()
+                and x.getAttribute("value") in entities.keys()
             ):
-                entitys[x.getAttribute("value")].append(object_layer)
+                entities[x.getAttribute("value")].append(object_layer)
                 object_layer.type = x.getAttribute("value")
 
-    return entitys
+    return entities
 
 
 def extract_locations(
