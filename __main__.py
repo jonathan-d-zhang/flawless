@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 
 import utils
@@ -13,6 +14,8 @@ from entity.player import Player
 
 from item.key import Key
 
+from music_player import MusicPlayer
+
 
 class GameView(arcade.View):
     def __init__(self, window):
@@ -23,10 +26,9 @@ class GameView(arcade.View):
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
 
+        self.music_player = MusicPlayer()
+
     def setup(self):
-
-        # Set up the player
-
         self.load_map()
 
         # Set up the player
@@ -45,12 +47,10 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-
         tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
-
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
@@ -60,7 +60,6 @@ class GameView(arcade.View):
         )
 
         # Object Layers
-
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
 
         self.enemy_list = arcade.SpriteList()
@@ -105,6 +104,8 @@ class GameView(arcade.View):
             interactable.interact(self.player)
 
         self.player.update()
+
+        self.music_player.update()
 
     def on_draw(self):
         arcade.start_render()
