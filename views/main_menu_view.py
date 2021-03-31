@@ -17,7 +17,7 @@ class MainMenuView(MenuView):
 
         self.field_list = [
             MainMenuField(
-                self.width // 2, self.height - i * 50 - self.height // 2, option
+                self.width // 2, self.height - i * 50 - self.height // 2.5, option
             )
             for i, option in enumerate(options)
         ]
@@ -28,7 +28,7 @@ class MainMenuView(MenuView):
         arcade.draw_text(
             "Name of The Game",
             self.width // 2,
-            self.height * 0.75,
+            self.height * 0.80,
             TEXT_COLOR,
             20,
             anchor_x="center",
@@ -58,7 +58,7 @@ class MainMenuView(MenuView):
             self.width, self.height = new_size
             for i, field in enumerate(self.field_list):
                 field.x = self.width // 2
-                field.y = self.height - i * 50 - self.height // 2
+                field.y = self.height - i * 50 - self.height // 2.5
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.DOWN:
