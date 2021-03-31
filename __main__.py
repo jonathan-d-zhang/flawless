@@ -13,6 +13,7 @@ from entity.enemy import Enemy
 from entity.player import Player
 
 from item.key import Key
+from ingame_ui import IngameUI
 
 from music_player import MusicPlayer
 
@@ -25,6 +26,7 @@ class GameView(arcade.View):
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
+        self.ingame_ui: Optional[IngameUI] = None
 
         self.music_player = MusicPlayer()
 
@@ -42,7 +44,10 @@ class GameView(arcade.View):
         self.interactable_list = arcade.SpriteList()
         self.interactable_list.append(cabinet)
 
+        self.ingame_ui = IngameUI(self.player.inventory)
+
         self.set_viewport_on_player()
+        self._draw()
 
     def load_map(self):
 
@@ -67,7 +72,6 @@ class GameView(arcade.View):
             guard_location = utils.extract_guard_locations(object_layer)
             self.enemy_list.append(Enemy(self.wall_list, guard_location))
 
-
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
@@ -80,6 +84,7 @@ class GameView(arcade.View):
                 self.enemy_list.update()
 
             self.set_viewport_on_player()
+            self._draw()
 
     def set_viewport_on_player(self):
         """
@@ -107,7 +112,7 @@ class GameView(arcade.View):
 
         self.music_player.update()
 
-    def on_draw(self):
+    def _draw(self):
         arcade.start_render()
 
         # GL_NEAREST makes scaled Pixel art look cleaner
@@ -119,6 +124,11 @@ class GameView(arcade.View):
         for enemy in self.enemy_list:
             enemy.draw_path()
         self.player.draw()
+
+    def on_draw(self):
+        self.ingame_ui.draw(
+            1, self.window.get_viewport()  # TODO: Replace with actual level.
+        )
 
 
 def main():

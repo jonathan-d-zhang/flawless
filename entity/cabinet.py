@@ -12,5 +12,5 @@ class Cabinet(arcade.Sprite, Interactable):
         self.content = content
 
     def interact(self, player: Player):
-        player.inventory.append(self.content)
+        player.inventory.keys += 1
         self.kill()
