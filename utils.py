@@ -100,7 +100,6 @@ def extract_guard_locations(
     waypoints it must patrol
     :return: dictionary containing spawn (dict) and waypoints (list of dicts)
     """
-    print(layer_data)
     locations = {"spawn": None, "waypoints": []}
 
     waypoints = {}
