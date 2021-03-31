@@ -1,7 +1,11 @@
 import arcade
 
 from .menu_view import MenuView, MenuField
+<<<<<<< HEAD
 from views import settings_view, credits_view, game_view
+=======
+from views import settings_view, credits_view, instructions_view
+>>>>>>> 277a246 (Add instructions view)
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -9,7 +13,7 @@ TEXT_COLOR = arcade.csscolor.WHITE
 class MainMenuView(MenuView):
     def __init__(self):
         super().__init__()
-        options = "Play", "Settings", "Credits", "Exit"
+        options = "Play", "Settings", "How to Play", "Credits", "Exit"
 
         self.field_list = [
             MainMenuField(
@@ -71,8 +75,10 @@ class MainMenuView(MenuView):
             elif self.selection_index == 1:
                 self.window.show_view(settings_view.SettingsView(self))
             elif self.selection_index == 2:
-                self.window.show_view(credits_view.CreditsView(self))
+                self.window.show_view(instructions_view.InstructionsView(self))
             elif self.selection_index == 3:
+                self.window.show_view(credits_view.CreditsView(self))
+            elif self.selection_index == 4:
                 self.window.close()
 
     def on_hide_view(self):
