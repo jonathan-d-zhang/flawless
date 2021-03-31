@@ -6,6 +6,11 @@ from constants import *
 
 from xml.dom import minidom
 
+Coordinate = dict[str, float]
+
+# Map Height in grid spaces - Set in __main__, used by tile_pos_to_arcade to convert from tile to arcade positions
+map_height = None
+
 
 class Vector(NamedTuple):
     x: int
@@ -19,6 +24,14 @@ class Vector(NamedTuple):
 
     def __mul__(self, scalar: int) -> Vector:
         return Vector(scalar * self.x, scalar * self.y)
+
+    def __getitem__(self, key):
+        if key in (0, "x"):
+            return self.x
+        elif key in (1, "y"):
+            return self.y
+        else:
+            raise IndexError
 
     __rmul__ = __mul__
 
@@ -34,7 +47,17 @@ def center_of_tile(x: int, y: int) -> Vector:
     )
 
 
-def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
+def tiled_pos_to_arcade(x: int, y: int) -> Vector:
+    """
+    Converts Tile style pixel locations ((0, 0) in upper left) to
+    arcade style pixel locations ((0,0) in lower left)
+    """
+    newx = x * TILE_SPRITE_SCALING + TILE_SIZE // 2
+    newy = map_height * TILE_SIZE - y * TILE_SPRITE_SCALING - TILE_SIZE // 2
+    return center_of_tile(newx, newy)
+
+
+def process_objects(file_path: str) -> list[ObjectLayer]:
     """
     Reads the .tmx file that the tile infomation is stored in and process the object infomation into
     a list of ObjectLayers
@@ -87,18 +110,17 @@ def extract_locations(
     """
     Extract locations for each different entity.
     """
+    locations = {"spawn": None, "waypoints": []}
 
-    locations = {"spawn": None}
+    waypoints = {}
 
-    for object in layer_data.objects:
-        if object.type == "spawn":
-            locations["spawn"] = Vector(object.x, object.y)
+    for i in layer_data.objects:
+        if i.type == "spawn":
+            locations["spawn"] = tiled_pos_to_arcade(i.x, i.y)
 
-        if object.type == "point":
-
-            if not "waypoints" in locations.keys():
-                locations["waypoints"] = [None for _ in range(layer_data.object_count - 1)]
-
-            locations["waypoints"][int(object.name)] = Vector(object.x, object.y)
+        elif i.type == "point":
+            waypoints[int(i.name)] = tiled_pos_to_arcade(i.x, i.y)
+            
+    locations["waypoints"] = [x[1] for x in sorted(waypoints.items())]
 
     return locations

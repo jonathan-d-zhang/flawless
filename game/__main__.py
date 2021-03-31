@@ -12,6 +12,9 @@ from entity.enemy import Enemy
 from entity.player import Player
 
 from item.key import Key
+from ingame_ui import IngameUI
+
+from music_player import MusicPlayer
 
 
 class GameView(arcade.View):
@@ -22,39 +25,36 @@ class GameView(arcade.View):
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[arcade.SpriteList] = None
         self.player: Optional[Player] = None
+        self.ingame_ui: Optional[IngameUI] = None
+
+        self.music_player = MusicPlayer()
 
     def setup(self):
-
-        # Set up the player
-
         self.load_map()
 
         # Set up the player
         self.player = Player()
 
         # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(135, 390)
+        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
 
         cabinet = Cabinet(content=Key())
         cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
         self.interactable_list = arcade.SpriteList()
         self.interactable_list.append(cabinet)
 
-        enemy = Enemy(self.wall_list)
-        enemy.center_x, enemy.center_y = utils.center_of_tile(135, 500)
-        self.enemy_list = arcade.SpriteList()
-        self.enemy_list.append(enemy)
+        self.ingame_ui = IngameUI(self.player.inventory)
 
         self.set_viewport_on_player()
+        self._draw()
 
     def load_map(self):
 
         # Process Tile Map
-
         tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
+        utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
-
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
@@ -64,6 +64,11 @@ class GameView(arcade.View):
         )
 
         # Object Layers
+        self.object_layers = utils.process_objects(
+            f"assets/tilemaps/TestLevel.tmx"
+        )
+
+        self.enemy_list = arcade.SpriteList()
 
         self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
 
@@ -77,6 +82,8 @@ class GameView(arcade.View):
             for key_layers in self.object_layers["key"]
         ]
 
+        [self.enemy_list.append(i) for i in [Enemy(self.wall_list, guard_location) for guard_location in self.guard_locations]]
+
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
@@ -89,6 +96,7 @@ class GameView(arcade.View):
                 self.enemy_list.update()
 
             self.set_viewport_on_player()
+            self._draw()
 
     def set_viewport_on_player(self):
         """
@@ -116,7 +124,9 @@ class GameView(arcade.View):
 
         self.player.update()
 
-    def on_draw(self):
+        self.music_player.update()
+
+    def _draw(self):
         arcade.start_render()
 
         # GL_NEAREST makes scaled Pixel art look cleaner
@@ -125,7 +135,14 @@ class GameView(arcade.View):
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
+        for enemy in self.enemy_list:
+            enemy.draw_path()
         self.player.draw()
+
+    def on_draw(self):
+        self.ingame_ui.draw(
+            1, self.window.get_viewport()  # TODO: Replace with actual level.
+        )
 
 
 def main():
