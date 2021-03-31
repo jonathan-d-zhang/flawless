@@ -1,4 +1,3 @@
-import time
 from typing import Optional
 
 import utils
@@ -52,7 +51,7 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"assets/tilemaps/TestLevel.tmx")
+        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/TestLevel.tmx")
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -65,7 +64,9 @@ class GameView(arcade.View):
         )
 
         # Object Layers
-        self.object_layers = utils.process_objects(f"assets/tilemaps/TestLevel.tmx")
+        self.object_layers = utils.process_objects(
+            f"game/assets/tilemaps/TestLevel.tmx"
+        )
 
         self.enemy_list = arcade.SpriteList()
         for object_layer in self.object_layers:

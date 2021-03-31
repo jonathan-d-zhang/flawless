@@ -5,6 +5,7 @@ import arcade
 from constants import TILE_SIZE
 from utils import Vector, center_of_tile
 
+
 class pathcolors:
     pathcoloridx = 0
     pathcolorlist = [
@@ -13,7 +14,8 @@ class pathcolors:
         (57, 48, 51),
         (230, 211, 179),
         (65, 115, 76),
-        (120, 101, 128)]
+        (120, 101, 128),
+    ]
 
     @classmethod
     def get_color(cls):
@@ -22,12 +24,13 @@ class pathcolors:
         cls.pathcoloridx %= len(cls.pathcolorlist)
         return color
 
+
 class Enemy(arcade.Sprite):
     def __init__(self, walls, locations, *args, **kwargs):
-        super().__init__("assets/sprites/enemy.png", 1, *args, **kwargs)
+        super().__init__("game/assets/sprites/enemy.png", 1, *args, **kwargs)
         self._walls = walls
-        self.position = locations['spawn']
-        self.waypoints = locations['waypoints']
+        self.position = locations["spawn"]
+        self.waypoints = locations["waypoints"]
         self.create_full_path()
         self.pathcolor = pathcolors.get_color()
 
@@ -65,14 +68,16 @@ class Enemy(arcade.Sprite):
         """
         self.path = []
         self.pathidx = 0
-        for waypoint1, waypoint2 in zip([self.position] + self.waypoints,
-                                        self.waypoints + [self.position]):
-            for point in self.calculate_path(center_of_tile(*waypoint1),
-                                             center_of_tile(*waypoint2)):
+        for waypoint1, waypoint2 in zip(
+            [self.position] + self.waypoints, self.waypoints + [self.position]
+        ):
+            for point in self.calculate_path(
+                center_of_tile(*waypoint1), center_of_tile(*waypoint2)
+            ):
                 self.path.append(center_of_tile(*point))
 
     def move_along_path(self):
-        self.pathidx += 1 # TODO: Handle direction facing
+        self.pathidx += 1  # TODO: Handle direction facing
         self.pathidx %= len(self.path)
         self.position = self.path[self.pathidx]
 
