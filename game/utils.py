@@ -47,7 +47,7 @@ def center_of_tile(x: int, y: int) -> Vector:
     )
 
 
-def tiled_pos_to_arcade(x: int, y: int) -> Vector:
+def tiled_pos_to_arcade(x: float, y: float) -> Vector:
     """
     Converts Tile style pixel locations ((0, 0) in upper left) to
     arcade style pixel locations ((0,0) in lower left)
@@ -57,7 +57,7 @@ def tiled_pos_to_arcade(x: int, y: int) -> Vector:
     return center_of_tile(newx, newy)
 
 
-def process_objects(file_path: str) -> list[ObjectLayer]:
+def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
     """
     Reads the .tmx file that the tile information is stored in and process the object information into
     a list of ObjectLayers
@@ -120,7 +120,7 @@ def extract_locations(
 
         elif i.type == "point":
             waypoints[int(i.name)] = tiled_pos_to_arcade(i.x, i.y)
-            
+
     locations["waypoints"] = [x[1] for x in sorted(waypoints.items())]
 
     return locations
