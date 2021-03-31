@@ -47,7 +47,7 @@ def center_of_tile(x: int, y: int) -> Vector:
     )
 
 
-def tiled_pos_to_arcade(x: int, y: int) -> Vector:
+def tiled_pos_to_arcade(x: float, y: float) -> Vector:
     """
     Converts Tile style pixel locations ((0, 0) in upper left) to
     arcade style pixel locations ((0,0) in lower left)
@@ -57,21 +57,22 @@ def tiled_pos_to_arcade(x: int, y: int) -> Vector:
     return center_of_tile(newx, newy)
 
 
-def process_objects(file_path: str) -> list[ObjectLayer]:
+def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
     """
-    Reads the .tmx file that the tile infomation is stored in and process the object infomation into
+    Reads the .tmx file that the tile information is stored in and process the object information into
     a list of ObjectLayers
-    :return: A list of ObjectLayer's
+    :return: A dictionary of object types and a list of those objects
     """
 
-    object_layers: list[ObjectLayer] = []
+    entities: dict[str, list[ObjectLayer]] = {"guard": [], "key": []}
 
     file = minidom.parse(file_path)
     objects = file.getElementsByTagName("objectgroup")
 
     for i in objects:
+
         object_layer = ObjectLayer(
-            name=i.getAttribute("name"), objects=[], object_count=0
+            name=i.getAttribute("name"), objects=[], object_count=0, type=None
         )
 
         child_object_elements = i.getElementsByTagName("object")
@@ -90,18 +91,24 @@ def process_objects(file_path: str) -> list[ObjectLayer]:
 
             object_layer.objects.append(object_infomation)
 
-        object_layers.append(object_layer)
+        property = i.getElementsByTagName("property")
 
-    return object_layers
+        for x in property:
+            if (
+                x.getAttribute("name") == "type"
+                and x.getAttribute("value") in entities.keys()
+            ):
+                entities[x.getAttribute("value")].append(object_layer)
+                object_layer.type = x.getAttribute("value")
+
+    return entities
 
 
-def extract_guard_locations(
+def extract_locations(
     layer_data: ObjectLayer,
-) -> dict[str, Union[Coordinate, list[Coordinate]]]:
+) -> dict[str, Union[Vector, list[Vector]]]:
     """
-    Extracts the infomation that can be generated from process_objects about the guards spawn location and the
-    waypoints it must patrol
-    :return: dictionary containing spawn (dict) and waypoints (list of dicts)
+    Extract locations for each different entity.
     """
     locations = {"spawn": None, "waypoints": []}
 
@@ -113,6 +120,7 @@ def extract_guard_locations(
 
         elif i.type == "point":
             waypoints[int(i.name)] = tiled_pos_to_arcade(i.x, i.y)
+
     locations["waypoints"] = [x[1] for x in sorted(waypoints.items())]
 
     return locations

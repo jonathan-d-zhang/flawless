@@ -71,17 +71,25 @@ class GameView(arcade.View):
         )
 
         self.enemy_list = arcade.SpriteList()
-        for object_layer in self.object_layers:
-            if object_layer.name == "keys":
-                keys = object_layer.objects
-                for key in keys:
-                    cabinet = Cabinet(content=Key())
-                    self.interactable_list.append(cabinet)
-                    x, y = utils.tiled_pos_to_arcade(key.x, key.y)
-                    cabinet.center_x, cabinet.center_y = utils.center_of_tile(x, y)
-            else:
-                guard_location = utils.extract_guard_locations(object_layer)
-                self.enemy_list.append(Enemy(self.wall_list, guard_location))
+
+        self.object_layers = utils.process_objects(
+            f"game/assets/tilemaps/TestLevel.tmx"
+        )
+
+        self.guard_locations = [
+            utils.extract_locations(guard_layers)
+            for guard_layers in self.object_layers["guard"]
+        ]
+
+        self.key_locations = [
+            utils.extract_locations(key_layers)
+            for key_layers in self.object_layers["key"]
+        ]
+
+        self.enemy_list.extend(
+            Enemy(self.wall_list, guard_location)
+            for guard_location in self.guard_locations
+        )
 
     def handle_collision(self, key: int, modifiers: int):
         original_pos = (self.player.center_x, self.player.center_y)
