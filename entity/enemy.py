@@ -8,8 +8,8 @@ from utils import Vector, center_of_tile
 class pathcolors:
     pathcoloridx = 0
     pathcolorlist = [
-        # (97, 82, 103),
-        # (34, 61, 40),
+        (97, 82, 103),
+        (34, 61, 40),
         (57, 48, 51),
         (230, 211, 179),
         (65, 115, 76),
@@ -42,9 +42,9 @@ class Enemy(arcade.Sprite):
     def calculate_path(self, waypoint1, waypoint2):
         """
         Generator that yields the points between waypoint1 to waypoint2
+        excludes waypoint1 from the list
         """
         pos_x, pos_y = waypoint1
-        yield pos_x, pos_y
         while pos_x < waypoint2[0]:
             pos_x += TILE_SIZE
             yield pos_x, pos_y
@@ -72,7 +72,7 @@ class Enemy(arcade.Sprite):
                 self.path.append(center_of_tile(*point))
 
     def move_along_path(self):
-        self.pathidx += 1
+        self.pathidx += 1 # TODO: Handle direction facing
         self.pathidx %= len(self.path)
         self.position = self.path[self.pathidx]
 
