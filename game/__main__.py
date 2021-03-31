@@ -30,6 +30,8 @@ class GameView(arcade.View):
         self.music_player = MusicPlayer()
 
     def setup(self):
+        self.interactable_list = arcade.SpriteList()
+
         self.load_map()
 
         # Set up the player
@@ -37,11 +39,6 @@ class GameView(arcade.View):
 
         # Starting position of the player
         self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
-
-        cabinet = Cabinet(content=Key())
-        cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
-        self.interactable_list = arcade.SpriteList()
-        self.interactable_list.append(cabinet)
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
@@ -70,8 +67,16 @@ class GameView(arcade.View):
 
         self.enemy_list = arcade.SpriteList()
         for object_layer in self.object_layers:
-            guard_location = utils.extract_guard_locations(object_layer)
-            self.enemy_list.append(Enemy(self.wall_list, guard_location))
+            if object_layer.name == "keys":
+                keys = object_layer.objects
+                for key in keys:
+                    cabinet = Cabinet(content=Key())
+                    self.interactable_list.append(cabinet)
+                    x, y = utils.tiled_pos_to_arcade(key.x, key.y)
+                    cabinet.center_x, cabinet.center_y = utils.center_of_tile(x, y)
+            else:
+                guard_location = utils.extract_guard_locations(object_layer)
+                self.enemy_list.append(Enemy(self.wall_list, guard_location))
 
     def on_key_press(self, key: int, modifiers: int):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
