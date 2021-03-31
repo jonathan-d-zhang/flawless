@@ -1,6 +1,6 @@
 import arcade
 
-from .menu_view import MenuView, MenuField
+from .menu_view import MenuView
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -22,8 +22,8 @@ class CreditsView(MenuView):
             anchor_x="center",
         )
 
-        self.draw_information_text(TEXT_COLOR, nav=True)
-
+        self.draw_information_text(TEXT_COLOR, back=True, nav=True)
+        
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:
             self.window.show_view(self.parent_view)
