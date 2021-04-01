@@ -1,7 +1,7 @@
 # Flawless
 
 Hello :wave:, we are team AbstractSingletonProxyFactoryBean,
-and `Flawless` is our submission for [PyWeek 31](https://pyweek.org/)
+and this is our submission for [PyWeek 31](https://pyweek.org/)
 
 ### Installation
 In your terminal of choice, run
@@ -14,6 +14,6 @@ $ python game
 Depending on your platform, you may need to use `python3` or `py`.
 
 ### Background
-Your goal is to steal a diamond as part of a heist. To do this, you will have to bypass many levels of security. As you get closer to the diamond, the security will become tougher and you will face new challenges. 
+As part of the biggest heist of the century, your goal is to steal a diamond. To do this, you will have to bypass many levels of security. As you get closer to the diamond, the security will become tougher and you will face new challenges. 
 
-More information can be found by selecting `How to Play` from the main menu.
+More information can be found by selecting `How to Play` from the main menu in the game.
