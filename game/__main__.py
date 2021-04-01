@@ -24,7 +24,7 @@ class GameState(Enum):
 
 
 class GameView(arcade.View):
-    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.mp3")
+    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
 
     def __init__(self, window):
         super().__init__(window)

@@ -7,7 +7,7 @@ from typing import Optional
 class MusicPlayer:
     def __init__(self):
         self.song_list: list[str] = [
-            ":resources:music/1918.mp3",
+            "game/assets/sound_effects/door_open.wav", # putting sound effect here for now as placeholder
         ]
         self.song_index: int = 0
         self.current_player = None
