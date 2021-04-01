@@ -10,7 +10,7 @@ import arcade
 from pyglet.gl import GL_NEAREST
 
 from .entity.cabinet import Cabinet
-from .entity.enemy import Enemy
+from .entity.enemy import EnemyList, Enemy
 from .entity.player import Player
 
 from .item.key import Key
@@ -29,19 +29,19 @@ class GameView(arcade.View):
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
-        self.enemy_list: Optional[arcade.SpriteList] = None
+        self.enemy_list: Optional[EnemyList] = None
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
+        self.gamestate = None
 
         self.music_player = MusicPlayer()
-
-        self.gamestate = GameState.playermove
 
     def setup(self):
         self.load_map()
 
         # Set up the player
         self.player = Player()
+        self.gamestate = GameState.playermove
 
         # Starting position of the player
         self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
@@ -72,30 +72,18 @@ class GameView(arcade.View):
         )
 
         # Object Layers
-        self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
-        )
-
-        self.enemy_list = arcade.SpriteList()
-
-        self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
-        )
-
-        self.guard_locations = [
-            utils.extract_locations(guard_layers)
-            for guard_layers in self.object_layers["guard"]
-        ]
+        levelfile = "game/assets/tilemaps/TestLevel.tmx"
+        self.object_layers = utils.process_objects(levelfile)
 
         self.key_locations = [
             utils.extract_locations(key_layers)
             for key_layers in self.object_layers["key"]
         ]
 
-        self.enemy_list.extend(
-            Enemy(self.wall_list, guard_location)
-            for guard_location in self.guard_locations
-        )
+        self.enemy_list = EnemyList(self.wall_list)
+        for guard_layer in self.object_layers["guard"]:
+            self.enemy_list.add_from_layer(guard_layer)
+
 
     def on_key_press(self, key: int, modifiers: int):
         if self.gamestate != GameState.playermove:
@@ -116,18 +104,16 @@ class GameView(arcade.View):
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:
-            for enemy in self.enemy_list:
-                enemy.move_one()
+            self.enemy_list.move_one_square()
             self._draw()
             self.gamestate = GameState.enemyturning
         elif self.gamestate == GameState.enemyturning:
-            for enemy in self.enemy_list:
-                enemy.update_direction()
+            self.enemy_list.update_direction()
             self._draw()
-            if any(enemy.movesleft for enemy in self.enemy_list):
-                self.gamestate = GameState.enemymove
-            else:
+            if self.enemy_list.moving_complete:
                 self.gamestate = GameState.playermove
+            else:
+                self.gamestate = GameState.enemymove
 
     def set_viewport_on_player(self):
         """
@@ -166,9 +152,6 @@ class GameView(arcade.View):
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
-        for enemy in self.enemy_list:
-            enemy.draw_path()
-            enemy.draw_vision()
         self.player.draw()
 
     def on_draw(self):
