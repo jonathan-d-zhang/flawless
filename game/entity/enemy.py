@@ -1,9 +1,8 @@
-import random
-
 import arcade
 
 from ..constants import TILE_SIZE
-from ..utils import Vector, center_of_tile
+from ..utils import Vector, center_of_tile, Direction
+
 
 class PathColors:
     pathcoloridx = 0
