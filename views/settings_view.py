@@ -13,9 +13,10 @@ class SettingsView(MenuView):
         # use setting_index to grab the currently selected setting
 
         # setting_list will store list of settings to add to the view
+        # full screen setting disabled as it create a ton of scaling issues
         self.setting_list = [
             partial(SettingToggle, text="Turn music on/off", binding="is_music_on"),
-            partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
+            # partial(SettingToggle, text="Fullscreen", binding="is_fullscreen"),
             partial(SettingSlider, text="Adjust volume", binding="music_volume"),
         ]
         self.setting_list = [
