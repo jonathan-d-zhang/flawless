@@ -1,5 +1,6 @@
 from typing import Optional
 import time
+from enum import Enum
 
 import utils
 
@@ -17,6 +18,10 @@ from ingame_ui import IngameUI
 
 from music_player import MusicPlayer
 
+class GameState(Enum):
+    playermove = 1
+    enemymove = 2
+    enemyturning = 3
 
 class GameView(arcade.View):
     def __init__(self, window):
@@ -30,7 +35,7 @@ class GameView(arcade.View):
 
         self.music_player = MusicPlayer()
 
-        self.gamestate = "playersturn"
+        self.gamestate = GameState.playermove
 
     def setup(self):
         self.load_map()
@@ -93,7 +98,7 @@ class GameView(arcade.View):
         )
 
     def on_key_press(self, key: int, modifiers: int):
-        if self.gamestate != "playersturn":
+        if self.gamestate != GameState.playermove:
             return
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
@@ -107,22 +112,22 @@ class GameView(arcade.View):
 
             self.set_viewport_on_player()
             self._draw()
-            self.gamestate = "enemymove"
+            self.gamestate = GameState.enemymove
 
     def enemy_moving(self, delta_time):
-        if self.gamestate == "enemymove":
+        if self.gamestate == GameState.enemymove:
             for enemy in self.enemy_list:
                 enemy.move_one()
             self._draw()
-            self.gamestate = "enemyturning"
-        elif self.gamestate == "enemyturning":
+            self.gamestate = GameState.enemyturning
+        elif self.gamestate == GameState.enemyturning:
             for enemy in self.enemy_list:
                 enemy.update_direction()
             self._draw()
             if any(enemy.movesleft for enemy in self.enemy_list):
-                self.gamestate = "enemymove"
+                self.gamestate = GameState.enemymove
             else:
-                self.gamestate = "playersturn"
+                self.gamestate = GameState.playermove
 
     def set_viewport_on_player(self):
         """
