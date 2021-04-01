@@ -177,7 +177,7 @@ def main():
 
     game_view = GameView(main_window)
     game_view.setup()
-    arcade.schedule(game_view.enemy_moving, 1 / 8)
+    arcade.schedule(game_view.enemy_moving, 1 / 20)
 
     main_window.show_view(game_view)
 
