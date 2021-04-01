@@ -1,4 +1,4 @@
-from model.item import Item
+from ..model.item import Item
 
 
 class Key(Item):

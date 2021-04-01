@@ -2,8 +2,8 @@ import random
 
 import arcade
 
-from constants import TILE_SIZE
-from utils import Vector, center_of_tile
+from ..constants import TILE_SIZE
+from ..utils import Vector, center_of_tile
 
 
 class pathcolors:

@@ -1,7 +1,7 @@
 import arcade
 from pyglet.gl import GL_NEAREST
 
-from entity.player import PlayerInventory
+from .entity.player import PlayerInventory
 
 
 class IngameUI:
