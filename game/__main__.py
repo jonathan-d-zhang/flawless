@@ -88,7 +88,7 @@ class GameView(arcade.View):
 
         self.interactable_list.extend(
             Cabinet(loc) for loc in self.key_locations
-        )  # 🏄‍♂️some smooth sailing code
+        )
 
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
