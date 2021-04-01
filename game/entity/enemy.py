@@ -19,7 +19,7 @@ class PathColors:
     @classmethod
     def get_color(cls):
         color = cls.pathcolorlist[cls.pathcoloridx]
-        cls.pathcoloridx += 1
+        cls.pathcoloridx = (cls.pathcoloridx + 1) % len(cls.pathcolorlist)
         return color
 
 
