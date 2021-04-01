@@ -92,6 +92,11 @@ class GameView(arcade.View):
             for key_layers in self.object_layers["key"]
         ]
 
+        self.exit_locations = [
+            utils.extract_locations(exit_layers)
+            for exit_layers in self.object_layers["exit"]
+        ]
+
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
             for guard_location in self.guard_locations
