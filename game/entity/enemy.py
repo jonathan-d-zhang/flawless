@@ -3,7 +3,7 @@ import random
 import arcade
 
 from constants import TILE_SIZE
-from utils import Vector, center_of_tile
+from utils import Direction, Vector, center_of_tile
 
 
 class pathcolors:
@@ -15,13 +15,13 @@ class pathcolors:
         (230, 211, 179),
         (65, 115, 76),
         (120, 101, 128),
+        (230, 115, 128),
     ]
 
     @classmethod
     def get_color(cls):
         color = cls.pathcolorlist[cls.pathcoloridx]
         cls.pathcoloridx += 1
-        cls.pathcoloridx %= len(cls.pathcolorlist)
         return color
 
 
@@ -33,6 +33,9 @@ class Enemy(arcade.Sprite):
         self.waypoints = locations["waypoints"]
         self.create_full_path()
         self.pathcolor = pathcolors.get_color()
+        self.movecount = 2
+        self.maxvision = 3
+        self.update_direction()
 
     @property
     def position(self) -> Vector:
@@ -76,13 +79,49 @@ class Enemy(arcade.Sprite):
             ):
                 self.path.append(center_of_tile(*point))
 
-    def move_along_path(self):
-        self.pathidx += 1  # TODO: Handle direction facing
-        self.pathidx %= len(self.path)
-        self.position = self.path[self.pathidx]
+    def move_one(self):
+        """
+        Moves the enemy forward one unit along his path
+        """
+        if self.movesleft > 0:
+            self.pathidx += 1
+            self.pathidx %= len(self.path)
+            self.position = self.path[self.pathidx]
+            self.movesleft -= 1
+            self.update_vision()
+
+    def update_direction(self):
+        """
+        Changes the direction the enemy is facing to face the next path location
+        """
+        nextposition = self.path[(self.pathidx + 1) % len(self.path)]
+        basedirection = nextposition - self.position
+        if basedirection[1] > 0:
+            self.direction = Direction.NORTH
+        elif basedirection[1] < 0:
+            self.direction = Direction.SOUTH
+        elif basedirection[0] > 0:
+            self.direction = Direction.EAST
+        elif basedirection[0] < 0:
+            self.direction = Direction.WEST
+        self.update_vision()
+
+    def update_vision(self):
+        self.vision_points = []
+        for visiondistance in range(1, self.maxvision + 1):
+            visionpoint = self.position + self.direction * visiondistance * TILE_SIZE
+            if arcade.get_sprites_at_exact_point(visionpoint, self._walls):
+                break
+            self.vision_points.append(visionpoint)
 
     def update(self):
-        self.move_along_path()
+        self.movesleft = self.movecount
 
     def draw_path(self):
         arcade.draw_line_strip(self.path + self.path[:1], self.pathcolor, 2)
+
+    def draw_vision(self):
+        for vision_point in self.vision_points:
+            arcade.draw_circle_filled(
+                vision_point[0], vision_point[1], 5, arcade.color.WISTERIA, 3
+            )
