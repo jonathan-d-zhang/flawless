@@ -1,4 +1,6 @@
 from typing import Optional
+import time
+from enum import Enum
 
 from . import utils
 
@@ -16,6 +18,10 @@ from .ingame_ui import IngameUI
 
 from .music_player import MusicPlayer
 
+class GameState(Enum):
+    playermove = 1
+    enemymove = 2
+    enemyturning = 3
 
 class GameView(arcade.View):
     def __init__(self, window):
@@ -28,6 +34,8 @@ class GameView(arcade.View):
         self.ingame_ui: Optional[IngameUI] = None
 
         self.music_player = MusicPlayer()
+
+        self.gamestate = GameState.playermove
 
     def setup(self):
         self.load_map()
@@ -90,6 +98,8 @@ class GameView(arcade.View):
         )
 
     def on_key_press(self, key: int, modifiers: int):
+        if self.gamestate != GameState.playermove:
+            return
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
@@ -102,6 +112,22 @@ class GameView(arcade.View):
 
             self.set_viewport_on_player()
             self._draw()
+            self.gamestate = GameState.enemymove
+
+    def enemy_moving(self, delta_time):
+        if self.gamestate == GameState.enemymove:
+            for enemy in self.enemy_list:
+                enemy.move_one()
+            self._draw()
+            self.gamestate = GameState.enemyturning
+        elif self.gamestate == GameState.enemyturning:
+            for enemy in self.enemy_list:
+                enemy.update_direction()
+            self._draw()
+            if any(enemy.movesleft for enemy in self.enemy_list):
+                self.gamestate = GameState.enemymove
+            else:
+                self.gamestate = GameState.playermove
 
     def set_viewport_on_player(self):
         """
@@ -110,10 +136,12 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH,
+            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
         )
         clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT,
+            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
@@ -140,6 +168,7 @@ class GameView(arcade.View):
         self.enemy_list.draw(filter=GL_NEAREST)
         for enemy in self.enemy_list:
             enemy.draw_path()
+            enemy.draw_vision()
         self.player.draw()
 
     def on_draw(self):
@@ -153,6 +182,7 @@ def main():
 
     game_view = GameView(main_window)
     game_view.setup()
+    arcade.schedule(game_view.enemy_moving, 1 / 20)
 
     main_window.show_view(game_view)
 
