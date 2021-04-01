@@ -1,8 +1,8 @@
 import arcade
 
-from entity.player import Player
-from model.interactable import Interactable
-from model.item import Item
+from ..entity.player import Player
+from ..model.interactable import Interactable
+from ..model.item import Item
 
 
 class Cabinet(arcade.Sprite, Interactable):

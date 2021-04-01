@@ -2,21 +2,21 @@ from typing import Optional
 import time
 from enum import Enum
 
-import utils
+from . import utils
 
-from constants import *
+from .constants import *
 
 import arcade
 from pyglet.gl import GL_NEAREST
 
-from entity.cabinet import Cabinet
-from entity.enemy import Enemy
-from entity.player import Player
+from .entity.cabinet import Cabinet
+from .entity.enemy import Enemy
+from .entity.player import Player
 
-from item.key import Key
-from ingame_ui import IngameUI
+from .item.key import Key
+from .ingame_ui import IngameUI
 
-from music_player import MusicPlayer
+from .music_player import MusicPlayer
 
 class GameState(Enum):
     playermove = 1
