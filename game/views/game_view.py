@@ -175,3 +175,9 @@ class GameView(arcade.View):
         self.ingame_ui.draw(
             1, self.window.get_viewport()  # TODO: Replace with actual level.
         )
+
+    def on_show_view(self):
+        self.music_player.play_song()
+
+    def on_hide_view(self):
+        self.music_player.music.stop(self.music_player.current_player)
