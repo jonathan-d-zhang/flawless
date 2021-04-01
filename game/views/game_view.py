@@ -178,6 +178,7 @@ class GameView(arcade.View):
 
     def on_show_view(self):
         self.music_player.play_song()
+        self._draw()
 
     def on_hide_view(self):
         self.music_player.music.stop(self.music_player.current_player)
