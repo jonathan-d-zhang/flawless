@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import NamedTuple, Union
-from model.object_layer import Object, ObjectLayer
+from .model.object_layer import Object, ObjectLayer
 
-from constants import *
+from .constants import *
 
 from xml.dom import minidom
 
