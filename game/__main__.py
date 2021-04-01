@@ -38,13 +38,10 @@ class GameView(arcade.View):
         self.gamestate = GameState.playermove
 
     def setup(self):
-        self.load_map()
 
-        # Set up the player
         self.player = Player()
 
-        # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
+        self.load_map()
 
         cabinet = Cabinet(content=Key())
         cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
@@ -97,10 +94,16 @@ class GameView(arcade.View):
             for exit_layers in self.object_layers["exit"]
         ]
 
+        self.player_spawn = utils.extract_locations(self.object_layers["player_spawn"][0])["spawn"]
+
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
             for guard_location in self.guard_locations
         )
+
+        # Set Player Location
+
+        self.player.center_x, self.player.center_y = utils.center_of_tile(self.player_spawn.x, self.player_spawn.y)
 
     def on_key_press(self, key: int, modifiers: int):
         if self.gamestate != GameState.playermove:
