@@ -13,36 +13,38 @@ class MainMenuView(MenuView):
 
         self.field_list = [
             MainMenuField(
-                self.width // 2, self.height - i * 50 - self.height // 2.5, option
+                self.width * 0.85, self.height - i * 50 - self.height // 3, option
             )
             for i, option in enumerate(options)
         ]
 
+        self.background = arcade.load_texture("game/assets/main_menu_background.png")
+
     def on_draw(self):
         arcade.start_render()
 
+        arcade.draw_lrwh_rectangle_textured(0, 0, self.width, self.height, self.background)
+
         arcade.draw_text(
-            "Name of The Game",
+            "Flawless",
             self.width // 2,
-            self.height * 0.80,
+            self.height * 0.90,
             TEXT_COLOR,
             20,
             anchor_x="center",
         )
 
-        half = self.width // 2
-        for field in self.field_list:
-            field.draw(half)
-
         field = self.field_list[self.selection_index]
 
         arcade.draw_rectangle_outline(
-            center_x=field.x,
+            center_x=field.x - 40,
             center_y=field.y + 8,
-            width=half // 4,
+            width=self.width // 8 - 20,
             height=30,
             color=TEXT_COLOR,
         )
+        for field in self.field_list:
+            field.draw()
 
         self.draw_information_text(TEXT_COLOR, nav=True)
 
@@ -91,5 +93,5 @@ class MainMenuField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="center",
+            self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="right",
         )
