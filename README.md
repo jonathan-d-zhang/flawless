@@ -9,7 +9,7 @@ In your terminal of choice, run
 $ git clone https://github.com/SavagePastaMan/pyweek-2021.git
 $ cd directory_name
 $ python -m pip install -r requirements.txt
-$ python game
+$ python -m game
 ```
 Depending on your platform, you may need to use `python3` or `py`.
 
