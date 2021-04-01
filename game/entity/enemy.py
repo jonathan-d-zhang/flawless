@@ -6,7 +6,7 @@ from constants import TILE_SIZE
 from utils import Direction, Vector, center_of_tile
 
 
-class pathcolors:
+class PathColors:
     pathcoloridx = 0
     pathcolorlist = [
         (97, 82, 103),
@@ -32,7 +32,7 @@ class Enemy(arcade.Sprite):
         self.position = locations["spawn"]
         self.waypoints = locations["waypoints"]
         self.create_full_path()
-        self.pathcolor = pathcolors.get_color()
+        self.pathcolor = PathColors.get_color()
         self.movecount = 2
         self.maxvision = 3
         self.update_direction()
