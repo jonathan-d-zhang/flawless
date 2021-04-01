@@ -63,6 +63,7 @@ class Enemy(arcade.Sprite):
         self.waypoints = locations["waypoints"]
         self.pathcolor = PathColors.get_color()
         self.create_full_path()
+        self.movesleft = 0
         self.movecount = 2
         self.maxvision = 3
         self.update_direction()
