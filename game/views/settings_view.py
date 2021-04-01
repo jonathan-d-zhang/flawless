@@ -1,6 +1,6 @@
 from functools import partial
 import arcade
-from config import CONFIG
+from ..config import CONFIG
 
 from .menu_view import MenuView, MenuField
 

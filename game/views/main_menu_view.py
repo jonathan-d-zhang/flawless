@@ -1,7 +1,7 @@
 import arcade
 
 from .menu_view import MenuView, MenuField
-from views import settings_view, credits_view, game_view, instructions_view
+from ..views import settings_view, credits_view, game_view, instructions_view
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
