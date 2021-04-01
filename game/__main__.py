@@ -24,6 +24,8 @@ class GameState(Enum):
 
 
 class GameView(arcade.View):
+    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.mp3")
+
     def __init__(self, window):
         super().__init__(window)
         self.wall_list: Optional[arcade.SpriteList] = None
@@ -114,6 +116,7 @@ class GameView(arcade.View):
             if self.player.inventory.keys > 0:
                 self.player.inventory.keys -= 1
                 self.door_list.remove(collisions[0])
+                arcade.play_sound(self.door_open_sound)
             else:
                 self.player.center_x, self.player.center_y = original_pos
 
