@@ -1,7 +1,7 @@
 import arcade
 
-from constants import TILE_SIZE, PLAYER_SCALING
-from utils import Vector
+from ..constants import TILE_SIZE, PLAYER_SCALING
+from ..utils import Vector
 
 
 class PlayerInventory:

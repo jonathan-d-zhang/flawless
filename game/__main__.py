@@ -1,20 +1,26 @@
 from typing import Optional
+from enum import Enum
 
-import utils
+from . import utils
 
-from constants import *
+from .constants import *
 
 import arcade
 from pyglet.gl import GL_NEAREST
 
-from entity.cabinet import Cabinet
-from entity.enemy import Enemy
-from entity.player import Player
+from .entity.cabinet import Cabinet
+from .entity.enemy import Enemy
+from .entity.player import Player
 
-from item.key import Key
-from ingame_ui import IngameUI
+from .ingame_ui import IngameUI
 
-from music_player import MusicPlayer
+from .music_player import MusicPlayer
+
+
+class GameState(Enum):
+    playermove = 1
+    enemymove = 2
+    enemyturning = 3
 
 
 class GameView(arcade.View):
@@ -29,6 +35,8 @@ class GameView(arcade.View):
         self.ingame_ui: Optional[IngameUI] = None
 
         self.music_player = MusicPlayer()
+
+        self.gamestate = GameState.playermove
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
@@ -86,9 +94,7 @@ class GameView(arcade.View):
             for key_layers in self.object_layers["key"]
         ]
 
-        self.interactable_list.extend(
-            Cabinet(loc) for loc in self.key_locations
-        )
+        self.interactable_list.extend(Cabinet(loc) for loc in self.key_locations)
 
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
@@ -115,6 +121,8 @@ class GameView(arcade.View):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
+        if self.gamestate != GameState.playermove:
+            return
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
@@ -122,6 +130,22 @@ class GameView(arcade.View):
 
             self.set_viewport_on_player()
             self._draw()
+            self.gamestate = GameState.enemymove
+
+    def enemy_moving(self, delta_time):
+        if self.gamestate == GameState.enemymove:
+            for enemy in self.enemy_list:
+                enemy.move_one()
+            self._draw()
+            self.gamestate = GameState.enemyturning
+        elif self.gamestate == GameState.enemyturning:
+            for enemy in self.enemy_list:
+                enemy.update_direction()
+            self._draw()
+            if any(enemy.movesleft for enemy in self.enemy_list):
+                self.gamestate = GameState.enemymove
+            else:
+                self.gamestate = GameState.playermove
 
     def set_viewport_on_player(self):
         """
@@ -161,6 +185,7 @@ class GameView(arcade.View):
         self.enemy_list.draw(filter=GL_NEAREST)
         for enemy in self.enemy_list:
             enemy.draw_path()
+            enemy.draw_vision()
         self.player.draw()
 
     def on_draw(self):
@@ -174,6 +199,7 @@ def main():
 
     game_view = GameView(main_window)
     game_view.setup()
+    arcade.schedule(game_view.enemy_moving, 1 / 20)
 
     main_window.show_view(game_view)
 

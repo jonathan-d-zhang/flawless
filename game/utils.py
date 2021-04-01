@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import NamedTuple, Union
-from model.object_layer import Object, ObjectLayer
+from .model.object_layer import Object, ObjectLayer
 
-from constants import *
+from .constants import *
 
 from xml.dom import minidom
 
@@ -34,6 +34,13 @@ class Vector(NamedTuple):
             raise IndexError
 
     __rmul__ = __mul__
+
+
+class Direction:
+    NORTH = Vector(0, 1)
+    EAST = Vector(1, 0)
+    SOUTH = Vector(0, -1)
+    WEST = Vector(-1, 0)
 
 
 def center_of_tile(x: int, y: int) -> Vector:
