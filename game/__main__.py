@@ -18,10 +18,12 @@ from .ingame_ui import IngameUI
 
 from .music_player import MusicPlayer
 
+
 class GameState(Enum):
     playermove = 1
     enemymove = 2
     enemyturning = 3
+
 
 class GameView(arcade.View):
     def __init__(self, window):
@@ -94,7 +96,9 @@ class GameView(arcade.View):
             for exit_layers in self.object_layers["exit"]
         ]
 
-        self.player_spawn = utils.extract_locations(self.object_layers["player_spawn"][0])["spawn"]
+        self.player_spawn = utils.extract_locations(
+            self.object_layers["player_spawn"][0]
+        )["spawn"]
 
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
@@ -103,7 +107,9 @@ class GameView(arcade.View):
 
         # Set Player Location
 
-        self.player.center_x, self.player.center_y = utils.center_of_tile(self.player_spawn.x, self.player_spawn.y)
+        self.player.center_x, self.player.center_y = utils.center_of_tile(
+            self.player_spawn.x, self.player_spawn.y
+        )
 
     def on_key_press(self, key: int, modifiers: int):
         if self.gamestate != GameState.playermove:
@@ -144,12 +150,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH,
-            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
         )
         clamped_y = min(
-            SCREEN_HEIGHT,
-            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
