@@ -1,6 +1,6 @@
 import arcade
 
-from .menu_view import MenuView, MenuField
+from .menu_view import MenuView
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -29,9 +29,8 @@ class InstructionsView(MenuView):
             arcade.color.WHITE,
         )
 
-        intro = """Your goal is to steal a diamond as part of a heist.\n
-        To do this, you will have to bypass many levels of security.\n
-        To pass each level, you must dodge the cops and get to the exit.\n"""
+        intro = """As part of the biggest heist of the century, your goal is to steal a diamond.\n
+        To do this, you will have to bypass many levels of security."""
 
         arcade.draw_text(
             intro,
@@ -43,17 +42,19 @@ class InstructionsView(MenuView):
             anchor_y="top",
         )
 
-        text = """For some levels, you will need to collect a key in order to unlock the door/exit.\n
-        There will also be knives for you to collect.\n
-        You can use these knives to kill guards if you approach them from behind or from the side."""
+        text = """Use the arrow keys to move around the map.\n
+        Some levels may be secured by guards.\n
+        You must dodge them your way to the exit.\n\n
+        Some levels will have locked doors.\n
+        These can be unlocked with a key found somewhere on the map."""
 
         arcade.draw_text(
             text,
             self.width // 2,
-            self.height * 0.25,
+            self.height * 0.15,
             TEXT_COLOR,
             align="center",
-            anchor_x="center"
+            anchor_x="center",
         )
 
     def on_key_press(self, symbol, modifiers):

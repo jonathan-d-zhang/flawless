@@ -23,7 +23,7 @@ class CreditsView(MenuView):
         )
 
         self.draw_information_text(TEXT_COLOR, back=True, nav=True)
-        
+
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:
             self.window.show_view(self.parent_view)
