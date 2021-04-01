@@ -36,6 +36,13 @@ class Vector(NamedTuple):
     __rmul__ = __mul__
 
 
+class Direction:
+    NORTH = Vector(0, 1)
+    EAST = Vector(1, 0)
+    SOUTH = Vector(0, -1)
+    WEST = Vector(-1, 0)
+
+
 def center_of_tile(x: int, y: int) -> Vector:
     """
     Get the exact center of the tile that co-ords xy is contained in.
