@@ -66,8 +66,6 @@ class IngameUI:
         left, right, bottom, top = self.viewport
         width, height = right // 10, top // 10
 
-        print(width, height)
-
         point_list = (
             (right, top),
             (right - width, top),
