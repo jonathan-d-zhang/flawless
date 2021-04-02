@@ -28,14 +28,15 @@ class PathColors:
 
 
 class EnemyList(arcade.SpriteList):
-    def __init__(self, wall_list):
+    def __init__(self, wall_list, door_list):
         self.wall_list = wall_list
+        self.door_list = door_list
         self.paths = arcade.ShapeElementList()
         super().__init__()
 
     def add_from_layer(self, layer):
         locations = extract_locations(layer)
-        newenemy = Enemy(self.wall_list, locations)
+        newenemy = Enemy(self.wall_list, self.door_list, locations)
         self.append(newenemy)
         self.paths.append(newenemy.pathshape)
 
@@ -64,9 +65,10 @@ class EnemyList(arcade.SpriteList):
 
 
 class Enemy(arcade.Sprite):
-    def __init__(self, walls, locations, *args, **kwargs):
+    def __init__(self, wall_list, door_list, locations, *args, **kwargs):
         super().__init__("game/assets/sprites/enemy.png", 1, *args, **kwargs)
-        self._walls = walls
+        self.wall_list = wall_list
+        self.door_list = door_list
         self.position = locations["spawn"]
         self.waypoints = locations["waypoints"]
         self.pathcolor = PathColors.get_color()
@@ -155,7 +157,9 @@ class Enemy(arcade.Sprite):
         self.vision_points = []
         for visiondistance in range(1, self.maxvision + 1):
             visionpoint = self.position + self.direction * visiondistance * TILE_SIZE
-            if arcade.get_sprites_at_exact_point(visionpoint, self._walls):
+            if arcade.get_sprites_at_exact_point(visionpoint, self.wall_list):
+                break
+            if arcade.get_sprites_at_exact_point(visionpoint, self.door_list):
                 break
             self.vision_points.append(visionpoint)
 

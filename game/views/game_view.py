@@ -104,7 +104,7 @@ class GameView(arcade.View):
 
         self.interactable_list.extend(Cabinet(loc) for loc in self.key_locations)
 
-        self.enemy_list = EnemyList(self.wall_list)
+        self.enemy_list = EnemyList(self.wall_list, self.door_list)
         for guard_layer in self.object_layers["guard"]:
             self.enemy_list.add_from_layer(guard_layer)
 
@@ -116,11 +116,6 @@ class GameView(arcade.View):
         self.player_spawn = utils.extract_locations(
             self.object_layers["player_spawn"][0]
         )["spawn"]
-
-        self.enemy_list.extend(
-            Enemy(self.wall_list, guard_location)
-            for guard_location in self.guard_locations
-        )
 
         self.exit_list.extend(Exit(loc) for loc in self.exit_locations)
 
