@@ -1,16 +1,19 @@
 from enum import Enum
 from typing import Optional
 
+from .. import utils
+
+from ..constants import *
+
 import arcade
 from pyglet.gl import GL_NEAREST
 
-from .. import utils
-from ..constants import *
 from ..entity.cabinet import Cabinet
-from ..entity.enemy import Enemy
+from ..entity.enemy import EnemyList, Enemy
 from ..entity.player import Player
+
 from ..ingame_ui import IngameUI
-from ..item.key import Key
+
 from ..music_player import MusicPlayer
 
 
@@ -21,35 +24,32 @@ class GameState(Enum):
 
 
 class GameView(arcade.View):
+    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
+
     def __init__(self, window):
         super().__init__(window)
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
+        self.door_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
-        self.enemy_list: Optional[arcade.SpriteList] = None
+        self.enemy_list: Optional[EnemyList] = None
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
+        self.gamestate = None
 
         self.music_player = MusicPlayer()
 
-        self.gamestate = GameState.playermove
-
     def setup(self):
-        self.load_map()
+        self.interactable_list = arcade.SpriteList()
+
 
         # Set up the player
         self.player = Player()
-
-        # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
-
-        cabinet = Cabinet(content=Key())
-        cabinet.center_x, cabinet.center_y = utils.center_of_tile(135, 300)
-        self.interactable_list = arcade.SpriteList()
-        self.interactable_list.append(cabinet)
+        self.gamestate = GameState.playermove
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
+        self.load_map()
         self.set_viewport_on_player()
         self._draw()
 
@@ -64,20 +64,19 @@ class GameView(arcade.View):
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
+        self.door_list = arcade.tilemap.process_layer(
+            tile_map, "doors", TILE_SPRITE_SCALING, use_spatial_hash=True
+        )
+
         self.floor_list = arcade.tilemap.process_layer(
             tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
         # Object Layers
-        self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
-        )
+        levelfile = "game/assets/tilemaps/TestLevel.tmx"
+        self.object_layers = utils.process_objects(levelfile)
 
         self.enemy_list = arcade.SpriteList()
-
-        self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
-        )
 
         self.guard_locations = [
             utils.extract_locations(guard_layers)
@@ -89,10 +88,49 @@ class GameView(arcade.View):
             for key_layers in self.object_layers["key"]
         ]
 
+        self.interactable_list.extend(Cabinet(loc) for loc in self.key_locations)
+
+        self.enemy_list = EnemyList(self.wall_list)
+        for guard_layer in self.object_layers["guard"]:
+            self.enemy_list.add_from_layer(guard_layer)
+        self.exit_locations = [
+            utils.extract_locations(exit_layers)
+            for exit_layers in self.object_layers["exit"]
+        ]
+
+        self.player_spawn = utils.extract_locations(
+            self.object_layers["player_spawn"][0]
+        )["spawn"]
+
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
             for guard_location in self.guard_locations
         )
+
+        # Set Player Location
+
+        self.player.center_x, self.player.center_y = utils.center_of_tile(
+            self.player_spawn.x, self.player_spawn.y
+        )
+    def handle_collision(self, key: int, modifiers: int):
+        original_pos = (self.player.center_x, self.player.center_y)
+        self.player.handle_user_input(key, modifiers)
+
+        if arcade.check_for_collision_with_list(self.player, self.wall_list):
+            self.player.center_x, self.player.center_y = original_pos
+
+        elif collisions := arcade.check_for_collision_with_list(
+            self.player, self.door_list
+        ):
+            if self.player.inventory.keys > 0:
+                self.player.inventory.keys -= 1
+                self.door_list.remove(collisions[0])
+                arcade.play_sound(self.door_open_sound)
+            else:
+                self.player.center_x, self.player.center_y = original_pos
+
+        else:
+            self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
         if self.gamestate != GameState.playermove:
@@ -100,29 +138,19 @@ class GameView(arcade.View):
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
-            original_pos = (self.player.center_x, self.player.center_y)
-            self.player.handle_user_input(key, modifiers)
-            if arcade.check_for_collision_with_list(self.player, self.wall_list):
-                self.player.center_x, self.player.center_y = original_pos
-            else:
-                self.enemy_list.update()
+            self.handle_collision(key, modifiers)
 
             self.set_viewport_on_player()
             self._draw()
             self.gamestate = GameState.enemymove
-        elif key == arcade.key.ESCAPE:
-            from ..views import pause_view
-            self.window.show_view(pause_view.PauseView(self))
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:
-            for enemy in self.enemy_list:
-                enemy.move_one()
+            self.enemy_list.move_one_square()
             self._draw()
             self.gamestate = GameState.enemyturning
         elif self.gamestate == GameState.enemyturning:
-            for enemy in self.enemy_list:
-                enemy.update_direction()
+            self.enemy_list.update_direction()
             self._draw()
             if any(enemy.movesleft for enemy in self.enemy_list):
                 self.gamestate = GameState.enemymove
@@ -136,12 +164,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH,
-            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
         )
         clamped_y = min(
-            SCREEN_HEIGHT,
-            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
@@ -163,12 +189,10 @@ class GameView(arcade.View):
         # GL_NEAREST makes scaled Pixel art look cleaner
         self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
+        self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
-        for enemy in self.enemy_list:
-            enemy.draw_path()
-            enemy.draw_vision()
         self.player.draw()
 
     def on_draw(self):
@@ -176,9 +200,18 @@ class GameView(arcade.View):
             1, self.window.get_viewport()  # TODO: Replace with actual level.
         )
 
-    def on_show_view(self):
-        self.music_player.play_song()
-        self._draw()
 
-    def on_hide_view(self):
-        self.music_player.music.stop(self.music_player.current_player)
+def main():
+    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+    game_view = GameView(main_window)
+    game_view.setup()
+    arcade.schedule(game_view.enemy_moving, 1 / 20)
+
+    main_window.show_view(game_view)
+
+    arcade.run()
+
+
+if __name__ == "__main__":
+    main()
