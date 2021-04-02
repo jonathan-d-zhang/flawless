@@ -62,18 +62,20 @@ class IngameUI:
         return left - padding_right, top
 
     def _draw_background(self):
-        width, height = self.window_size[0] // 10, self.window_size[1] // 10
-        left, right, bottom, top = self.viewport
 
-        print(right, top)
+        left, right, bottom, top = self.viewport
+        width, height = right // 10, top // 10
+
+        print(width, height)
+
         point_list = (
             (right, top),
-            (right - 50, top),
-            (right - 50, top - 50),
-            (right, top - 50),
+            (right - width, top),
+            (right - width, top - height),
+            (right, top - height),
         )
 
-        # arcade.draw_polygon_filled(point_list, self.colour)
+        arcade.draw_polygon_filled(point_list, self.colour)
 
     def draw(
         self,
