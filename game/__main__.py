@@ -9,9 +9,10 @@ import arcade
 from pyglet.gl import GL_NEAREST
 
 from .entity.cabinet import Cabinet
-from .entity.enemy import Enemy
+from .entity.enemy import EnemyList, Enemy
 from .entity.player import Player
 
+from .item.key import Key
 from .ingame_ui import IngameUI
 
 from .music_player import MusicPlayer
@@ -24,7 +25,7 @@ class GameState(Enum):
 
 
 class GameView(arcade.View):
-    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.mp3")
+    door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
 
     def __init__(self, window):
         super().__init__(window)
@@ -32,27 +33,24 @@ class GameView(arcade.View):
         self.floor_list: Optional[arcade.SpriteList] = None
         self.door_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
-        self.enemy_list: Optional[arcade.SpriteList] = None
+        self.enemy_list: Optional[EnemyList] = None
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
+        self.gamestate = None
 
         self.music_player = MusicPlayer()
-
-        self.gamestate = GameState.playermove
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
 
-        self.load_map()
 
         # Set up the player
         self.player = Player()
-
-        # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(320, 320)
+        self.gamestate = GameState.playermove
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
+        self.load_map()
         self.set_viewport_on_player()
         self._draw()
 
@@ -94,11 +92,28 @@ class GameView(arcade.View):
 
         self.interactable_list.extend(Cabinet(loc) for loc in self.key_locations)
 
+        self.enemy_list = EnemyList(self.wall_list)
+        for guard_layer in self.object_layers["guard"]:
+            self.enemy_list.add_from_layer(guard_layer)
+        self.exit_locations = [
+            utils.extract_locations(exit_layers)
+            for exit_layers in self.object_layers["exit"]
+        ]
+
+        self.player_spawn = utils.extract_locations(
+            self.object_layers["player_spawn"][0]
+        )["spawn"]
+
         self.enemy_list.extend(
             Enemy(self.wall_list, guard_location)
             for guard_location in self.guard_locations
         )
 
+        # Set Player Location
+
+        self.player.center_x, self.player.center_y = utils.center_of_tile(
+            self.player_spawn.x, self.player_spawn.y
+        )
     def handle_collision(self, key: int, modifiers: int):
         original_pos = (self.player.center_x, self.player.center_y)
         self.player.handle_user_input(key, modifiers)
@@ -133,13 +148,11 @@ class GameView(arcade.View):
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:
-            for enemy in self.enemy_list:
-                enemy.move_one()
+            self.enemy_list.move_one_square()
             self._draw()
             self.gamestate = GameState.enemyturning
         elif self.gamestate == GameState.enemyturning:
-            for enemy in self.enemy_list:
-                enemy.update_direction()
+            self.enemy_list.update_direction()
             self._draw()
             if any(enemy.movesleft for enemy in self.enemy_list):
                 self.gamestate = GameState.enemymove
@@ -153,10 +166,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
         )
         clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
         )
 
         print(clamped_x, clamped_y)
@@ -185,9 +198,6 @@ class GameView(arcade.View):
         self.interactable_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
-        for enemy in self.enemy_list:
-            enemy.draw_path()
-            enemy.draw_vision()
         self.player.draw()
 
     def on_draw(self):
