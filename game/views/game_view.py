@@ -69,8 +69,9 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
+        level_path = f"game/assets/levels/{self.level_list[self.level]}.tmx"
         tile_map = arcade.tilemap.read_tmx(
-            f"game/assets/levels/{self.level_list[self.level]}.tmx"
+            level_path
         )
         utils.map_height = tile_map.map_size[1]
 
@@ -91,7 +92,7 @@ class GameView(arcade.View):
 
         # Object Layers
         self.object_layers = utils.process_objects(
-            f"game/assets/levels/{self.level_list[self.level]}.tmx"
+            level_path
         )
 
         self.enemy_list = arcade.SpriteList()
