@@ -16,7 +16,7 @@ class IngameUI:
         self.inv_sprite.append(self.key_sprite)
         self.colour = 0x22, 0x3D, 0x28
 
-    def _draw_level(self, top, right) -> tuple[int, int]:
+    def _draw_level(self) -> tuple[int, int]:
         """
         :return: The xy coords for the Top Left of the containing bounding box
         """
@@ -40,7 +40,7 @@ class IngameUI:
 
         return right - (self.key_sprite.width // 2) - padding_right, top
 
-    def _draw_keys(self, top, right) -> tuple[int, int]:
+    def _draw_keys(self) -> tuple[int, int]:
         """
         :return: The xy coords for the Top Left of the containing bounding box
         """
@@ -61,22 +61,32 @@ class IngameUI:
 
         return left - padding_right, top
 
-    def _draw_background(self, top, right):
-        background_width, background_height = 200, 75
+    def _draw_background(self):
+        width, height = self.window_size[0] // 10, self.window_size[1] // 10
+        left, right, bottom, top = self.viewport
+
+        print(right, top)
         point_list = (
             (right, top),
-            (right - background_width, top),
-            (right - background_width, top - background_height),
-            (right, top - background_height - (background_height // 3)),
+            (right - 50, top),
+            (right - 50, top - 50),
+            (right, top - 50),
         )
-        arcade.draw_polygon_filled(point_list, self.colour)
 
-    def draw(self, current_level: int, viewport: tuple[float, float, float, float]):
+        # arcade.draw_polygon_filled(point_list, self.colour)
+
+    def draw(
+        self,
+        current_level: int,
+        viewport: tuple[float, float, float, float],
+        window_size: tuple[int, int],
+    ):
         self.cur_level = current_level
-        _, right, _, top = viewport
+        self.viewport = viewport
+        self.window_size = window_size
 
-        self._draw_background(top, right)
-        right, top = self._draw_keys(top, right)
-        right, top = self._draw_level(top, right)
+        self._draw_background()
+        # self._draw_keys()
+        # self._draw_level()
 
         self.inv_sprite.draw(filter=GL_NEAREST)

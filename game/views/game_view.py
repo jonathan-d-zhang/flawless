@@ -71,6 +71,7 @@ class GameView(arcade.View):
         level_path = f"game/assets/levels/level{self.level}.tmx"
         tile_map = arcade.tilemap.read_tmx(level_path)
         utils.map_height = tile_map.map_size[1]
+        self.map_width, self.map_height = tile_map.map_size
 
         # Tile Layers
         self.wall_list = arcade.tilemap.process_layer(
@@ -183,15 +184,10 @@ class GameView(arcade.View):
         it is clamped with the game map.
         :return:
         """
-        clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
-        )
-        clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
-        )
-        arcade.set_viewport(
-            clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
-        )
+        clamped_x = min(self.window.width, self.map_width * 32)
+        clamped_y = min(self.window.height, self.map_height * 32)
+
+        arcade.set_viewport(0, clamped_x, 0, clamped_y)
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
@@ -219,7 +215,9 @@ class GameView(arcade.View):
         self.player.draw()
 
     def on_draw(self):
-        self.ingame_ui.draw(self.level, self.window.get_viewport())
+        self.ingame_ui.draw(
+            self.level, self.window.get_viewport(), self.window.get_size()
+        )
 
 
 def main():

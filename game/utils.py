@@ -71,7 +71,12 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
     :return: A dictionary of object types and a list of those objects
     """
 
-    entities: dict[str, list[ObjectLayer]] = {"guard": [], "key": [], "exit": [], "player_spawn": []}
+    entities: dict[str, list[ObjectLayer]] = {
+        "guard": [],
+        "key": [],
+        "exit": [],
+        "player_spawn": [],
+    }
 
     file = minidom.parse(file_path)
     objects = file.getElementsByTagName("objectgroup")
@@ -86,7 +91,7 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
 
         for x in child_object_elements:
             object_layer.object_count += 1
-
+            y = x.getAttribute("width")
             object_infomation = Object(
                 name=x.getAttribute("name"),
                 type=x.getAttribute("type"),
