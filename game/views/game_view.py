@@ -70,9 +70,7 @@ class GameView(arcade.View):
 
         # Process Tile Map
         level_path = f"game/assets/levels/{self.level_list[self.level]}.tmx"
-        tile_map = arcade.tilemap.read_tmx(
-            level_path
-        )
+        tile_map = arcade.tilemap.read_tmx(level_path)
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -91,9 +89,7 @@ class GameView(arcade.View):
         self.exit_list = arcade.SpriteList()
 
         # Object Layers
-        self.object_layers = utils.process_objects(
-            level_path
-        )
+        self.object_layers = utils.process_objects(level_path)
 
         self.enemy_list = arcade.SpriteList()
 
@@ -219,7 +215,6 @@ class GameView(arcade.View):
         self.wall_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
-        self.exit_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
