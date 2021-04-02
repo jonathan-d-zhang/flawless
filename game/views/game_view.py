@@ -140,6 +140,7 @@ class GameView(arcade.View):
                 self.player.inventory.keys -= 1
                 self.door_list.remove(collisions[0])
                 arcade.play_sound(self.door_open_sound)
+                self.enemy_list.update()
             else:
                 self.player.center_x, self.player.center_y = original_pos
 
