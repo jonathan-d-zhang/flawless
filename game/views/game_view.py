@@ -30,7 +30,7 @@ class GameView(arcade.View):
     def __init__(self, window):
         super().__init__(window)
 
-        self.level = 0
+        self.level = 1
 
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
@@ -219,7 +219,7 @@ class GameView(arcade.View):
         self.player.draw()
 
     def on_draw(self):
-        self.ingame_ui.draw(self.level + 1, self.window.get_viewport())
+        self.ingame_ui.draw(self.level, self.window.get_viewport())
 
 
 def main():
