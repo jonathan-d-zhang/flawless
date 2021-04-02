@@ -1,19 +1,21 @@
 import arcade
 
 from ..constants import TILE_SIZE
-from ..utils import Vector, center_of_tile, Direction
-
+from ..utils import Direction, Vector, center_of_tile, extract_locations
 
 class PathColors:
     pathcoloridx = 0
     pathcolorlist = [
         (97, 82, 103),
         (34, 61, 40),
+        (66, 81, 100),
         (57, 48, 51),
         (230, 211, 179),
+        (95, 117, 145),
         (65, 115, 76),
         (120, 101, 128),
         (230, 115, 128),
+        (53, 64, 79),
     ]
 
     @classmethod
@@ -22,6 +24,34 @@ class PathColors:
         cls.pathcoloridx = (cls.pathcoloridx + 1) % len(cls.pathcolorlist)
         return color
 
+class EnemyList(arcade.SpriteList):
+    def __init__(self, wall_list):
+        self.wall_list = wall_list
+        self.paths = arcade.ShapeElementList()
+        super().__init__()
+
+    def add_from_layer(self, layer):
+        locations = extract_locations(layer)
+        newenemy = Enemy(self.wall_list, locations)
+        self.append(newenemy)
+        self.paths.append(newenemy.pathshape)
+
+    def move_one_square(self):
+        self.moving_complete = True
+        for enemy in self:
+            movesleft = enemy.move_one_square()
+            if movesleft:
+                self.moving_complete = False
+
+    def update_direction(self):
+        for enemy in self:
+            enemy.update_direction()
+
+    def draw(self, *args, **kwargs):
+        self.paths.draw()
+        for enemy in self:
+            enemy.draw_vision()
+        super().draw(*args, **kwargs)
 
 class Enemy(arcade.Sprite):
     def __init__(self, walls, locations, *args, **kwargs):
@@ -29,8 +59,9 @@ class Enemy(arcade.Sprite):
         self._walls = walls
         self.position = locations["spawn"]
         self.waypoints = locations["waypoints"]
-        self.create_full_path()
         self.pathcolor = PathColors.get_color()
+        self.create_full_path()
+        self.movesleft = 0
         self.movecount = 2
         self.maxvision = 3
         self.update_direction()
@@ -76,10 +107,12 @@ class Enemy(arcade.Sprite):
                 center_of_tile(*waypoint1), center_of_tile(*waypoint2)
             ):
                 self.path.append(center_of_tile(*point))
+        self.pathshape = arcade.create_line_strip(self.path + self.path[:1], self.pathcolor, 2)
 
-    def move_one(self):
+    def move_one_square(self):
         """
         Moves the enemy forward one unit along his path
+        Returns True if more moves left
         """
         if self.movesleft > 0:
             self.pathidx += 1
@@ -87,6 +120,7 @@ class Enemy(arcade.Sprite):
             self.position = self.path[self.pathidx]
             self.movesleft -= 1
             self.update_vision()
+        return self.movesleft > 0
 
     def update_direction(self):
         """
@@ -115,11 +149,12 @@ class Enemy(arcade.Sprite):
     def update(self):
         self.movesleft = self.movecount
 
-    def draw_path(self):
-        arcade.draw_line_strip(self.path + self.path[:1], self.pathcolor, 2)
-
     def draw_vision(self):
         for vision_point in self.vision_points:
-            arcade.draw_circle_filled(
-                vision_point[0], vision_point[1], 5, arcade.color.WISTERIA, 3
+            arcade.draw_rectangle_filled(
+                center_x=vision_point[0],
+                center_y=vision_point[1],
+                width=TILE_SIZE,
+                height=TILE_SIZE,
+                color=(220, 220, 79, 200)
             )
