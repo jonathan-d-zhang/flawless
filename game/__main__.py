@@ -61,16 +61,16 @@ class GameView(arcade.View):
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
+        self.floor_list = arcade.tilemap.process_layer(
+            tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
+        )
+
         self.wall_list = arcade.tilemap.process_layer(
             tile_map, "walls", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
         self.door_list = arcade.tilemap.process_layer(
             tile_map, "doors", TILE_SPRITE_SCALING, use_spatial_hash=True
-        )
-
-        self.floor_list = arcade.tilemap.process_layer(
-            tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
 
         # Object Layers
@@ -171,8 +171,6 @@ class GameView(arcade.View):
         clamped_y = min(
             SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
         )
-
-        print(clamped_x, clamped_y)
 
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
