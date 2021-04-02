@@ -12,6 +12,7 @@ from .entity.cabinet import Cabinet
 from .entity.enemy import EnemyList, Enemy
 from .entity.player import Player
 
+from .item.key import Key
 from .ingame_ui import IngameUI
 
 from .music_player import MusicPlayer
@@ -48,9 +49,6 @@ class GameView(arcade.View):
         self.player = Player()
         self.gamestate = GameState.playermove
 
-        # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
-
         self.ingame_ui = IngameUI(self.player.inventory)
 
         self.set_viewport_on_player()
@@ -79,6 +77,13 @@ class GameView(arcade.View):
         levelfile = "game/assets/tilemaps/TestLevel.tmx"
         self.object_layers = utils.process_objects(levelfile)
 
+        self.enemy_list = arcade.SpriteList()
+
+        self.guard_locations = [
+            utils.extract_locations(guard_layers)
+            for guard_layers in self.object_layers["guard"]
+        ]
+
         self.key_locations = [
             utils.extract_locations(key_layers)
             for key_layers in self.object_layers["key"]
@@ -89,8 +94,25 @@ class GameView(arcade.View):
         self.enemy_list = EnemyList(self.wall_list)
         for guard_layer in self.object_layers["guard"]:
             self.enemy_list.add_from_layer(guard_layer)
+        self.exit_locations = [
+            utils.extract_locations(exit_layers)
+            for exit_layers in self.object_layers["exit"]
+        ]
 
+        self.player_spawn = utils.extract_locations(
+            self.object_layers["player_spawn"][0]
+        )["spawn"]
 
+        self.enemy_list.extend(
+            Enemy(self.wall_list, guard_location)
+            for guard_location in self.guard_locations
+        )
+
+        # Set Player Location
+
+        self.player.center_x, self.player.center_y = utils.center_of_tile(
+            self.player_spawn.x, self.player_spawn.y
+        )
     def handle_collision(self, key: int, modifiers: int):
         original_pos = (self.player.center_x, self.player.center_y)
         self.player.handle_user_input(key, modifiers)
@@ -131,10 +153,10 @@ class GameView(arcade.View):
         elif self.gamestate == GameState.enemyturning:
             self.enemy_list.update_direction()
             self._draw()
-            if self.enemy_list.moving_complete:
-                self.gamestate = GameState.playermove
-            else:
+            if any(enemy.movesleft for enemy in self.enemy_list):
                 self.gamestate = GameState.enemymove
+            else:
+                self.gamestate = GameState.playermove
 
     def set_viewport_on_player(self):
         """
@@ -143,10 +165,10 @@ class GameView(arcade.View):
         :return:
         """
         clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
         )
         clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
         )
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
