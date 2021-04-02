@@ -8,7 +8,7 @@ class Cabinet(arcade.Sprite, Interactable):
     pickup_sound = arcade.Sound("game/assets/sound_effects/key_pickup.wav")
 
     def __init__(self, loc, *args, **kwargs):
-        super().__init__("game/assets/sprites/cabinet.png", 1, *args, **kwargs)
+        super().__init__("game/assets/sprites/key.png", 1, *args, **kwargs)
         self.center_x, self.center_y = loc["spawn"].x, loc["spawn"].y
 
     def interact(self, player: Player):
