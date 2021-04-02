@@ -20,7 +20,7 @@ class IngameUI:
         """
         :return: The xy coords for the Top Left of the containing bounding box
         """
-        padding_top, padding_right = 5, 50
+        padding_top, padding_right = 5, 150
         arcade.draw_text(
             text="Level",
             start_x=right - (self.key_sprite.width // 2) - padding_right,
@@ -29,7 +29,7 @@ class IngameUI:
             font_size=24,
         )
 
-        padding_top, padding_right = 45, padding_right - 20
+        padding_top, padding_right = 25, padding_right - 75
         arcade.draw_text(
             text=str(self.cur_level),
             start_x=right - (self.key_sprite.width // 2) - padding_right,
@@ -62,12 +62,24 @@ class IngameUI:
         return left - padding_right, top
 
     def _draw_background(self, top, right):
-        background_width, background_height = 200, 75
+        background_width, background_height = 125, 75
+        right_padded = right - background_width
+        top_padded = top - background_height
         point_list = (
             (right, top),
-            (right - background_width, top),
-            (right - background_width, top - background_height),
-            (right, top - background_height - (background_height // 3)),
+            (right_padded, top),
+            (right_padded, top_padded),
+            (right, top_padded - (background_height // 3)),
+        )
+        arcade.draw_polygon_filled(point_list, self.colour)
+
+        background_height = 50
+        right_padded -= 50
+        point_list = (
+            (right_padded, top),
+            (right_padded - background_width, top),
+            (right_padded - background_width, top - background_height),
+            (right_padded, top - background_height - (background_height // 3)),
         )
         arcade.draw_polygon_filled(point_list, self.colour)
 
