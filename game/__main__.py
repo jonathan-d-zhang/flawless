@@ -49,7 +49,7 @@ class GameView(arcade.View):
         self.player = Player()
 
         # Starting position of the player
-        self.player.center_x, self.player.center_y = utils.center_of_tile(530, 700)
+        self.player.center_x, self.player.center_y = utils.center_of_tile(320, 320)
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
@@ -59,7 +59,7 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/TestLevel.tmx")
+        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/level1.tmx")
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -77,14 +77,10 @@ class GameView(arcade.View):
 
         # Object Layers
         self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
+            f"game/assets/tilemaps/level1.tmx"
         )
 
         self.enemy_list = arcade.SpriteList()
-
-        self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/TestLevel.tmx"
-        )
 
         self.guard_locations = [
             utils.extract_locations(guard_layers)
