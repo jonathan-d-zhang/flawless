@@ -12,59 +12,46 @@ class IngameUI:
     def __init__(self, player_inventory: PlayerInventory):
         self.player_inv = player_inventory
         self.inv_sprite = arcade.SpriteList()
-        self.key_sprite = arcade.Sprite("game/assets/sprites/key.png", 2)
+        self.key_sprite = arcade.Sprite("game/assets/sprites/key.png", 0.75)
         self.inv_sprite.append(self.key_sprite)
         self.colour = 0x22, 0x3D, 0x28
 
-    def _draw_level(self) -> tuple[int, int]:
-        """
-        :return: The xy coords for the Top Left of the containing bounding box
-        """
-        padding_top, padding_right = 5, 50
+    def _draw_level(self):
+        left, right, bottom, top = self.viewport
+
         arcade.draw_text(
             text="Level",
-            start_x=right - (self.key_sprite.width // 2) - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
+            start_x=right - ((right // 14) * 2),
+            start_y=top - (top // 10),
             color=arcade.color.WHITE,
-            font_size=24,
+            font_size=top // 24,
         )
-
-        padding_top, padding_right = 45, padding_right - 20
         arcade.draw_text(
             text=str(self.cur_level),
-            start_x=right - (self.key_sprite.width // 2) - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
+            start_x=right - ((right // 16) * 2),
+            start_y=top - (top // 13),
             color=arcade.color.WHITE,
-            font_size=36,
+            font_size=top // 16,
         )
 
-        return right - (self.key_sprite.width // 2) - padding_right, top
+    def _draw_keys(self):
+        left, right, bottom, top = self.viewport
 
-    def _draw_keys(self) -> tuple[int, int]:
-        """
-        :return: The xy coords for the Top Left of the containing bounding box
-        """
-        padding_top, padding_right = 10, 5
-        left = right - (self.key_sprite.width // 2)
+        self.key_sprite.center_x = right - (self.key_sprite.width // 2) - 5
+        self.key_sprite.center_y = top - (self.key_sprite.height // 2) - 5
 
-        self.key_sprite.center_x = left - padding_right
-        self.key_sprite.center_y = top - (self.key_sprite.height // 2) - padding_top
-
-        padding_top, padding_right = 40, self.key_sprite.width + 10
         arcade.draw_text(
             text=str(self.player_inv.keys),
-            start_x=left - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
+            start_x=right - (right // 14),
+            start_y=top - (top // 10),
             color=arcade.color.WHITE,
-            font_size=48,
+            font_size=top // 14,
         )
-
-        return left - padding_right, top
 
     def _draw_background(self):
 
         left, right, bottom, top = self.viewport
-        width, height = right // 10, top // 10
+        width, height = right // 6.5, top // 10
 
         point_list = (
             (right, top),
@@ -86,7 +73,7 @@ class IngameUI:
         self.window_size = window_size
 
         self._draw_background()
-        # self._draw_keys()
-        # self._draw_level()
+        self._draw_keys()
+        self._draw_level()
 
         self.inv_sprite.draw(filter=GL_NEAREST)
