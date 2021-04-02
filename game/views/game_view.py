@@ -152,9 +152,9 @@ class GameView(arcade.View):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
-        if self.gamestate != GameState.playermove:
-            return
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
+            while self.gamestate != GameState.playermove:
+                self.enemy_moving(0)
             # Record Original Pos so if collision with wall is detected, we return the
             # player to that spot before rendering, making it impassable.
             self.handle_collision(key, modifiers)
