@@ -26,9 +26,13 @@ class GameState(Enum):
 
 class GameView(arcade.View):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
+    level_list = ["level1", "level2"]
 
     def __init__(self, window):
         super().__init__(window)
+
+        self.level = 0
+
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
         self.exit_list: Optional[arcade.SpriteList] = None
@@ -56,7 +60,8 @@ class GameView(arcade.View):
 
     def win_level(self):
         # TODO: Transition to next level
-        print("You are built different")
+        self.level += 1
+        self.setup()
 
     def lose_level(self):
         self.setup()
@@ -64,7 +69,9 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/level1_.tmx")
+        tile_map = arcade.tilemap.read_tmx(
+            f"game/assets/levels/{self.level_list[self.level]}.tmx"
+        )
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -83,8 +90,9 @@ class GameView(arcade.View):
         self.exit_list = arcade.SpriteList()
 
         # Object Layers
-        levelfile = "game/assets/tilemaps/level1_.tmx"
-        self.object_layers = utils.process_objects(levelfile)
+        self.object_layers = utils.process_objects(
+            f"game/assets/levels/{self.level_list[self.level]}.tmx"
+        )
 
         self.enemy_list = arcade.SpriteList()
 
@@ -206,8 +214,8 @@ class GameView(arcade.View):
         arcade.start_render()
 
         # GL_NEAREST makes scaled Pixel art look cleaner
-        self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
+        self.wall_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
         self.exit_list.draw(filter=GL_NEAREST)
@@ -216,9 +224,7 @@ class GameView(arcade.View):
         self.player.draw()
 
     def on_draw(self):
-        self.ingame_ui.draw(
-            1, self.window.get_viewport()  # TODO: Replace with actual level.
-        )
+        self.ingame_ui.draw(self.level + 1, self.window.get_viewport())
 
 
 def main():
