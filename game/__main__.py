@@ -1,6 +1,7 @@
 from typing import Optional
 from enum import Enum
 
+from game.entity.exit import Exit
 from . import utils
 
 from .constants import *
@@ -12,7 +13,6 @@ from .entity.cabinet import Cabinet
 from .entity.enemy import EnemyList, Enemy
 from .entity.player import Player
 
-from .item.key import Key
 from .ingame_ui import IngameUI
 
 from .music_player import MusicPlayer
@@ -22,14 +22,6 @@ class GameState(Enum):
     playermove = 1
     enemymove = 2
     enemyturning = 3
-
-
-class Exit(arcade.Sprite):
-    def __init__(self, location, *args, **kwargs):
-        super().__init__(
-            "game/assets/sprites/square.png", *args, **kwargs
-        )  # Not gonna be rendered
-        self.center_x, self.center_y = location["spawn"].x, location["spawn"].y
 
 
 class GameView(arcade.View):
@@ -63,10 +55,12 @@ class GameView(arcade.View):
         self._draw()
 
     def win_level(self):
+        # TODO: Transition to next level
         print("You are built different")
 
     def lose_level(self):
-        print("These guards are built different")
+        # TODO: Lose Ui
+        self.setup()
 
     def load_map(self):
 
@@ -200,6 +194,9 @@ class GameView(arcade.View):
             self.player, self.interactable_list
         ):
             interactable.interact(self.player)
+
+        if self.enemy_list.check_los_collision(self.player):
+            self.lose_level()
 
         self.player.update()
 

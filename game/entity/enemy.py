@@ -1,9 +1,9 @@
-import random
-
+from __future__ import annotations
 import arcade
 
 from ..constants import TILE_SIZE
 from ..utils import Direction, Vector, center_of_tile, extract_locations
+
 
 class PathColors:
     pathcoloridx = 0
@@ -25,6 +25,7 @@ class PathColors:
         color = cls.pathcolorlist[cls.pathcoloridx]
         cls.pathcoloridx = (cls.pathcoloridx + 1) % len(cls.pathcolorlist)
         return color
+
 
 class EnemyList(arcade.SpriteList):
     def __init__(self, wall_list):
@@ -54,6 +55,13 @@ class EnemyList(arcade.SpriteList):
         for enemy in self:
             enemy.draw_vision()
         super().draw(*args, **kwargs)
+
+    def check_los_collision(self, sprite: arcade.Sprite) -> list[arcade.Sprite]:
+        """
+        Return list of all enemies that spotted the player
+        """
+        return [enemy for enemy in self if enemy.check_los_collision(sprite)]
+
 
 class Enemy(arcade.Sprite):
     def __init__(self, walls, locations, *args, **kwargs):
@@ -109,7 +117,9 @@ class Enemy(arcade.Sprite):
                 center_of_tile(*waypoint1), center_of_tile(*waypoint2)
             ):
                 self.path.append(center_of_tile(*point))
-        self.pathshape = arcade.create_line_strip(self.path + self.path[:1], self.pathcolor, 2)
+        self.pathshape = arcade.create_line_strip(
+            self.path + self.path[:1], self.pathcolor, 2
+        )
 
     def move_one_square(self):
         """
@@ -158,5 +168,9 @@ class Enemy(arcade.Sprite):
                 center_y=vision_point[1],
                 width=TILE_SIZE,
                 height=TILE_SIZE,
-                color=(220, 220, 79, 200)
+                color=(220, 220, 79, 200),
             )
+
+    def check_los_collision(self, sprite: arcade.Sprite) -> bool:
+        pos = sprite.position
+        return any(pos.x == v.x and pos.y == v.y for v in self.vision_points)
