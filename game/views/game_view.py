@@ -29,6 +29,9 @@ class GameView(arcade.View):
 
     def __init__(self, window):
         super().__init__(window)
+
+        self.level = 1
+
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
         self.exit_list: Optional[arcade.SpriteList] = None
@@ -56,7 +59,8 @@ class GameView(arcade.View):
 
     def win_level(self):
         # TODO: Transition to next level
-        print("You are built different")
+        self.level += 1
+        self.setup()
 
     def lose_level(self):
         self.setup()
@@ -64,7 +68,8 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/level1_.tmx")
+        level_path = f"game/assets/levels/level{self.level}.tmx"
+        tile_map = arcade.tilemap.read_tmx(level_path)
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -83,8 +88,7 @@ class GameView(arcade.View):
         self.exit_list = arcade.SpriteList()
 
         # Object Layers
-        levelfile = "game/assets/tilemaps/level1_.tmx"
-        self.object_layers = utils.process_objects(levelfile)
+        self.object_layers = utils.process_objects(level_path)
 
         self.enemy_list = arcade.SpriteList()
 
@@ -206,19 +210,16 @@ class GameView(arcade.View):
         arcade.start_render()
 
         # GL_NEAREST makes scaled Pixel art look cleaner
-        self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
+        self.wall_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
-        self.exit_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
 
     def on_draw(self):
-        self.ingame_ui.draw(
-            1, self.window.get_viewport()  # TODO: Replace with actual level.
-        )
+        self.ingame_ui.draw(self.level, self.window.get_viewport())
 
 
 def main():

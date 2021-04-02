@@ -31,7 +31,7 @@ class IngameUI:
 
         padding_top, padding_right = 45, padding_right - 20
         arcade.draw_text(
-            text="1",
+            text=str(self.cur_level),
             start_x=right - (self.key_sprite.width // 2) - padding_right,
             start_y=top - (self.key_sprite.height // 2) - padding_top,
             color=arcade.color.WHITE,
@@ -72,6 +72,7 @@ class IngameUI:
         arcade.draw_polygon_filled(point_list, self.colour)
 
     def draw(self, current_level: int, viewport: tuple[float, float, float, float]):
+        self.cur_level = current_level
         _, right, _, top = viewport
 
         self._draw_background(top, right)
