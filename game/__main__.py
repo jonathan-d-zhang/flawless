@@ -1,7 +1,6 @@
 from typing import Optional
 from enum import Enum
 
-from game.entity.exit import Exit
 from . import utils
 
 from .constants import *
@@ -12,6 +11,8 @@ from pyglet.gl import GL_NEAREST
 from .entity.cabinet import Cabinet
 from .entity.enemy import EnemyList, Enemy
 from .entity.player import Player
+from .entity.exit import Exit
+
 
 from .ingame_ui import IngameUI
 
