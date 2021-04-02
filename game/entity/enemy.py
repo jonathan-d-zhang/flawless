@@ -148,6 +148,7 @@ class Enemy(arcade.Sprite):
             self.direction = Direction.EAST
         elif basedirection[0] < 0:
             self.direction = Direction.WEST
+
         self.update_vision()
 
     def update_vision(self):
