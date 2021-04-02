@@ -210,6 +210,7 @@ class GameView(arcade.View):
         self.floor_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
+        self.exit_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
