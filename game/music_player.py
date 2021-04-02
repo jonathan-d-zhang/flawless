@@ -7,7 +7,8 @@ from typing import Optional
 class MusicPlayer:
     def __init__(self):
         self.song_list: list[str] = [
-            "game/assets/sound_effects/door_open.wav", # putting sound effect here for now as placeholder
+            "game/assets/sound_effects/background_01.wav", # putting sound effect here for now as placeholder
+            "game/assets/sound_effects/background_02.wav",
         ]
         self.song_index: int = 0
         self.current_player = None
