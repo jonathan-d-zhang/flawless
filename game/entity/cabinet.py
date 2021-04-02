@@ -5,7 +5,7 @@ from ..model.interactable import Interactable
 
 
 class Cabinet(arcade.Sprite, Interactable):
-    pickup_sound = arcade.Sound("game/assets/sound_effects/key_pickup.mp3")
+    pickup_sound = arcade.Sound("game/assets/sound_effects/key_pickup.wav")
 
     def __init__(self, loc, *args, **kwargs):
         super().__init__("game/assets/sprites/cabinet.png", 1, *args, **kwargs)
