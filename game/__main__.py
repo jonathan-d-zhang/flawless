@@ -43,7 +43,6 @@ class GameView(arcade.View):
     def setup(self):
         self.interactable_list = arcade.SpriteList()
 
-        self.load_map()
 
         # Set up the player
         self.player = Player()
@@ -51,6 +50,7 @@ class GameView(arcade.View):
 
         self.ingame_ui = IngameUI(self.player.inventory)
 
+        self.load_map()
         self.set_viewport_on_player()
         self._draw()
 
