@@ -1,5 +1,4 @@
-
-SCREEN_TITLE = "You better run..."
+SCREEN_TITLE = "Flawless"
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 480
 
