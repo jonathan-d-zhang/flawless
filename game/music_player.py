@@ -7,8 +7,8 @@ from typing import Optional
 class MusicPlayer:
     def __init__(self):
         self.song_list: list[str] = [
-            "game/assets/sound_effects/background_01.wav",
-            "game/assets/sound_effects/background_02.wav",
+            "game/assets/music/background_01.wav",
+            "game/assets/music/background_02.wav",
         ]
         self.song_index: int = 0
         self.current_player = None
