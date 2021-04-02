@@ -26,7 +26,6 @@ class GameState(Enum):
 
 class GameView(arcade.View):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
-    level_list = ["level1", "level2"]
 
     def __init__(self, window):
         super().__init__(window)
@@ -69,7 +68,7 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        level_path = f"game/assets/levels/{self.level_list[self.level]}.tmx"
+        level_path = f"game/assets/levels/level{self.level}.tmx"
         tile_map = arcade.tilemap.read_tmx(level_path)
         utils.map_height = tile_map.map_size[1]
 
