@@ -59,7 +59,6 @@ class GameView(arcade.View):
         print("You are built different")
 
     def lose_level(self):
-        # TODO: Lose Ui
         self.setup()
 
     def load_map(self):
