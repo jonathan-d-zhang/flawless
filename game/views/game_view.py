@@ -11,6 +11,7 @@ from pyglet.gl import GL_NEAREST
 from ..entity.cabinet import Cabinet
 from ..entity.enemy import EnemyList, Enemy
 from ..entity.player import Player
+from ..entity.exit import Exit
 
 from ..ingame_ui import IngameUI
 
@@ -30,6 +31,7 @@ class GameView(arcade.View):
         super().__init__(window)
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
+        self.exit_list: Optional[arcade.SpriteList] = None
         self.door_list: Optional[arcade.SpriteList] = None
         self.interactable_list: Optional[arcade.SpriteList] = None
         self.enemy_list: Optional[EnemyList] = None
@@ -42,7 +44,6 @@ class GameView(arcade.View):
     def setup(self):
         self.interactable_list = arcade.SpriteList()
 
-
         # Set up the player
         self.player = Player()
         self.gamestate = GameState.playermove
@@ -52,6 +53,13 @@ class GameView(arcade.View):
         self.load_map()
         self.set_viewport_on_player()
         self._draw()
+
+    def win_level(self):
+        # TODO: Transition to next level
+        print("You are built different")
+
+    def lose_level(self):
+        self.setup()
 
     def load_map(self):
 
@@ -71,6 +79,8 @@ class GameView(arcade.View):
         self.floor_list = arcade.tilemap.process_layer(
             tile_map, "floor", TILE_SPRITE_SCALING, use_spatial_hash=True
         )
+
+        self.exit_list = arcade.SpriteList()
 
         # Object Layers
         levelfile = "game/assets/tilemaps/TestLevel.tmx"
@@ -93,6 +103,7 @@ class GameView(arcade.View):
         self.enemy_list = EnemyList(self.wall_list)
         for guard_layer in self.object_layers["guard"]:
             self.enemy_list.add_from_layer(guard_layer)
+
         self.exit_locations = [
             utils.extract_locations(exit_layers)
             for exit_layers in self.object_layers["exit"]
@@ -107,18 +118,22 @@ class GameView(arcade.View):
             for guard_location in self.guard_locations
         )
 
+        self.exit_list.extend(Exit(loc) for loc in self.exit_locations)
+
         # Set Player Location
 
         self.player.center_x, self.player.center_y = utils.center_of_tile(
             self.player_spawn.x, self.player_spawn.y
         )
+
     def handle_collision(self, key: int, modifiers: int):
         original_pos = (self.player.center_x, self.player.center_y)
         self.player.handle_user_input(key, modifiers)
 
-        if arcade.check_for_collision_with_list(self.player, self.wall_list):
+        if arcade.check_for_collision_with_list(self.player, self.exit_list):
+            self.win_level()
+        elif arcade.check_for_collision_with_list(self.player, self.wall_list):
             self.player.center_x, self.player.center_y = original_pos
-
         elif collisions := arcade.check_for_collision_with_list(
             self.player, self.door_list
         ):
@@ -178,6 +193,9 @@ class GameView(arcade.View):
             self.player, self.interactable_list
         ):
             interactable.interact(self.player)
+
+        if self.enemy_list.check_los_collision(self.player):
+            self.lose_level()
 
         self.player.update()
 
