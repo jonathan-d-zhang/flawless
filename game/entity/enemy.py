@@ -1,5 +1,3 @@
-import random
-
 import arcade
 
 from ..constants import TILE_SIZE
