@@ -69,7 +69,7 @@ class MainMenuView(MenuView):
             if self.selection_index == 0:
                 view = game_view.GameView(self.window)
                 view.setup()
-                arcade.schedule(view.enemy_moving, 1 / 20)
+                arcade.schedule(view.enemy_moving, 1 / 40)
                 self.window.show_view(view)
             elif self.selection_index == 1:
                 self.window.show_view(settings_view.SettingsView(self))
