@@ -59,7 +59,7 @@ class GameView(arcade.View):
     def load_map(self):
 
         # Process Tile Map
-        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/level1.tmx")
+        tile_map = arcade.tilemap.read_tmx(f"game/assets/tilemaps/level1_.tmx")
         utils.map_height = tile_map.map_size[1]
 
         # Tile Layers
@@ -77,7 +77,7 @@ class GameView(arcade.View):
 
         # Object Layers
         self.object_layers = utils.process_objects(
-            f"game/assets/tilemaps/level1.tmx"
+            f"game/assets/tilemaps/level1_.tmx"
         )
 
         self.enemy_list = arcade.SpriteList()
@@ -158,6 +158,9 @@ class GameView(arcade.View):
         clamped_y = min(
             SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
         )
+
+        print(clamped_x, clamped_y)
+
         arcade.set_viewport(
             clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
         )
