@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="7">
+ <tileset firstgid="1" source="../tilemaps/flawless.tsx"/>
+ <layer id="1" name="floor" width="20" height="10" locked="1">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,2684354568,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="walls" width="20" height="10">
+  <data encoding="csv">
+25,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354585,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+1610612761,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,2684354565,3221225497
+</data>
+ </layer>
+ <objectgroup id="3" name="exit">
+  <properties>
+   <property name="type" value="exit"/>
+  </properties>
+  <object id="1" name="exit" type="spawn" x="576" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="4" name="player_spawn">
+  <properties>
+   <property name="type" value="player_spawn"/>
+  </properties>
+  <object id="2" name="player_spawn" type="spawn" x="32" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#aaff00" id="5" name="guard1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="3" name="guard1_spawn" type="spawn" x="96" y="96" width="32" height="32"/>
+  <object id="4" name="2" type="point" x="512" y="96" width="32" height="32"/>
+  <object id="5" name="0" type="point" x="96" y="192" width="32" height="32"/>
+  <object id="6" name="1" type="point" x="512" y="192" width="32" height="32"/>
+ </objectgroup>
+</map>
