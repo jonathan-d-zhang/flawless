@@ -10,8 +10,8 @@ PLAYER_SCALING = 1
 
 TILE_SIZE = 32 * TILE_SPRITE_SCALING
 
-INGAME_UI_FONT = "game/assets/fonts/NewTegomin-Regular.ttf"
-MENU_FONT = "game/assets/fonts/NewTegomin-Regular.ttf"
+INGAME_UI_FONT = "game/assets/fonts/KiwiMaru-Regular.ttf"
+MENU_FONT = "game/assets/fonts/KiwiMaru-Regular.ttf"
 
 CREDITS_FONT = MENU_FONT
 WIN_FONT = MENU_FONT
