@@ -8,6 +8,7 @@ from .views import (
     MainMenuView,
     CreditsView,
     PauseView,
+    InstructionsView,
     WinView,
 )
 
@@ -23,6 +24,7 @@ views.update(
     credits=CreditsView(views),
     pause=PauseView(views),
     win=WinView(views),
+    instructions=InstructionsView(views),
 )
 
 window.show_view(views["menu"])

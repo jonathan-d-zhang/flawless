@@ -53,7 +53,7 @@ class GameView(BaseView):
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
         self.gamestate = None
-
+        arcade.set_background_color(arcade.color.SLATE_GRAY)
         self.music_player = MusicPlayer()
 
     def setup(self):
@@ -221,6 +221,12 @@ class GameView(BaseView):
 
     def on_show(self):
         self._draw()
+
+    def on_show_view(self):
+        self.music_player.play_song()
+
+    def on_hide_view(self):
+        self.music_player.stop()
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
