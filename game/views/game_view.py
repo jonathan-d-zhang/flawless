@@ -17,6 +17,8 @@ from ..ingame_ui import IngameUI
 
 from ..music_player import MusicPlayer
 
+from ..views import pause_view
+
 
 class GameState(Enum):
     playermove = 1
@@ -158,6 +160,8 @@ class GameView(arcade.View):
             self.set_viewport_on_player()
             self._draw()
             self.gamestate = GameState.enemymove
+        elif key == arcade.key.ESCAPE:
+            self.window.show_view(pause_view.PauseView(self))
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:
