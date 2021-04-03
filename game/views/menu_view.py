@@ -24,7 +24,10 @@ class MenuView(arcade.View):
         width, height = self.window.get_size()
         if back:
             arcade.draw_text(
-                "Press ESC to go back", width // 16, height * 7 / 8, arcade.color.WHITE,
+                "Press ESC to go back",
+                width // 16,
+                height * 7 / 8,
+                arcade.color.WHITE,
             )
         if nav:
             t = "Up and down to navigate, ENTER to select"
