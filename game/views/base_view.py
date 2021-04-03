@@ -10,6 +10,9 @@ class BaseView(arcade.View):
     def switch_to(self, viewname):
         new_view = self.views[viewname]
         new_view.previous_view = self
+
+        if viewname != "game":
+            self.window.set_viewport(0, self.window.width, 0, self.window.height)
         self.window.show_view(new_view)
 
     def switch_to_previous(self):

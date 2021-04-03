@@ -8,6 +8,8 @@ from .views import (
     MainMenuView,
     CreditsView,
     PauseView,
+    InstructionsView,
+    WinView,
 )
 
 window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
@@ -21,6 +23,8 @@ views.update(
     menu=MainMenuView(views),
     credits=CreditsView(views),
     pause=PauseView(views),
+    win=WinView(views),
+    instructions=InstructionsView(views),
 )
 
 window.show_view(views["menu"])

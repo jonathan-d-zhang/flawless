@@ -1,5 +1,7 @@
 from enum import Enum
 from typing import Optional
+from glob import glob
+import re
 
 from .. import utils
 
@@ -28,11 +30,21 @@ class GameState(Enum):
 
 class GameView(BaseView):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
+    secret_sound = arcade.Sound("game/assets/sound_effects/secret.wav")
+    konami_code = [65362, 65362, 65364, 65364, 65361, 65363, 65361, 65363, 98, 97]
 
     def __init__(self, views):
         super().__init__(views)
 
         self.level = 1
+
+        files = glob("game/assets/levels/level*.tmx")
+        self.last_level = sorted(
+            int(re.search(r"\d+", file).group()) for file in files
+        )[-1]
+        assert self.last_level == len(
+            files
+        ), f"Missing a level, check you have a level for the full range from 1 - {len(files)} in game/levels"
 
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
@@ -43,11 +55,14 @@ class GameView(BaseView):
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
         self.gamestate = None
+        arcade.set_background_color(arcade.color.SLATE_GRAY)
+        self._code_counter = None
 
         self.music_player = MusicPlayer()
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
+        self._code_counter = 0
 
         # Set up the player
         self.player = Player()
@@ -61,7 +76,10 @@ class GameView(BaseView):
 
     def win_level(self):
         # TODO: Transition to next level
-        self.level += 1
+        if self.last_level <= self.level:
+            self.switch_to("win")
+        else:
+            self.level += 1
         self.setup()
 
     def lose_level(self):
@@ -151,6 +169,15 @@ class GameView(BaseView):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
+
+        if key == self.konami_code[self._code_counter]:
+            self._code_counter += 1
+            if self._code_counter == len(self.konami_code):
+                arcade.play_sound(self.secret_sound)
+                self.win_level()
+        else:
+            self._code_counter = 0
+
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             while self.gamestate != GameState.playermove:
                 self.enemy_moving(0)
@@ -184,10 +211,33 @@ class GameView(BaseView):
         it is clamped with the game map.
         :return:
         """
-        clamped_x = min(self.window.width, self.map_width * 32)
-        clamped_y = min(self.window.height, self.map_height * 32)
 
-        arcade.set_viewport(0, clamped_x, 0, clamped_y)
+        if SCREEN_WIDTH >= self.map_width * TILE_SIZE:
+            left = (self.map_width * TILE_SIZE - SCREEN_WIDTH) / 2
+        else:
+            left = min(
+                self.map_width * TILE_SIZE - SCREEN_WIDTH,
+                max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            )
+        right = left + SCREEN_WIDTH
+        if SCREEN_HEIGHT >= self.map_height * TILE_SIZE:
+            bottom = (self.map_height * TILE_SIZE - SCREEN_HEIGHT) / 2
+        else:
+            bottom = min(
+                self.map_height * TILE_SIZE - SCREEN_HEIGHT,
+                max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            )
+        top = bottom + SCREEN_HEIGHT
+        arcade.set_viewport(left, right, bottom, top)
+
+    def on_show(self):
+        self._draw()
+
+    def on_show_view(self):
+        self.music_player.play_song()
+
+    def on_hide_view(self):
+        self.music_player.stop()
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
@@ -210,6 +260,9 @@ class GameView(BaseView):
         self.wall_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
+
+        if self.level == self.last_level:
+            self.exit_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
