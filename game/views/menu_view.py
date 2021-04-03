@@ -2,11 +2,12 @@ import arcade
 import arcade.gui
 
 from abc import ABC
+from .base_view import BaseView
 
 
-class MenuView(arcade.View):
-    def __init__(self):
-        super().__init__()
+class MenuView(BaseView):
+    def __init__(self, views):
+        super().__init__(views)
         self.ui_manager = arcade.gui.UIManager()
         self.selection_index = 0
         self.width, self.height = self.window.get_size()
@@ -24,10 +25,7 @@ class MenuView(arcade.View):
         width, height = self.window.get_size()
         if back:
             arcade.draw_text(
-                "Press ESC to go back",
-                width // 16,
-                height * 7 / 8,
-                arcade.color.WHITE,
+                "Press ESC to go back", width // 16, height * 7 / 8, arcade.color.WHITE,
             )
         if nav:
             t = "Up and down to navigate, ENTER to select"
