@@ -198,16 +198,23 @@ class GameView(BaseView):
         :return:
         """
 
-        left = min(
-            self.map_width * 32 - SCREEN_WIDTH,
-            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
-        )
+
+        if SCREEN_WIDTH >= self.map_width * 32:
+            left = (self.map_width * 32 - SCREEN_WIDTH)/2
+        else:
+            left = min(
+                self.map_width * 32 - SCREEN_WIDTH,
+                max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            )
         right = left + SCREEN_WIDTH
-        bottom = min(
-            self.map_height * 32 - SCREEN_HEIGHT,
-            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
-        )
-        top = left + SCREEN_HEIGHT
+        if SCREEN_HEIGHT >= self.map_height * 32:
+            bottom = (self.map_height * 32 - SCREEN_HEIGHT)/2
+        else:
+            bottom = min(
+                self.map_height * 32 - SCREEN_HEIGHT,
+                max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            )
+        top = bottom + SCREEN_HEIGHT
         arcade.set_viewport(left, right, bottom, top)
 
     def on_update(self, delta_time: float):
