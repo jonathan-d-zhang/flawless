@@ -185,7 +185,7 @@ class SettingSlider(SettingField):
             self.x,
             self.y,
             color=arcade.csscolor.WHITE,
-            width=self.length,
+            width=self.length + 10,
             font_name=SETTINGS_FONT,
         )
         arcade.draw_line(

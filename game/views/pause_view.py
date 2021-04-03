@@ -7,10 +7,6 @@ from ..constants import *
 TEXT_COLOR = arcade.csscolor.WHITE
 
 
-# TODO  pause music when switching from game-view to pause-view (previous
-#       implementation had to be removed)
-
-
 class PauseView(MenuView):
     def __init__(self, views):
         super().__init__(views)
@@ -38,7 +34,7 @@ class PauseView(MenuView):
 
         current_field = self.field_list[self.selection_index]
         arcade.draw_rectangle_outline(
-            current_field.x, current_field.y + 8, self.width // 8, 30, TEXT_COLOR
+            current_field.x, current_field.y + 8, self.width / 5, 30, TEXT_COLOR
         )
 
         self.draw_information_text(TEXT_COLOR, nav=True)

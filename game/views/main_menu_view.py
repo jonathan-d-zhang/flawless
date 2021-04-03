@@ -40,9 +40,9 @@ class MainMenuView(MenuView):
         field = self.field_list[self.selection_index]
 
         arcade.draw_rectangle_outline(
-            center_x=field.x - 40,
+            center_x=field.x - 50,
             center_y=field.y + 8,
-            width=self.width // 8 - 20,
+            width=self.width // 8 + 10,
             height=30,
             color=TEXT_COLOR,
         )
