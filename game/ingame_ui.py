@@ -27,26 +27,29 @@ class IngameUI:
 
         arcade.draw_text(
             text=str(self.player_inv.keys),
-            start_x=key_x - self.key_sprite.width,
+            start_x=key_x - self.key_sprite.width - 10,
             start_y=key_y - 20,
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 14,
         )
 
-        left_pos = left + 10
         arcade.draw_text(
             text="Level",
-            start_x=left_pos,
-            start_y=top - 55,
+            start_x=40,
+            start_y=top - 45,
+            anchor_x="center",
+            anchor_y="center",
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 32,
         )
         arcade.draw_text(
             text=str(self.cur_level),
-            start_x=left_pos + 10,
-            start_y=top - 40,
+            start_x=40,
+            start_y=top - 20,
+            anchor_x="center",
+            anchor_y="center",
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 16,
@@ -54,8 +57,10 @@ class IngameUI:
 
         arcade.draw_text(
             text="Deaths",
-            start_x=left_pos + self.window_size[0] // 16 - 5,
-            start_y=top - 55,
+            start_x=120,
+            start_y=top - 45,
+            anchor_x="center",
+            anchor_y="center",
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 32,
@@ -63,8 +68,10 @@ class IngameUI:
 
         arcade.draw_text(
             text=str(self.death_counter) if self.death_counter < 100 else "∞",
-            start_x=left_pos + 70,
-            start_y=top - 40,
+            start_x=120,
+            start_y=top - 20,
+            anchor_x="center",
+            anchor_y="center",
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 16,
@@ -73,7 +80,8 @@ class IngameUI:
     def _draw_background(self):
 
         left, right, bottom, top = self.viewport
-        width, height = self.window_size[0] // 12, self.window_size[1] // 10
+        # width, height = self.window_size[0] // 12, self.window_size[1] // 10
+        width, height = 90, 60
 
         point_list = (
             (right, top),
@@ -84,7 +92,8 @@ class IngameUI:
 
         arcade.draw_polygon_filled(point_list, self.colour)
 
-        width, height = self.window_size[0] / 7, self.window_size[1] // 8
+        # width, height = self.window_size[0] / 7, self.window_size[1] // 8
+        width, height = 160, 60
         point_list = (
             (left, top),
             (left + width, top),
