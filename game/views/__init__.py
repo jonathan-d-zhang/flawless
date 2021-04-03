@@ -1,3 +1,4 @@
+from .base_view import BaseView
 from .menu_view import MenuView, MenuField
 from .credits_view import CreditsView
 from .settings_view import SettingsView

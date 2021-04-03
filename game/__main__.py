@@ -1,18 +1,27 @@
 import arcade
 
 from .constants import *
-from .views import MainMenuView
+from .views import (
+    BaseView,
+    GameView,
+    SettingsView,
+    MainMenuView,
+    CreditsView,
+    PauseView,
+)
 
+window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+window.center_window()
+window.set_mouse_visible(False)
 
-def main():
-    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    main_window.center_window()
-    main_window.set_mouse_visible(False)
-    view = MainMenuView()
-    main_window.show_view(view)
+views: dict[str, BaseView] = {}
+views.update(
+    game=GameView(views),
+    settings=SettingsView(views),
+    menu=MainMenuView(views),
+    credits=CreditsView(views),
+    pause=PauseView(views),
+)
 
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
+window.show_view(views["menu"])
+arcade.run()
