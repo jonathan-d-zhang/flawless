@@ -36,15 +36,15 @@ class GameView(BaseView):
     def __init__(self, views):
         super().__init__(views)
 
-        self.level = 1
+        self.level = 6
 
         files = glob("game/assets/levels/level*.tmx")
         self.last_level = sorted(
             int(re.search(r"\d+", file).group()) for file in files
         )[-1]
-        assert self.last_level == len(
-            files
-        ), f"Missing a level, check you have a level for the full range from 1 - {len(files)} in game/levels"
+        # assert self.last_level == len(
+        #     files
+        # ), f"Missing a level, check you have a level for the full range from 1 - {len(files)} in game/levels"
 
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
@@ -59,6 +59,7 @@ class GameView(BaseView):
         self._code_counter = None
 
         self.music_player = MusicPlayer()
+        self.death_counter = 0
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
@@ -83,6 +84,7 @@ class GameView(BaseView):
         self.setup()
 
     def lose_level(self):
+        self.death_counter += 1
         self.setup()
 
     def load_map(self):
@@ -269,5 +271,5 @@ class GameView(BaseView):
 
     def on_draw(self):
         self.ingame_ui.draw(
-            self.level, self.window.get_viewport(), self.window.get_size()
+            self.level, self.death_counter, self.window.get_viewport(), self.window.get_size()
         )

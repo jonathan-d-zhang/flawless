@@ -48,6 +48,23 @@ class IngameUI:
             font_size=self.window_size[1] // 16,
         )
 
+        arcade.draw_text(
+            text="Deaths",
+            start_x=left_pos + self.window_size[0] // 16 - 5,
+            start_y=top - 55,
+            color=arcade.color.WHITE,
+            font_size=self.window_size[1] // 32,
+        )
+
+
+        arcade.draw_text(
+            text=str(self.death_counter) if self.death_counter < 100 else "∞",
+            start_x=left_pos + 70,
+            start_y=top-40,
+            color=arcade.color.WHITE,
+            font_size=self.window_size[1] // 16,
+        )
+
     def _draw_background(self):
 
         left, right, bottom, top = self.viewport
@@ -62,7 +79,7 @@ class IngameUI:
 
         arcade.draw_polygon_filled(point_list, self.colour)
 
-        width, height = self.window_size[0] // 16, self.window_size[1] // 8
+        width, height = self.window_size[0] // 8, self.window_size[1] // 8
         point_list = (
             (left, top),
             (left + width, top),
@@ -75,12 +92,14 @@ class IngameUI:
     def draw(
         self,
         current_level: int,
+        death_counter: int,
         viewport: tuple[float, float, float, float],
         window_size: tuple[int, int],
     ):
         self.cur_level = current_level
         self.viewport = viewport
         self.window_size = window_size
+        self.death_counter = death_counter
 
         self._draw_background()
         self._draw_info()
