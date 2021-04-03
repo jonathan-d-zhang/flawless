@@ -38,7 +38,7 @@ class IngameUI:
 
         arcade.draw_text(
             text="Level",
-            start_x=40,
+            start_x=left + 40,
             start_y=top - 45,
             anchor_x="center",
             anchor_y="center",
@@ -48,7 +48,7 @@ class IngameUI:
         )
         arcade.draw_text(
             text=str(self.cur_level),
-            start_x=40,
+            start_x=left + 40,
             start_y=top - 20,
             anchor_x="center",
             anchor_y="center",
@@ -59,7 +59,7 @@ class IngameUI:
 
         arcade.draw_text(
             text="Deaths",
-            start_x=120,
+            start_x=left + 120,
             start_y=top - 45,
             anchor_x="center",
             anchor_y="center",
@@ -70,7 +70,7 @@ class IngameUI:
 
         arcade.draw_text(
             text=str(self.death_counter) if self.death_counter < 100 else "∞",
-            start_x=120,
+            start_x=left + 120,
             start_y=top - 20,
             anchor_x="center",
             anchor_y="center",
