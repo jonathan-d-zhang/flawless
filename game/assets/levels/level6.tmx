@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="23" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="25">
  <tileset firstgid="1" source="../tilemaps/flawless.tsx"/>
- <layer id="14" name="floor" width="23" height="9">
+ <layer id="14" name="floor" width="23" height="9" locked="1">
   <data encoding="csv">
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
-37,37,1610612744,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
+37,1610612744,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
@@ -14,7 +14,7 @@
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37
 </data>
  </layer>
- <layer id="3" name="doors" width="23" height="9">
+ <layer id="3" name="doors" width="23" height="9" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -27,7 +27,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="15" name="walls" width="23" height="9">
+ <layer id="15" name="walls" width="23" height="9" locked="1">
   <data encoding="csv">
 25,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,15,16,16,16,16,35,
 5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,5,
@@ -56,7 +56,7 @@
   <properties>
    <property name="type" value="exit"/>
   </properties>
-  <object id="18" name="level_exit" type="spawn" x="64" y="64" width="32" height="32"/>
+  <object id="18" name="level_exit" type="spawn" x="32" y="64" width="32" height="32"/>
  </objectgroup>
  <objectgroup color="#ff0000" id="6" name="guard1" locked="1">
   <properties>
