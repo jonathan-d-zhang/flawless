@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="7">
+ <tileset firstgid="1" source="../tilemaps/flawless.tsx"/>
+ <layer id="2" name="floor" width="20" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,2684354568,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="1" name="walls" width="20" height="10">
+  <data encoding="csv">
+25,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,15,16,16,35,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,5,
+26,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,3221225487,16,16,36
+</data>
+ </layer>
+ <layer id="3" name="doors" width="20" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,57,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="6" name="key">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="3" name="key_spawn" type="spawn" x="480" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="7" name="guard1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="4" name="guard1_spawn" type="spawn" x="480" y="96" width="32" height="32"/>
+  <object id="5" name="0" type="point" x="416" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="5" name="playerspawn">
+  <properties>
+   <property name="type" value="player_spawn"/>
+  </properties>
+  <object id="1" name="player_spawn" type="spawn" x="64" y="64" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="9" name="exit">
+  <object id="6" name="exit_spawn" type="spawn" x="576" y="128" width="32" height="32"/>
+ </objectgroup>
+</map>
