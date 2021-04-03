@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="20" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="23" nextobjectid="41">
  <tileset firstgid="1" source="../tilemaps/flawless.tsx"/>
- <layer id="20" name="floors" width="20" height="10" locked="1">
+ <layer id="20" name="floors" width="20" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,8,0,
 0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
 0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
 0,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
@@ -91,7 +91,7 @@
   <object id="34" name="1" type="point" x="512" y="64" width="32" height="32" rotation="90"/>
   <object id="35" name="2" type="point" x="192" y="64" width="32" height="32" rotation="90"/>
  </objectgroup>
- <objectgroup color="#005500" id="18" name="guard5">
+ <objectgroup color="#005500" id="18" name="guard5" locked="1">
   <properties>
    <property name="type" value="guard"/>
   </properties>
