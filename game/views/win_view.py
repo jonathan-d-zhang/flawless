@@ -16,10 +16,11 @@ class WinView(MenuView):
             WinField(self.width // 2, self.height - i * 50 - self.height // 2, field)
             for i, field in enumerate(self.field_list)
         ]
-        self.window.set_viewport(0, self.width, 0, self.height)
 
     def on_draw(self):
         arcade.start_render()
+
+        self.window.set_viewport(0, self.width, 0, self.height)
 
         arcade.draw_text(
             "You win!",
