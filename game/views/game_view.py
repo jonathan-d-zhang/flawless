@@ -1,5 +1,7 @@
 from enum import Enum
 from typing import Optional
+from glob import glob
+import re
 
 from .. import utils
 
@@ -17,7 +19,7 @@ from ..ingame_ui import IngameUI
 
 from ..music_player import MusicPlayer
 
-from ..views import pause_view
+from .base_view import BaseView
 
 
 class GameState(Enum):
@@ -26,13 +28,23 @@ class GameState(Enum):
     enemyturning = 3
 
 
-class GameView(arcade.View):
+class GameView(BaseView):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
+    secret_sound = arcade.Sound("game/assets/sound_effects/secret.wav")
+    konami_code = [65362, 65362, 65364, 65364, 65361, 65363, 65361, 65363, 98, 97]
 
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, views):
+        super().__init__(views)
 
         self.level = 1
+
+        files = glob("game/assets/levels/level*.tmx")
+        self.last_level = sorted(
+            int(re.search(r"\d+", file).group()) for file in files
+        )[-1]
+        assert self.last_level == len(
+            files
+        ), f"Missing a level, check you have a level for the full range from 1 - {len(files)} in game/levels"
 
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
@@ -43,11 +55,14 @@ class GameView(arcade.View):
         self.player: Optional[Player] = None
         self.ingame_ui: Optional[IngameUI] = None
         self.gamestate = None
+        arcade.set_background_color(arcade.color.SLATE_GRAY)
+        self._code_counter = None
 
         self.music_player = MusicPlayer()
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
+        self._code_counter = 0
 
         # Set up the player
         self.player = Player()
@@ -61,7 +76,10 @@ class GameView(arcade.View):
 
     def win_level(self):
         # TODO: Transition to next level
-        self.level += 1
+        if self.last_level <= self.level:
+            self.switch_to("win")
+        else:
+            self.level += 1
         self.setup()
 
     def lose_level(self):
@@ -73,6 +91,7 @@ class GameView(arcade.View):
         level_path = f"game/assets/levels/level{self.level}.tmx"
         tile_map = arcade.tilemap.read_tmx(level_path)
         utils.map_height = tile_map.map_size[1]
+        self.map_width, self.map_height = tile_map.map_size
 
         # Tile Layers
         self.wall_list = arcade.tilemap.process_layer(
@@ -150,6 +169,15 @@ class GameView(arcade.View):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
+
+        if key == self.konami_code[self._code_counter]:
+            self._code_counter += 1
+            if self._code_counter == len(self.konami_code):
+                arcade.play_sound(self.secret_sound)
+                self.win_level()
+        else:
+            self._code_counter = 0
+
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             while self.gamestate != GameState.playermove:
                 self.enemy_moving(0)
@@ -161,7 +189,7 @@ class GameView(arcade.View):
             self._draw()
             self.gamestate = GameState.enemymove
         elif key == arcade.key.ESCAPE:
-            self.window.show_view(pause_view.PauseView(self))
+            self.switch_to("pause")
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:
@@ -183,15 +211,33 @@ class GameView(arcade.View):
         it is clamped with the game map.
         :return:
         """
-        clamped_x = min(
-            SCREEN_WIDTH, max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN)
-        )
-        clamped_y = min(
-            SCREEN_HEIGHT, max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN)
-        )
-        arcade.set_viewport(
-            clamped_x, SCREEN_WIDTH + clamped_x, clamped_y, SCREEN_HEIGHT + clamped_y
-        )
+
+        if SCREEN_WIDTH >= self.map_width * TILE_SIZE:
+            left = (self.map_width * TILE_SIZE - SCREEN_WIDTH) / 2
+        else:
+            left = min(
+                self.map_width * TILE_SIZE - SCREEN_WIDTH,
+                max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+            )
+        right = left + SCREEN_WIDTH
+        if SCREEN_HEIGHT >= self.map_height * TILE_SIZE:
+            bottom = (self.map_height * TILE_SIZE - SCREEN_HEIGHT) / 2
+        else:
+            bottom = min(
+                self.map_height * TILE_SIZE - SCREEN_HEIGHT,
+                max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+            )
+        top = bottom + SCREEN_HEIGHT
+        arcade.set_viewport(left, right, bottom, top)
+
+    def on_show(self):
+        self._draw()
+
+    def on_show_view(self):
+        self.music_player.play_song()
+
+    def on_hide_view(self):
+        self.music_player.stop()
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
@@ -215,25 +261,13 @@ class GameView(arcade.View):
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
 
+        if self.level == self.last_level:
+            self.exit_list.draw(filter=GL_NEAREST)
+
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
 
     def on_draw(self):
-        self.ingame_ui.draw(self.level, self.window.get_viewport())
-        self._draw()
-
-
-def main():
-    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-
-    game_view = GameView(main_window)
-    game_view.setup()
-    arcade.schedule(game_view.enemy_moving, 1 / 20)
-
-    main_window.show_view(game_view)
-
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
+        self.ingame_ui.draw(
+            self.level, self.window.get_viewport(), self.window.get_size()
+        )

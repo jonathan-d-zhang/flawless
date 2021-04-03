@@ -91,7 +91,7 @@ def process_objects(file_path: str) -> dict[str, list[ObjectLayer]]:
 
         for x in child_object_elements:
             object_layer.object_count += 1
-
+            y = x.getAttribute("width")
             object_infomation = Object(
                 name=x.getAttribute("name"),
                 type=x.getAttribute("type"),

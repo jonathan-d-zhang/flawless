@@ -6,10 +6,9 @@ from .menu_view import MenuView, MenuField
 
 
 class SettingsView(MenuView):
-    def __init__(self, parent_view):
-        super().__init__()
+    def __init__(self, views):
+        super().__init__(views)
         self.width, self.height = self.window.get_size()
-        self.parent_view = parent_view
         # use setting_index to grab the currently selected setting
 
         # setting_list will store list of settings to add to the view
@@ -89,7 +88,7 @@ class SettingsView(MenuView):
         elif symbol == arcade.key.RIGHT:
             self.setting_list[self.selection_index].increase()
         elif symbol == arcade.key.ESCAPE:
-            self.window.show_view(self.parent_view)
+            self.switch_to_previous()
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()
@@ -139,10 +138,7 @@ class SettingToggle(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=arcade.csscolor.WHITE,
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE,
         )
 
         arcade.draw_rectangle_outline(
@@ -151,20 +147,12 @@ class SettingToggle(SettingField):
 
         if self.value:
             arcade.draw_rectangle_filled(
-                self.x + longest + 47,
-                self.y + 8,
-                23,
-                18,
-                color=arcade.color.BUD_GREEN,
+                self.x + longest + 47, self.y + 8, 23, 18, color=arcade.color.BUD_GREEN,
             )
 
         else:
             arcade.draw_rectangle_filled(
-                self.x + longest + 23,
-                self.y + 8,
-                23,
-                18,
-                color=arcade.color.CG_RED,
+                self.x + longest + 23, self.y + 8, 23, 18, color=arcade.color.CG_RED,
             )
 
 
@@ -186,11 +174,7 @@ class SettingSlider(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text,
-            self.x,
-            self.y,
-            color=arcade.csscolor.WHITE,
-            width=self.length,
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
         )
         arcade.draw_line(
             self.x, self.y - 15, self.x + longest, self.y - 15, arcade.color.WHITE

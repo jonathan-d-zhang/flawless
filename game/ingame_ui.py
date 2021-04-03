@@ -12,71 +12,77 @@ class IngameUI:
     def __init__(self, player_inventory: PlayerInventory):
         self.player_inv = player_inventory
         self.inv_sprite = arcade.SpriteList()
-        self.key_sprite = arcade.Sprite("game/assets/sprites/key.png", 2)
+        self.key_sprite = arcade.Sprite("game/assets/sprites/key.png", 1.25)
         self.inv_sprite.append(self.key_sprite)
         self.colour = 0x22, 0x3D, 0x28
 
-    def _draw_level(self, top, right) -> tuple[int, int]:
-        """
-        :return: The xy coords for the Top Left of the containing bounding box
-        """
-        padding_top, padding_right = 5, 50
-        arcade.draw_text(
-            text="Level",
-            start_x=right - (self.key_sprite.width // 2) - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
-            color=arcade.color.WHITE,
-            font_size=24,
-        )
+    def _draw_info(self):
+        left, right, bottom, top = self.viewport
 
-        padding_top, padding_right = 45, padding_right - 20
-        arcade.draw_text(
-            text=str(self.cur_level),
-            start_x=right - (self.key_sprite.width // 2) - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
-            color=arcade.color.WHITE,
-            font_size=36,
-        )
+        key_x = right - (self.key_sprite.width // 2) - 5
+        key_y = top - (self.key_sprite.height // 2) - 5
+        self.key_sprite.center_x = key_x
+        self.key_sprite.center_y = key_y
 
-        return right - (self.key_sprite.width // 2) - padding_right, top
-
-    def _draw_keys(self, top, right) -> tuple[int, int]:
-        """
-        :return: The xy coords for the Top Left of the containing bounding box
-        """
-        padding_top, padding_right = 10, 5
-        left = right - (self.key_sprite.width // 2)
-
-        self.key_sprite.center_x = left - padding_right
-        self.key_sprite.center_y = top - (self.key_sprite.height // 2) - padding_top
-
-        padding_top, padding_right = 40, self.key_sprite.width + 10
         arcade.draw_text(
             text=str(self.player_inv.keys),
-            start_x=left - padding_right,
-            start_y=top - (self.key_sprite.height // 2) - padding_top,
+            start_x=key_x - self.key_sprite.width,
+            start_y=key_y - 20,
             color=arcade.color.WHITE,
-            font_size=48,
+            font_size=self.window_size[1] // 14,
         )
 
-        return left - padding_right, top
+        left_pos = left + 10
+        arcade.draw_text(
+            text="Level",
+            start_x=left_pos,
+            start_y=top - 55,
+            color=arcade.color.WHITE,
+            font_size=self.window_size[1] // 32,
+        )
+        arcade.draw_text(
+            text=str(self.cur_level),
+            start_x=left_pos + 10,
+            start_y=top - 40,
+            color=arcade.color.WHITE,
+            font_size=self.window_size[1] // 16,
+        )
 
-    def _draw_background(self, top, right):
-        background_width, background_height = 200, 75
+    def _draw_background(self):
+
+        left, right, bottom, top = self.viewport
+        width, height = self.window_size[0] // 12, self.window_size[1] // 10
+
         point_list = (
             (right, top),
-            (right - background_width, top),
-            (right - background_width, top - background_height),
-            (right, top - background_height - (background_height // 3)),
+            (right - width, top),
+            (right - width, top - height),
+            (right, top - height),
         )
+
         arcade.draw_polygon_filled(point_list, self.colour)
 
-    def draw(self, current_level: int, viewport: tuple[float, float, float, float]):
-        self.cur_level = current_level
-        _, right, _, top = viewport
+        width, height = self.window_size[0] // 16, self.window_size[1] // 8
+        point_list = (
+            (left, top),
+            (left + width, top),
+            (left + width, top - height),
+            (left, top - height),
+        )
 
-        self._draw_background(top, right)
-        right, top = self._draw_keys(top, right)
-        right, top = self._draw_level(top, right)
+        arcade.draw_polygon_filled(point_list, self.colour)
+
+    def draw(
+        self,
+        current_level: int,
+        viewport: tuple[float, float, float, float],
+        window_size: tuple[int, int],
+    ):
+        self.cur_level = current_level
+        self.viewport = viewport
+        self.window_size = window_size
+
+        self._draw_background()
+        self._draw_info()
 
         self.inv_sprite.draw(filter=GL_NEAREST)
