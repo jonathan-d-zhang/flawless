@@ -63,6 +63,9 @@
   <object id="1" name="player_spawn" type="spawn" x="64" y="64" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="9" name="exit">
+  <properties>
+   <property name="type" value="exit"/>
+  </properties>
   <object id="6" name="exit_spawn" type="spawn" x="576" y="128" width="32" height="32"/>
  </objectgroup>
 </map>
