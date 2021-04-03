@@ -3,6 +3,7 @@ import arcade.gui
 
 from abc import ABC
 from .base_view import BaseView
+from ..constants import *
 
 
 class MenuView(BaseView):
@@ -25,11 +26,17 @@ class MenuView(BaseView):
         width, height = self.window.get_size()
         if back:
             arcade.draw_text(
-                "Press ESC to go back", width // 16, height * 7 / 8, arcade.color.WHITE,
+                "Press ESC to go back",
+                width // 16,
+                height * 7 / 8,
+                arcade.color.WHITE,
+                font_name=MENU_FONT,
             )
         if nav:
             t = "Up and down to navigate, ENTER to select"
-            arcade.draw_text(t, width // 16, height // 8, color)
+            arcade.draw_text(
+                t, width // 16, height // 8, color, font_name=MENU_FONT,
+            )
 
 
 class MenuField(ABC):

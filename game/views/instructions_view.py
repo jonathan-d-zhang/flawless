@@ -1,6 +1,7 @@
 import arcade
 
 from .menu_view import MenuView
+from ..constants import *
 
 
 TEXT_COLOR = arcade.csscolor.WHITE
@@ -17,6 +18,7 @@ class InstructionsView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
+            font_name=INSTRUCTIONS_FONT,
         )
 
         self.draw_information_text(TEXT_COLOR, back=True)
@@ -32,6 +34,7 @@ class InstructionsView(MenuView):
             align="center",
             anchor_x="center",
             anchor_y="top",
+            font_name=INSTRUCTIONS_FONT,
         )
 
         text = """Some levels may be secured by guards.\nYou must dodge them your way to the exit.
@@ -46,10 +49,25 @@ class InstructionsView(MenuView):
             TEXT_COLOR,
             align="center",
             anchor_x="center",
+            font_name=INSTRUCTIONS_FONT,
         )
 
-        arcade.draw_text(a, self.width * .8 // 5, self.height * .27, TEXT_COLOR, anchor_y="top")
-        arcade.draw_text(b, self.width * 3.2 // 5, self.height * .27, TEXT_COLOR, anchor_y="top")
+        arcade.draw_text(
+            a,
+            self.width * 0.8 // 5,
+            self.height * 0.27,
+            TEXT_COLOR,
+            anchor_y="top",
+            font_name=INSTRUCTIONS_FONT,
+        )
+        arcade.draw_text(
+            b,
+            self.width * 3.2 // 5,
+            self.height * 0.27,
+            TEXT_COLOR,
+            anchor_y="top",
+            font_name=INSTRUCTIONS_FONT,
+        )
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:

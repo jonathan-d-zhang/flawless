@@ -2,12 +2,9 @@ import arcade
 import arcade.gui
 
 from ..views import MenuView, MenuField
+from ..constants import *
 
 TEXT_COLOR = arcade.csscolor.WHITE
-
-
-# TODO  pause music when switching from game-view to pause-view (previous
-#       implementation had to be removed)
 
 
 class PauseView(MenuView):
@@ -30,13 +27,14 @@ class PauseView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
+            font_name=PAUSE_FONT,
         )
         for field in self.field_list:
             field.draw()
 
         current_field = self.field_list[self.selection_index]
         arcade.draw_rectangle_outline(
-            current_field.x, current_field.y + 8, self.width // 8, 30, TEXT_COLOR
+            current_field.x, current_field.y + 8, self.width / 5, 30, TEXT_COLOR
         )
 
         self.draw_information_text(TEXT_COLOR, nav=True)
@@ -76,4 +74,11 @@ class PauseField(MenuField):
         super().__init__(x, y, text)
 
     def draw(self, longest=None):
-        arcade.draw_text(self.text, self.x, self.y, TEXT_COLOR, anchor_x="center")
+        arcade.draw_text(
+            self.text,
+            self.x,
+            self.y,
+            TEXT_COLOR,
+            anchor_x="center",
+            font_name=PAUSE_FONT,
+        )
