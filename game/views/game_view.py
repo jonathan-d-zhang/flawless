@@ -36,7 +36,7 @@ class GameView(BaseView):
     def __init__(self, views):
         super().__init__(views)
 
-        self.level = 6
+        self.level = 1
 
         files = glob("game/assets/levels/level*.tmx")
         self.last_level = sorted(
@@ -79,6 +79,7 @@ class GameView(BaseView):
         # TODO: Transition to next level
         if self.last_level <= self.level:
             self.switch_to("win")
+            self.level = 1
         else:
             self.level += 1
         self.setup()
@@ -271,5 +272,8 @@ class GameView(BaseView):
 
     def on_draw(self):
         self.ingame_ui.draw(
-            self.level, self.death_counter, self.window.get_viewport(), self.window.get_size()
+            self.level,
+            self.death_counter,
+            self.window.get_viewport(),
+            self.window.get_size(),
         )
