@@ -35,3 +35,8 @@ class MusicPlayer:
                 self.play_song()
         else:
             self.play_song()
+
+    def stop(self):
+        if self.music:
+            self.music.stop(self.current_player)
+        self.music = None
