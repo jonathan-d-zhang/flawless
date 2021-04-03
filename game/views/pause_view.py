@@ -6,6 +6,10 @@ from ..views import MenuView, MenuField
 TEXT_COLOR = arcade.csscolor.WHITE
 
 
+# TODO  pause music when switching from game-view to pause-view (previous
+#       implementation had to be removed)
+
+
 class PauseView(MenuView):
     def __init__(self, views):
         super().__init__(views)

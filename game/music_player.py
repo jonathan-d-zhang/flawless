@@ -3,6 +3,8 @@ import time
 
 from typing import Optional
 
+from .config import CONFIG
+
 
 class MusicPlayer:
     def __init__(self):
@@ -15,13 +17,15 @@ class MusicPlayer:
         self.music: Optional[arcade.Sound] = None
 
     def play_song(self):
-        self.music = arcade.Sound(self.song_list[self.song_index], streaming=True)
-        self.current_player = self.music.play(0.1)
+        if CONFIG.is_music_on:
+            i = CONFIG.music_volume / 30
+            self.music = arcade.Sound(self.song_list[self.song_index], streaming=True)
+            self.current_player = self.music.play(volume=i)
 
-        # because position is reset to 0 when a song finishes, there is a small
-        # window where it is impossible to determine if a song has just finished
-        # or just started. sleep for a small period to be sure if a song has finished
-        time.sleep(0.03)
+            # because position is reset to 0 when a song finishes, there is a small
+            # window where it is impossible to determine if a song has just finished
+            # or just started. sleep for a small period to be sure if a song has finished
+            time.sleep(0.03)
 
     def update(self):
         if self.music:
@@ -32,3 +36,8 @@ class MusicPlayer:
                 self.play_song()
         else:
             self.play_song()
+
+    def stop(self):
+        if self.music:
+            self.music.stop(self.current_player)
+        self.music = None
