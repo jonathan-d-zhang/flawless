@@ -84,7 +84,7 @@ class IngameUI:
 
         arcade.draw_polygon_filled(point_list, self.colour)
 
-        width, height = self.window_size[0] / 7.5, self.window_size[1] // 8
+        width, height = self.window_size[0] / 7, self.window_size[1] // 8
         point_list = (
             (left, top),
             (left + width, top),
