@@ -30,6 +30,8 @@ class GameState(Enum):
 
 class GameView(BaseView):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
+    secret_sound = arcade.Sound("game/assets/sound_effects/secret.wav")
+    konami_code = [65362, 65362, 65364, 65364, 65361, 65363, 65361, 65363, 98, 97]
 
     def __init__(self, views):
         super().__init__(views)
@@ -54,10 +56,13 @@ class GameView(BaseView):
         self.ingame_ui: Optional[IngameUI] = None
         self.gamestate = None
         arcade.set_background_color(arcade.color.SLATE_GRAY)
+        self._code_counter = None
+
         self.music_player = MusicPlayer()
 
     def setup(self):
         self.interactable_list = arcade.SpriteList()
+        self._code_counter = 0
 
         # Set up the player
         self.player = Player()
@@ -164,8 +169,14 @@ class GameView(BaseView):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
-        if key == arcade.key.J:
-            self.win_level()
+
+        if key == self.konami_code[self._code_counter]:
+            self._code_counter += 1
+            if self._code_counter == len(self.konami_code):
+                arcade.play_sound(self.secret_sound)
+                self.win_level()
+        else:
+            self._code_counter = 0
 
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             while self.gamestate != GameState.playermove:
