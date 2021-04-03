@@ -164,6 +164,9 @@ class GameView(BaseView):
             self.enemy_list.update()
 
     def on_key_press(self, key: int, modifiers: int):
+        if key == arcade.key.J:
+            self.win_level()
+
         if key in [arcade.key.UP, arcade.key.LEFT, arcade.key.RIGHT, arcade.key.DOWN]:
             while self.gamestate != GameState.playermove:
                 self.enemy_moving(0)
@@ -198,24 +201,26 @@ class GameView(BaseView):
         :return:
         """
 
-
-        if SCREEN_WIDTH >= self.map_width * 32:
-            left = (self.map_width * 32 - SCREEN_WIDTH)/2
+        if SCREEN_WIDTH >= self.map_width * TILE_SIZE:
+            left = (self.map_width * TILE_SIZE - SCREEN_WIDTH) / 2
         else:
             left = min(
-                self.map_width * 32 - SCREEN_WIDTH,
+                self.map_width * TILE_SIZE - SCREEN_WIDTH,
                 max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
             )
         right = left + SCREEN_WIDTH
-        if SCREEN_HEIGHT >= self.map_height * 32:
-            bottom = (self.map_height * 32 - SCREEN_HEIGHT)/2
+        if SCREEN_HEIGHT >= self.map_height * TILE_SIZE:
+            bottom = (self.map_height * TILE_SIZE - SCREEN_HEIGHT) / 2
         else:
             bottom = min(
-                self.map_height * 32 - SCREEN_HEIGHT,
+                self.map_height * TILE_SIZE - SCREEN_HEIGHT,
                 max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
             )
         top = bottom + SCREEN_HEIGHT
         arcade.set_viewport(left, right, bottom, top)
+
+    def on_show(self):
+        self._draw()
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
