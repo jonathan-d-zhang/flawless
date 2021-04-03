@@ -27,8 +27,10 @@ class IngameUI:
 
         arcade.draw_text(
             text=str(self.player_inv.keys),
-            start_x=key_x - self.key_sprite.width - 10,
-            start_y=key_y - 20,
+            start_x=right - 70,
+            start_y=top - 20,
+            anchor_x="center",
+            anchor_y="center",
             color=arcade.color.WHITE,
             font_name=INGAME_UI_FONT,
             font_size=self.window_size[1] // 14,
@@ -81,7 +83,7 @@ class IngameUI:
 
         left, right, bottom, top = self.viewport
         # width, height = self.window_size[0] // 12, self.window_size[1] // 10
-        width, height = 90, 60
+        width, height = 90, 50
 
         point_list = (
             (right, top),
