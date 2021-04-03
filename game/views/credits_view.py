@@ -16,7 +16,7 @@ class CreditsView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
         self.draw_information_text(TEXT_COLOR, back=True, nav=True)
 
@@ -26,7 +26,7 @@ class CreditsView(MenuView):
             self.height * 0.65,
             TEXT_COLOR,
             18,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
         music_credits = "Music is original and created in GarageBand.\n\nAll loops Copyright 2021 Apple Inc."
         arcade.draw_text(
@@ -35,7 +35,7 @@ class CreditsView(MenuView):
             self.height * 0.54,
             TEXT_COLOR,
             11,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
 
         arcade.draw_text(
@@ -44,7 +44,7 @@ class CreditsView(MenuView):
             self.height * 0.45,
             TEXT_COLOR,
             18,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
         sprites_credits = (
             "Sprites were created by our team member eddpmett using Photoshop"
@@ -55,7 +55,7 @@ class CreditsView(MenuView):
             self.height * 0.40,
             TEXT_COLOR,
             11,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
 
         arcade.draw_text(
@@ -64,7 +64,7 @@ class CreditsView(MenuView):
             self.height * 0.30,
             TEXT_COLOR,
             18,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
         tilemaps_credits = (
             "Tilemaps/levels were created by our team members using Tiled."
@@ -75,7 +75,7 @@ class CreditsView(MenuView):
             self.height * 0.25,
             TEXT_COLOR,
             11,
-            font_name=FONT_NAME,
+            font_name=CREDITS_FONT,
         )
 
     def on_key_press(self, symbol, modifiers):

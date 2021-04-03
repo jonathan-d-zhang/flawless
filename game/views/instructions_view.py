@@ -18,7 +18,7 @@ class InstructionsView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=INSTRUCTIONS_FONT,
         )
 
         self.draw_information_text(TEXT_COLOR, back=True)
@@ -34,7 +34,7 @@ class InstructionsView(MenuView):
             align="center",
             anchor_x="center",
             anchor_y="top",
-            font_name=FONT_NAME,
+            font_name=INSTRUCTIONS_FONT,
         )
 
         text = """Some levels may be secured by guards.\nYou must dodge them your way to the exit.
@@ -49,7 +49,7 @@ class InstructionsView(MenuView):
             TEXT_COLOR,
             align="center",
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=INSTRUCTIONS_FONT,
         )
 
         arcade.draw_text(
@@ -58,7 +58,7 @@ class InstructionsView(MenuView):
             self.height * 0.27,
             TEXT_COLOR,
             anchor_y="top",
-            font_name=FONT_NAME,
+            font_name=INSTRUCTIONS_FONT,
         )
         arcade.draw_text(
             b,
@@ -66,7 +66,7 @@ class InstructionsView(MenuView):
             self.height * 0.27,
             TEXT_COLOR,
             anchor_y="top",
-            font_name=FONT_NAME,
+            font_name=INSTRUCTIONS_FONT,
         )
 
     def on_key_press(self, symbol, modifiers):

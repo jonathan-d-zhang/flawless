@@ -31,7 +31,7 @@ class PauseView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=PAUSE_FONT,
         )
         for field in self.field_list:
             field.draw()
@@ -84,5 +84,5 @@ class PauseField(MenuField):
             self.y,
             TEXT_COLOR,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=PAUSE_FONT,
         )

@@ -29,7 +29,7 @@ class WinView(MenuView):
             arcade.color.WHITE,
             20,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=WIN_FONT,
         )
         for field in self.field_list:
             field.draw()
@@ -74,5 +74,5 @@ class WinField(MenuField):
             self.y,
             color=arcade.csscolor.WHITE,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=WIN_FONT,
         )

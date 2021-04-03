@@ -30,12 +30,12 @@ class MenuView(BaseView):
                 width // 16,
                 height * 7 / 8,
                 arcade.color.WHITE,
-                font_name=FONT_NAME,
+                font_name=MENU_FONT,
             )
         if nav:
             t = "Up and down to navigate, ENTER to select"
             arcade.draw_text(
-                t, width // 16, height // 8, color, font_name=FONT_NAME,
+                t, width // 16, height // 8, color, font_name=MENU_FONT,
             )
 
 

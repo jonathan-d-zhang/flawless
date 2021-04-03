@@ -34,7 +34,7 @@ class MainMenuView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
-            font_name=FONT_NAME,
+            font_name=MENU_FONT,
         )
 
         field = self.field_list[self.selection_index]
@@ -102,5 +102,5 @@ class MainMenuField(MenuField):
             self.y,
             color=TEXT_COLOR,
             anchor_x="right",
-            font_name=FONT_NAME,
+            font_name=MENU_FONT,
         )
