@@ -23,7 +23,9 @@ class MainMenuView(MenuView):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_lrwh_rectangle_textured(0, 0, self.width, self.height, self.background)
+        arcade.draw_lrwh_rectangle_textured(
+            0, 0, self.width, self.height, self.background
+        )
 
         arcade.draw_text(
             "Flawless",
@@ -93,5 +95,9 @@ class MainMenuField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="right",
+            self.text,
+            self.x,
+            self.y,
+            color=TEXT_COLOR,
+            anchor_x="right",
         )

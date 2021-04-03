@@ -17,6 +17,8 @@ from ..ingame_ui import IngameUI
 
 from ..music_player import MusicPlayer
 
+from ..views import pause_view
+
 
 class GameState(Enum):
     playermove = 1
@@ -105,7 +107,7 @@ class GameView(arcade.View):
 
         self.interactable_list.extend(Cabinet(loc) for loc in self.key_locations)
 
-        self.enemy_list = EnemyList(self.wall_list)
+        self.enemy_list = EnemyList(self.wall_list, self.door_list)
         for guard_layer in self.object_layers["guard"]:
             self.enemy_list.add_from_layer(guard_layer)
 
@@ -117,11 +119,6 @@ class GameView(arcade.View):
         self.player_spawn = utils.extract_locations(
             self.object_layers["player_spawn"][0]
         )["spawn"]
-
-        self.enemy_list.extend(
-            Enemy(self.wall_list, guard_location)
-            for guard_location in self.guard_locations
-        )
 
         self.exit_list.extend(Exit(loc) for loc in self.exit_locations)
 
@@ -146,6 +143,7 @@ class GameView(arcade.View):
                 self.player.inventory.keys -= 1
                 self.door_list.remove(collisions[0])
                 arcade.play_sound(self.door_open_sound)
+                self.enemy_list.update()
             else:
                 self.player.center_x, self.player.center_y = original_pos
 
@@ -163,6 +161,8 @@ class GameView(arcade.View):
             self.set_viewport_on_player()
             self._draw()
             self.gamestate = GameState.enemymove
+        elif key == arcade.key.ESCAPE:
+            self.window.show_view(pause_view.PauseView(self))
 
     def enemy_moving(self, delta_time):
         if self.gamestate == GameState.enemymove:

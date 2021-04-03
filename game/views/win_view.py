@@ -69,5 +69,9 @@ class WinField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, anchor_x="center",
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            anchor_x="center",
         )

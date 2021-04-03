@@ -1,7 +1,7 @@
 import arcade
 import arcade.gui
 
-from ..views import MenuView, MenuField, SettingsView, MainMenuView
+from ..views import MenuView, MenuField, SettingsView, main_menu_view
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -17,6 +17,7 @@ class PauseView(MenuView):
 
         self.parent_view = parent_view
         self.window.set_viewport(0, self.width, 0, self.height)
+        self.parent_view.music_player.stop()
 
     def on_draw(self):
         arcade.start_render()
@@ -64,7 +65,7 @@ class PauseView(MenuView):
             elif current_option == "Settings":
                 self.window.show_view(SettingsView(self))
             elif current_option == "Exit to Main Menu":
-                self.window.show_view(MainMenuView())
+                self.window.show_view(main_menu_view.MainMenuView())
             elif current_option == "Quit Game":
                 self.window.close()
 
