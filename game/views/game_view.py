@@ -71,7 +71,10 @@ class GameView(BaseView):
 
     def win_level(self):
         # TODO: Transition to next level
-        self.level += 1
+        if self.last_level <= self.level:
+            self.switch_to("win")
+        else:
+            self.level += 1
         self.setup()
 
     def lose_level(self):
@@ -224,6 +227,9 @@ class GameView(BaseView):
         self.wall_list.draw(filter=GL_NEAREST)
         self.door_list.draw(filter=GL_NEAREST)
         self.interactable_list.draw(filter=GL_NEAREST)
+
+        if self.level == self.last_level:
+            self.exit_list.draw(filter=GL_NEAREST)
 
         self.enemy_list.draw(filter=GL_NEAREST)
         self.player.draw()
