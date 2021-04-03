@@ -139,7 +139,10 @@ class SettingToggle(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
         )
 
         arcade.draw_rectangle_outline(
@@ -148,12 +151,20 @@ class SettingToggle(SettingField):
 
         if self.value:
             arcade.draw_rectangle_filled(
-                self.x + longest + 47, self.y + 8, 23, 18, color=arcade.color.BUD_GREEN,
+                self.x + longest + 47,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.BUD_GREEN,
             )
 
         else:
             arcade.draw_rectangle_filled(
-                self.x + longest + 23, self.y + 8, 23, 18, color=arcade.color.CG_RED,
+                self.x + longest + 23,
+                self.y + 8,
+                23,
+                18,
+                color=arcade.color.CG_RED,
             )
 
 
@@ -175,7 +186,11 @@ class SettingSlider(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
         )
         arcade.draw_line(
             self.x, self.y - 15, self.x + longest, self.y - 15, arcade.color.WHITE

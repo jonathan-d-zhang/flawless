@@ -5,6 +5,7 @@ from typing import Optional
 
 from .config import CONFIG
 
+
 class MusicPlayer:
     def __init__(self):
         self.song_list: list[str] = [
