@@ -1,5 +1,7 @@
 from enum import Enum
 from typing import Optional
+from glob import glob
+import re
 
 from .. import utils
 
@@ -33,6 +35,14 @@ class GameView(BaseView):
         super().__init__(views)
 
         self.level = 1
+
+        files = glob("game/assets/levels/level*.tmx")
+        self.last_level = sorted(
+            int(re.search(r"\d+", file).group()) for file in files
+        )[-1]
+        assert self.last_level == len(
+            files
+        ), f"Missing a level, check you have a level for the full range from 1 - {len(files)} in game/levels"
 
         self.wall_list: Optional[arcade.SpriteList] = None
         self.floor_list: Optional[arcade.SpriteList] = None
