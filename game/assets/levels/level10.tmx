@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="26" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="35" nextobjectid="93">
+ <tileset firstgid="1" source="../tilemaps/flawless.tsx"/>
+ <layer id="14" name="floor" width="26" height="15">
+  <data encoding="csv">
+37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+18,18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+18,18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+18,18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,0,0,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
+18,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37
+</data>
+ </layer>
+ <layer id="15" name="walls" width="26" height="15" locked="1">
+  <data encoding="csv">
+25,16,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,16,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,35,0,0,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,
+26,16,3221225498,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,
+0,0,3221225477,0,0,0,0,0,0,3221225508,3221225488,3221225488,3221225488,3221225488,3221225488,3221225488,15,0,3221225488,3221225488,3221225488,3221225488,3221225488,36,0,0,
+0,3221225508,3221225497,0,0,0,0,3221225508,3221225488,3221225497,0,0,0,0,0,0,5,0,25,16,16,16,16,35,0,0,
+0,3221225477,0,0,0,0,0,3221225477,16,16,35,0,0,0,0,0,5,0,5,0,0,0,0,5,0,0,
+0,3221225477,0,0,0,0,0,0,0,0,1610612751,16,16,16,35,0,5,0,5,0,0,0,0,5,0,0,
+0,3221225507,3221225498,0,0,0,0,5,0,0,5,0,0,0,5,0,5,0,0,0,0,0,0,26,35,0,
+0,0,3221225477,0,0,0,0,3221225477,0,0,0,0,0,0,5,0,26,16,2684354575,0,0,0,0,0,5,0,
+0,0,3221225477,0,0,0,0,3221225477,16,16,2684354575,0,0,0,5,0,0,0,5,0,0,0,0,0,5,0,
+0,0,3221225507,3221225488,3221225488,3221225488,3221225488,3221225497,0,0,26,16,16,16,36,0,25,16,36,0,0,0,0,25,36,0,
+0,25,16,16,16,16,16,16,16,16,16,16,16,16,16,16,36,0,0,0,0,0,0,5,0,0,
+0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,26,16,35,
+0,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+0,26,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,36
+</data>
+ </layer>
+ <layer id="3" name="doors" width="26" height="15" locked="1">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,57,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,57,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="playerspawn" locked="1">
+  <properties>
+   <property name="type" value="player_spawn"/>
+  </properties>
+  <object id="1" name="player_spawn" type="spawn" x="64" y="416" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ffff00" id="13" name="key1" locked="1">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="33" name="key1_spawn" type="spawn" x="640" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ffff00" id="18" name="key2" locked="1">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="34" name="key2_spawn" type="spawn" x="736" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ffff00" id="32" name="key3" locked="1">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="90" name="key3_spawn" type="spawn" x="32" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ffff00" id="33" name="key4" locked="1">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="91" name="key3_spawn" type="spawn" x="64" y="192" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ffff00" id="34" name="key5" locked="1">
+  <properties>
+   <property name="type" value="key"/>
+  </properties>
+  <object id="92" name="key5_spawn" type="spawn" x="160" y="192" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="12" name="exit" locked="1">
+  <properties>
+   <property name="type" value="exit"/>
+  </properties>
+  <object id="18" name="level_exit" type="spawn" x="384" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ff0000" id="6" name="guard1" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="2" name="guard1_spawn" type="spawn" x="544" y="384" width="32" height="32"/>
+  <object id="3" name="0" type="point" x="224" y="384" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#55007f" id="8" name="guard2" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="7" name="guard2_spawn" type="spawn" x="608" y="352" width="32" height="32"/>
+  <object id="8" name="0" type="point" x="608" y="416" width="32" height="32"/>
+  <object id="24" name="1" type="point" x="608" y="160" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#00f2ff" id="10" name="guard3" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="12" name="guard3_spawn" type="spawn" x="672" y="352" width="32" height="32"/>
+  <object id="13" name="0" type="point" x="672" y="416" width="32" height="32"/>
+  <object id="22" name="1" type="point" x="640" y="416" width="32" height="32"/>
+  <object id="23" name="2" type="point" x="640" y="288" width="32" height="32"/>
+  <object id="26" name="3" type="point" x="672" y="288" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#0000ff" id="11" name="guard4" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="14" name="guard4_spawn" type="spawn" x="608" y="224" width="32" height="32"/>
+  <object id="15" name="1" type="point" x="608" y="160" width="32" height="32"/>
+  <object id="25" name="0" type="point" x="608" y="416" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#0000ff" id="16" name="guard5" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="27" name="guard5_spawn" type="spawn" x="704" y="224" width="32" height="32"/>
+  <object id="28" name="1" type="point" x="704" y="160" width="32" height="32"/>
+  <object id="29" name="0" type="point" x="704" y="416" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#55007f" id="17" name="guard6" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="30" name="guard6_spawn" type="spawn" x="704" y="352" width="32" height="32"/>
+  <object id="31" name="0" type="point" x="704" y="416" width="32" height="32"/>
+  <object id="32" name="1" type="point" x="704" y="160" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#ff0000" id="29" name="guard7" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="88" name="guard7_spawn" type="spawn" x="256" y="64" width="32" height="32"/>
+  <object id="89" name="0" type="point" x="576" y="64" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#55007f" id="28" name="guard8" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="85" name="guard8_spawn" type="spawn" x="192" y="96" width="32" height="32"/>
+  <object id="86" name="0" type="point" x="192" y="32" width="32" height="32"/>
+  <object id="87" name="1" type="point" x="192" y="288" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#00f2ff" id="27" name="guard9" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="80" name="guard9_spawn" type="spawn" x="128" y="96" width="32" height="32"/>
+  <object id="81" name="0" type="point" x="128" y="32" width="32" height="32"/>
+  <object id="82" name="1" type="point" x="160" y="32" width="32" height="32"/>
+  <object id="83" name="2" type="point" x="160" y="160" width="32" height="32"/>
+  <object id="84" name="3" type="point" x="128" y="160" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#0000ff" id="26" name="guard10" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="77" name="guard10_spawn" type="spawn" x="192" y="224" width="32" height="32"/>
+  <object id="78" name="1" type="point" x="192" y="288" width="32" height="32"/>
+  <object id="79" name="0" type="point" x="192" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#0000ff" id="25" name="guard11" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="74" name="guard11_spawn" type="spawn" x="96" y="224" width="32" height="32"/>
+  <object id="75" name="1" type="point" x="96" y="288" width="32" height="32"/>
+  <object id="76" name="0" type="point" x="96" y="32" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup color="#55007f" id="24" name="guard12" locked="1">
+  <properties>
+   <property name="type" value="guard"/>
+  </properties>
+  <object id="71" name="guard12_spawn" type="spawn" x="96" y="96" width="32" height="32"/>
+  <object id="72" name="0" type="point" x="96" y="32" width="32" height="32"/>
+  <object id="73" name="1" type="point" x="96" y="288" width="32" height="32"/>
+ </objectgroup>
+</map>
