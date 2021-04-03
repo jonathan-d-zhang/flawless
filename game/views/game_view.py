@@ -220,6 +220,7 @@ class GameView(arcade.View):
 
     def on_draw(self):
         self.ingame_ui.draw(self.level, self.window.get_viewport())
+        self._draw()
 
 
 def main():
