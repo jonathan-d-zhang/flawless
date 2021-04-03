@@ -41,7 +41,6 @@ class InstructionsView(MenuView):
         \n\nSome levels will have locked doors. These can be unlocked with a key found somewhere on the map."""
         a = "Use the arrow keys to move\naround the map."
         b = "You can pause the game at\nany point by pressing ESC."
-        c = "From the pause menu, you will\nbe able to change settings,\nquit the game, or simply resume."
 
         arcade.draw_text(
             text,
@@ -53,8 +52,7 @@ class InstructionsView(MenuView):
         )
 
         arcade.draw_text(a, self.width * .8 // 5, self.height * .27, TEXT_COLOR, anchor_y="top")
-        arcade.draw_text(b, self.width * 2.5 // 5, self.height * .27, TEXT_COLOR, anchor_x="center", anchor_y="top")
-        arcade.draw_text(c, self.width * 3.2 // 5, self.height * .27, TEXT_COLOR, anchor_y="top")
+        arcade.draw_text(b, self.width * 3.2 // 5, self.height * .27, TEXT_COLOR, anchor_y="top")
 
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:
