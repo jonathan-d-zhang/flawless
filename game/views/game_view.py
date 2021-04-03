@@ -197,10 +197,18 @@ class GameView(BaseView):
         it is clamped with the game map.
         :return:
         """
-        clamped_x = min(self.window.width, self.map_width * 32)
-        clamped_y = min(self.window.height, self.map_height * 32)
 
-        arcade.set_viewport(0, clamped_x, 0, clamped_y)
+        left = min(
+            self.map_width * 32 - SCREEN_WIDTH,
+            max(0, self.player.center_x - HORIZONTAL_VIEWPORT_MARGIN),
+        )
+        right = left + SCREEN_WIDTH
+        bottom = min(
+            self.map_height * 32 - SCREEN_HEIGHT,
+            max(0, self.player.center_y - VERTICAL_VIEWPORT_MARGIN),
+        )
+        top = left + SCREEN_HEIGHT
+        arcade.set_viewport(left, right, bottom, top)
 
     def on_update(self, delta_time: float):
         for interactable in arcade.check_for_collision_with_list(
