@@ -9,3 +9,5 @@ TILE_SPRITE_SCALING = 1
 PLAYER_SCALING = 1
 
 TILE_SIZE = 32 * TILE_SPRITE_SCALING
+
+FONT_NAME = "game/assets/fonts/NewTegomin-Regular.ttf"

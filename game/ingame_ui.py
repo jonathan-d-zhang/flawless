@@ -2,6 +2,7 @@ import arcade
 from pyglet.gl import GL_NEAREST
 
 from .entity.player import PlayerInventory
+from .constants import *
 
 
 class IngameUI:
@@ -29,6 +30,7 @@ class IngameUI:
             start_x=key_x - self.key_sprite.width,
             start_y=key_y - 20,
             color=arcade.color.WHITE,
+            font_name=FONT_NAME,
             font_size=self.window_size[1] // 14,
         )
 
@@ -38,6 +40,7 @@ class IngameUI:
             start_x=left_pos,
             start_y=top - 55,
             color=arcade.color.WHITE,
+            font_name=FONT_NAME,
             font_size=self.window_size[1] // 32,
         )
         arcade.draw_text(
@@ -45,6 +48,7 @@ class IngameUI:
             start_x=left_pos + 10,
             start_y=top - 40,
             color=arcade.color.WHITE,
+            font_name=FONT_NAME,
             font_size=self.window_size[1] // 16,
         )
 
@@ -53,15 +57,16 @@ class IngameUI:
             start_x=left_pos + self.window_size[0] // 16 - 5,
             start_y=top - 55,
             color=arcade.color.WHITE,
+            font_name=FONT_NAME,
             font_size=self.window_size[1] // 32,
         )
-
 
         arcade.draw_text(
             text=str(self.death_counter) if self.death_counter < 100 else "∞",
             start_x=left_pos + 70,
-            start_y=top-40,
+            start_y=top - 40,
             color=arcade.color.WHITE,
+            font_name=FONT_NAME,
             font_size=self.window_size[1] // 16,
         )
 
@@ -79,7 +84,7 @@ class IngameUI:
 
         arcade.draw_polygon_filled(point_list, self.colour)
 
-        width, height = self.window_size[0] // 8, self.window_size[1] // 8
+        width, height = self.window_size[0] / 7.5, self.window_size[1] // 8
         point_list = (
             (left, top),
             (left + width, top),

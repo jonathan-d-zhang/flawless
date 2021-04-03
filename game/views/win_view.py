@@ -2,6 +2,7 @@ import arcade
 import arcade.gui
 
 from .menu_view import MenuView, MenuField
+from ..constants import *
 
 
 class WinView(MenuView):
@@ -28,6 +29,7 @@ class WinView(MenuView):
             arcade.color.WHITE,
             20,
             anchor_x="center",
+            font_name=FONT_NAME,
         )
         for field in self.field_list:
             field.draw()
@@ -67,5 +69,10 @@ class WinField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, anchor_x="center",
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            anchor_x="center",
+            font_name=FONT_NAME,
         )

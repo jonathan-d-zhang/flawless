@@ -1,6 +1,7 @@
 import arcade
 
 from .menu_view import MenuView, MenuField
+from ..constants import *
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -33,6 +34,7 @@ class MainMenuView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
+            font_name=FONT_NAME,
         )
 
         field = self.field_list[self.selection_index]
@@ -95,5 +97,10 @@ class MainMenuField(MenuField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=TEXT_COLOR, anchor_x="right",
+            self.text,
+            self.x,
+            self.y,
+            color=TEXT_COLOR,
+            anchor_x="right",
+            font_name=FONT_NAME,
         )

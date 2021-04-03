@@ -2,6 +2,7 @@ import arcade
 import arcade.gui
 
 from ..views import MenuView, MenuField
+from ..constants import *
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
@@ -30,6 +31,7 @@ class PauseView(MenuView):
             TEXT_COLOR,
             20,
             anchor_x="center",
+            font_name=FONT_NAME,
         )
         for field in self.field_list:
             field.draw()
@@ -76,4 +78,11 @@ class PauseField(MenuField):
         super().__init__(x, y, text)
 
     def draw(self, longest=None):
-        arcade.draw_text(self.text, self.x, self.y, TEXT_COLOR, anchor_x="center")
+        arcade.draw_text(
+            self.text,
+            self.x,
+            self.y,
+            TEXT_COLOR,
+            anchor_x="center",
+            font_name=FONT_NAME,
+        )

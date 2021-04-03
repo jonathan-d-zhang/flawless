@@ -3,6 +3,7 @@ import arcade
 from ..config import CONFIG
 
 from .menu_view import MenuView, MenuField
+from ..constants import *
 
 
 class SettingsView(MenuView):
@@ -33,6 +34,7 @@ class SettingsView(MenuView):
             arcade.color.WHITE,
             20,
             anchor_x="center",
+            font_name=FONT_NAME,
         )
 
         self.draw_information_text(arcade.color.WHITE, back=True)
@@ -42,6 +44,7 @@ class SettingsView(MenuView):
             self.width // 16,
             self.height // 8,
             arcade.color.WHITE,
+            font_name=FONT_NAME,
         )
 
         longest = self.width // 2
@@ -138,7 +141,7 @@ class SettingToggle(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE,
+            self.text, self.x, self.y, color=arcade.csscolor.WHITE, font_name=FONT_NAME,
         )
 
         arcade.draw_rectangle_outline(
@@ -174,7 +177,12 @@ class SettingSlider(SettingField):
 
     def draw(self, longest=None):
         arcade.draw_text(
-            self.text, self.x, self.y, color=arcade.csscolor.WHITE, width=self.length,
+            self.text,
+            self.x,
+            self.y,
+            color=arcade.csscolor.WHITE,
+            width=self.length,
+            font_name=FONT_NAME,
         )
         arcade.draw_line(
             self.x, self.y - 15, self.x + longest, self.y - 15, arcade.color.WHITE
@@ -186,6 +194,7 @@ class SettingSlider(SettingField):
             arcade.color.WHITE,
             20,
             anchor_x="center",
+            font_name=FONT_NAME,
         )
 
         tick_len = longest // 9
