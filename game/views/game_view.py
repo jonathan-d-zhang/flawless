@@ -17,6 +17,8 @@ from ..ingame_ui import IngameUI
 
 from ..music_player import MusicPlayer
 
+from .base_view import BaseView
+
 
 class GameState(Enum):
     playermove = 1
@@ -24,11 +26,11 @@ class GameState(Enum):
     enemyturning = 3
 
 
-class GameView(arcade.View):
+class GameView(BaseView):
     door_open_sound = arcade.Sound("game/assets/sound_effects/door_open.wav")
 
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, views):
+        super().__init__(views)
 
         self.level = 1
 
@@ -220,19 +222,3 @@ class GameView(arcade.View):
 
     def on_draw(self):
         self.ingame_ui.draw(self.level, self.window.get_viewport())
-
-
-def main():
-    main_window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-
-    game_view = GameView(main_window)
-    game_view.setup()
-    arcade.schedule(game_view.enemy_moving, 1 / 20)
-
-    main_window.show_view(game_view)
-
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()

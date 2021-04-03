@@ -1,14 +1,13 @@
 import arcade
 
 from .menu_view import MenuView, MenuField
-from ..views import settings_view, credits_view, game_view, instructions_view
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
 
 class MainMenuView(MenuView):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, views):
+        super().__init__(views)
         options = "Play", "Settings", "How to Play", "Credits", "Exit"
 
         self.field_list = [
@@ -23,7 +22,9 @@ class MainMenuView(MenuView):
     def on_draw(self):
         arcade.start_render()
 
-        arcade.draw_lrwh_rectangle_textured(0, 0, self.width, self.height, self.background)
+        arcade.draw_lrwh_rectangle_textured(
+            0, 0, self.width, self.height, self.background
+        )
 
         arcade.draw_text(
             "Flawless",
@@ -67,16 +68,17 @@ class MainMenuView(MenuView):
                 self.selection_index = len(self.field_list) - 1
         elif symbol == arcade.key.ENTER:
             if self.selection_index == 0:
-                view = game_view.GameView(self.window)
+                view = self.views["game"]
                 view.setup()
                 arcade.schedule(view.enemy_moving, 1 / 20)
                 self.window.show_view(view)
+                self.switch_to("game")
             elif self.selection_index == 1:
-                self.window.show_view(settings_view.SettingsView(self))
+                self.switch_to("settings")
             elif self.selection_index == 2:
-                self.window.show_view(instructions_view.InstructionsView(self))
+                self.switch_to("instructions")
             elif self.selection_index == 3:
-                self.window.show_view(credits_view.CreditsView(self))
+                self.switch_to("credits")
             elif self.selection_index == 4:
                 self.window.close()
 

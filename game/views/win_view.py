@@ -2,13 +2,11 @@ import arcade
 import arcade.gui
 
 from .menu_view import MenuView, MenuField
-from .main_menu_view import MainMenuView
-from .game_view import GameView
 
 
 class WinView(MenuView):
-    def __init__(self, parent_view):
-        super().__init__()
+    def __init__(self, views):
+        super().__init__(views)
 
         self.field_list = [
             "Play Again",
@@ -18,7 +16,6 @@ class WinView(MenuView):
             WinField(self.width // 2, self.height - i * 50 - self.height // 2, field)
             for i, field in enumerate(self.field_list)
         ]
-        self.parent_view = parent_view
         self.window.set_viewport(0, self.width, 0, self.height)
 
     def on_draw(self):
@@ -55,9 +52,10 @@ class WinView(MenuView):
         elif symbol == arcade.key.ENTER:
             current_option = self.field_list[self.selection_index].text
             if current_option == "Play Again":
-                self.window.show_view(GameView(self.window))
+                # TODO reset the game?
+                self.switch_to("game")
             elif current_option == "Exit to Main Menu":
-                self.window.show_view(MainMenuView())
+                self.switch_to("menu")
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()

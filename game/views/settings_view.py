@@ -6,10 +6,9 @@ from .menu_view import MenuView, MenuField
 
 
 class SettingsView(MenuView):
-    def __init__(self, parent_view):
-        super().__init__()
+    def __init__(self, views):
+        super().__init__(views)
         self.width, self.height = self.window.get_size()
-        self.parent_view = parent_view
         # use setting_index to grab the currently selected setting
 
         # setting_list will store list of settings to add to the view
@@ -89,7 +88,7 @@ class SettingsView(MenuView):
         elif symbol == arcade.key.RIGHT:
             self.setting_list[self.selection_index].increase()
         elif symbol == arcade.key.ESCAPE:
-            self.window.show_view(self.parent_view)
+            self.switch_to_previous()
 
     def on_hide_view(self):
         self.ui_manager.unregister_handlers()

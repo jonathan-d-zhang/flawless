@@ -1,21 +1,19 @@
 import arcade
 import arcade.gui
 
-from ..views import MenuView, MenuField, SettingsView, MainMenuView
+from ..views import MenuView, MenuField
 
 TEXT_COLOR = arcade.csscolor.WHITE
 
 
 class PauseView(MenuView):
-    def __init__(self, parent_view):
-        super().__init__()
+    def __init__(self, views):
+        super().__init__(views)
         self.field_list = ["Resume", "Settings", "Exit to Main Menu", "Quit Game"]
         self.field_list = [
             PauseField(self.width // 2, self.height - i * 50 - self.height // 2, field)
             for i, field in enumerate(self.field_list)
         ]
-
-        self.parent_view = parent_view
         self.window.set_viewport(0, self.width, 0, self.height)
 
     def on_draw(self):
@@ -59,12 +57,12 @@ class PauseView(MenuView):
         elif symbol == arcade.key.ENTER:
             current_option = self.field_list[self.selection_index].text
             if current_option == "Resume":
-                self.parent_view.set_viewport_on_player()
-                self.window.show_view(self.parent_view)
+                self.views["game"].set_viewport_on_player()
+                self.switch_to("game")
             elif current_option == "Settings":
-                self.window.show_view(SettingsView(self))
+                self.switch_to("settings")
             elif current_option == "Exit to Main Menu":
-                self.window.show_view(MainMenuView())
+                self.switch_to("menu")
             elif current_option == "Quit Game":
                 self.window.close()
 
